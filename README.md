@@ -4,6 +4,20 @@
   <p>
     <strong>一个基于 GoFrame 和 Vue3 构建的直播录制平台</strong>
   </p>
+  <p>
+  <a>
+    <img alt="Docker Image Version" 
+      src="https://img.shields.io/docker/v/shichen437/gowlive?labelColor=%20%23FDB062&color=%20%23f79009">
+  </a>
+  <a href="https://hub.docker.com/u/shichen437" target="_blank">
+    <img alt="Docker Pulls" 
+      src="https://img.shields.io/docker/pulls/shichen437/gowlive?labelColor=%20%23528bff&color=%20%23155EEF">
+  </a>
+  <a>
+    <img alt="Docker Image Size" 
+      src="https://img.shields.io/docker/image-size/shichen437/gowlive">
+  </a>
+</p>
 </div>
 
 ## ✨ 项目简介
