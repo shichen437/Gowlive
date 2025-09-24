@@ -96,7 +96,7 @@ func (s *sSysUser) UpdatePassword(ctx context.Context, req *v1.PutPasswordReq) (
 		manager.GetLogManager().AddErrorLog(consts.LogTypeUser, "修改用户密码失败")
 		return
 	}
-	manager.GetLogManager().AddErrorLog(consts.LogTypeUser, "修改用户密码成功")
+	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, "修改用户密码成功")
 	return
 }
 
