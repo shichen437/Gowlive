@@ -1,0 +1,43 @@
+{
+  "name": "gowlive-web",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:prod": "vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "@tanstack/vue-table": "^8.21.3",
+    "@vee-validate/zod": "^4.15.1",
+    "@vuepic/vue-datepicker": "^11.0.2",
+    "@vueuse/core": "^13.9.0",
+    "axios": "^1.12.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "js-beautify": "^1.15.4",
+    "js-cookie": "^3.0.5",
+    "lucide-vue-next": "^0.544.0",
+    "pinia": "^3.0.3",
+    "reka-ui": "^2.5.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.13",
+    "tw-animate-css": "^1.3.8",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.18",
+    "vue-router": "^4.5.1",
+    "vue-sonner": "^2.0.8",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^24.4.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "~5.8.3",
+    "vite": "^5.3.5",
+    "vue-tsc": "^3.0.5"
+  }
+}

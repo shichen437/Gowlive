@@ -1,0 +1,16 @@
+.vscode/
+.trae/
+.DS_Store
+**/.DS_Store
+.codebuddy
+
+temp/
+resources/data/
+resources/logs/
+
+hack/config.yaml
+manifest/config/config.yaml
+docker-compose.yaml
+*.db
+*.sqlite3
+main

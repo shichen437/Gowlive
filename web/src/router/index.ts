@@ -1,0 +1,153 @@
+import { createRouter, createWebHistory } from "vue-router";
+import { getToken } from "@/store/auth";
+
+import Login from "@/views/login.vue";
+
+// 布局/父路由
+import Index from "@/views/index.vue";
+
+// 子页面
+import Dashboard from "@/views/dashboard/index.vue";
+import Stream from "@/views/stream/index.vue";
+import StreamHistory from "@/views/stream/history.vue";
+import StreamCookie from "@/views/stream/cookie.vue";
+import SystemLogs from "@/views/system/logs.vue"
+import SystemNotify from "@/views/system/notify.vue"
+import SystemChannel from "@/views/system/channel.vue"
+import MediaParse from "@/views/media/parse.vue"
+import MediaFollowers from "@/views/media/followers.vue"
+import MediaFile from "@/views/media/file.vue"
+import Users from "@/views/users/index.vue";
+import About from "@/views/about/index.vue";
+
+const routes = [
+  {
+    path: "/",
+    name: "Index",
+    component: Index,
+    redirect: "/dashboard",
+    children: [
+      {
+        path: "dashboard",
+        name: "Dashboard",
+        component: Dashboard,
+        meta: { title: '概览' },
+      },
+      {
+        path: "stream",
+        meta: { title: '直播管理' },
+        children: [
+          {
+            path: "history",
+            name: "StreamHistory",
+            component: StreamHistory,
+            meta: { title: '直播历史' },
+          },
+          {
+            path: "index",
+            name: "Stream",
+            component: Stream,
+            meta: { title: '房间列表' },
+          },
+          {
+            path: "cookie",
+            name: "StreamCookie",
+            component: StreamCookie,
+            meta: { title: 'Cookie' },
+          },
+        ],
+      },
+      {
+        path: "media",
+        meta: { title: '媒体中心' },
+        children: [
+          {
+            path: "file",
+            name: "MediaFile",
+            component: MediaFile,
+            meta: { title: '文件管理' },
+          },
+          {
+            path: "parse",
+            name: "MediaParse",
+            component: MediaParse,
+            meta: { title: '媒体解析' },
+          },
+          {
+            path: "followers",
+            name: "MediaFollowers",
+            component: MediaFollowers,
+            meta: { title: '粉丝趋势' },
+          },
+        ],
+      },
+      {
+        path: "system",
+        meta: { title: '系统管理' },
+        children: [
+          {
+            path: "channel",
+            name: "SystemChannel",
+            component: SystemChannel,
+            meta: { title: '推送渠道' },
+          },
+          {
+            path: "notify",
+            name: "SystemNotify",
+            component: SystemNotify,
+            meta: { title: '通知中心' },
+          },
+          {
+            path: "logs",
+            name: "SystemLogs",
+            component: SystemLogs,
+            meta: { title: '日志中心' },
+          },
+        ],
+      },
+      {
+        path: "user/index",
+        name: "Users",
+        component: Users,
+        meta: { title: '个人中心' },
+      },
+      {
+        path: "about/index",
+        name: "About",
+        component: About,
+        meta: { title: '关于' },
+      },
+    ],
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+// 全局前置守卫
+router.beforeEach((to, _from, next) => {
+  const hasToken = getToken();
+
+  if (hasToken) {
+    if (to.path === "/login") {
+      next({ path: "/" });
+    } else {
+      next();
+    }
+  } else {
+    if (to.path === "/login") {
+      next();
+    } else {
+      next(`/login?redirect=${to.path}`);
+    }
+  }
+});
+
+export default router;

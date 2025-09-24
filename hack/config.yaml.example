@@ -1,0 +1,33 @@
+
+# CLI tool, only in development environment.
+# https://goframe.org/pages/viewpage.action?pageId=3673173
+gfcli:
+  build:
+    name:     "main"
+    arch:     "amd64"
+    system:   "linux"
+    mod:      "none"
+    packSrc:  "api,internal"
+    packDst:  "temp/pack.go"
+    path:     "./temp"
+  gen:
+    dao:
+      - link:            "sqlite::@file(resources/data/gowlive.db)"
+        tables:          "sys_user"
+        tablesEx:        ""
+        removePrefix:    ""
+        descriptionTag:  true
+        noModelComment:  true
+        path: "internal/app/admin"
+    service:
+      srcFolder: "internal/app/admin/logic"
+      dstFolder:  "internal/app/admin/service"
+
+  docker:
+    build:
+      name: "main"
+      arch: "amd64"
+      system: "linux"
+      extra: "--no-cache"
+    tagName: "gowlive:0.0.1"
+    TagPrefixes: "shichen437"

@@ -1,0 +1,11 @@
+services:
+  gowlive:
+    container_name: gowlive
+    image: shichen437/gowlive:latest
+    restart: always
+    ports:
+      - '12580:12580'
+    volumes:
+      - your-data-path:/gowlive/resources/data
+    environment:
+      - PROJECT_SM4KEY=abcdefghijklmnopqrstuvwxyz123456 # SM4加密密钥, 32位字符, 可选

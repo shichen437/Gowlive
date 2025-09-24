@@ -1,0 +1,31 @@
+server:
+  address: ":12615"
+  openapiPath: "/api.json"
+  swaggerPath: "/swagger"
+
+project:
+  data: "resources/data"
+  sm4key: "abcdefghijklmnopqrstuvwxyz123456"
+
+logger:
+  path: "resources/logs/system/"
+  prefix: ""
+  file: "{Y-m-d}.log"
+  level: "all"
+  stdout: true
+
+database:
+  logger:
+    level: "all"
+    stdout: true
+    Path: "resources/logs/sql/"
+  default:
+    link: "sqlite::@file(resources/data/gowlive.db)"
+    charset: "utf8mb4"
+    timezone: "Local"
+    debug: true
+    dryRun: false #空跑
+    maxIdle: 10 #连接池最大闲置的连接数
+    maxOpen: 10 #连接池最大打开的连接数
+    maxLifetime: "30s" #(单位秒)连接对象可重复使用的时间长度
+    timeMaintainDisabled: true
