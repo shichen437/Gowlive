@@ -31,7 +31,7 @@ export const configurableMenu = ref([
     icon: Infinity,
     children: [
       { title: "日志中心", to: "/system/logs" },
-      //   { title: "推送渠道", to: "/system/channel" },
+      { title: "推送渠道", to: "/system/channel" },
       //   { title: "通知中心", to: "/system/notify" },
     ],
   },

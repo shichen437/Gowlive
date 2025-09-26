@@ -9,6 +9,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.18.3
 	github.com/lthibault/jitterbug v2.0.0+incompatible
 	github.com/tidwall/gjson v1.18.0
+	gopkg.in/mail.v2 v2.3.1
 )
 
 require (
@@ -48,6 +49,7 @@ require (
 	golang.org/x/net v0.44.0 // indirect
 	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.22.5 // indirect
 	modernc.org/mathutil v1.5.0 // indirect

@@ -6,10 +6,12 @@ import (
 	"sync"
 
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
 	"github.com/shichen437/gowlive/internal/app/stream/model/do"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
+	"github.com/shichen437/gowlive/internal/pkg/message_push"
 	"github.com/shichen437/gowlive/internal/pkg/service"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
@@ -18,9 +20,10 @@ var (
 	liveStartTimes = &sync.Map{}
 )
 
-func liveStartBiz(ctx context.Context, liveId int) {
+func liveStartBiz(ctx context.Context, liveId int, anchor string) {
 	g.Log().Info(ctx, "liveStartBiz", liveId)
 	liveStartTimes.Store(liveId, utils.Now())
+	go message_push.LivePush(gctx.GetInitCtx(), anchor)
 }
 
 func liveEndBiz(ctx context.Context, liveId int, anchor string) {

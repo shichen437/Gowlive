@@ -142,7 +142,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 func (s *sLiveManage) Delete(ctx context.Context, req *v1.DeleteLiveManageReq) (res *v1.DeleteLiveManageRes, err error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
-	g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 		_, err = dao.LiveManage.Ctx(ctx).Where(dao.LiveManage.Columns().Id, req.LiveId).Delete()
 		if err != nil {
 			return err

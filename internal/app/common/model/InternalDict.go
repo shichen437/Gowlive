@@ -9,6 +9,7 @@ type InternalDict struct {
 
 var (
 	LivePlatform = "live_platform"
+	ChannelType  = "channel_type"
 	m            = make(map[string][]InternalDict)
 )
 
@@ -24,6 +25,20 @@ func init() {
 			DictType:  LivePlatform,
 			DictLabel: "哔哩哔哩",
 			DictValue: "bilibili",
+			DictSort:  2,
+		},
+	})
+	addDictData(ChannelType, []InternalDict{
+		{
+			DictType:  ChannelType,
+			DictLabel: "邮箱",
+			DictValue: "email",
+			DictSort:  1,
+		},
+		{
+			DictType:  ChannelType,
+			DictLabel: "Gotify",
+			DictValue: "gotify",
 			DictSort:  2,
 		},
 	})

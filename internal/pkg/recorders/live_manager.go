@@ -48,7 +48,7 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 			g.Log().Error(ctx, "failed to add recorder")
 			return
 		}
-		liveStartBiz(ctx, session.Id)
+		liveStartBiz(ctx, session.Id, session.State.Anchor)
 	}))
 
 	ed.AddEventListener("NameChanged", events.NewEventListener(func(event *events.Event) {

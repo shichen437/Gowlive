@@ -148,7 +148,7 @@ func bindRoute(group *ghttp.RouterGroup) {
 		Common.InternalDict,
 		Media.FileManage,
 		Stream.LiveManage, Stream.LiveHistory, Stream.LiveCookie,
-		System.SystemOverview, System.SystemSettings, System.SysLogs)
+		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel)
 }
 
 func shutdown(sig os.Signal) {
