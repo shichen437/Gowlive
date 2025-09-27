@@ -34,11 +34,11 @@ func (p *MessagePush) Push(ctx context.Context, channel *model.PushChannel) (err
 	var model mp.MessageModel
 	model.Title = "开播通知"
 	model.Content = "你关注的主播[" + p.Anchor + "]开播了！"
-	err = mailPush(ctx, channel, &model)
+	err = p.PushMessage(ctx, channel, &model)
 	return err
 }
 
-func mailPush(ctx context.Context, channel *model.PushChannel, model *mp.MessageModel) (err error) {
+func (p *MessagePush) PushMessage(ctx context.Context, channel *model.PushChannel, model *mp.MessageModel) (err error) {
 	m := mail.NewMessage()
 	m.SetHeader("From", channel.Email.Sender)
 	m.SetHeader("To", channel.Email.Receiver)

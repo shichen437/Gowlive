@@ -2,9 +2,11 @@ package logic
 
 import (
 	"context"
+	"math"
 
 	v1 "github.com/shichen437/gowlive/api/v1/system"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
+	sysDao "github.com/shichen437/gowlive/internal/app/system/dao"
 	"github.com/shichen437/gowlive/internal/app/system/model"
 	"github.com/shichen437/gowlive/internal/app/system/service"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
@@ -26,6 +28,7 @@ func (s *sSystemOverview) Overview(ctx context.Context, req *v1.GetOverviewReq) 
 	data := &model.Overview{}
 	genRoomData(ctx, data)
 	genRecordingTime(ctx, data)
+	genUnreadNotify(ctx, data)
 	res.Data = data
 	return
 }
@@ -41,5 +44,13 @@ func genRecordingTime(ctx context.Context, data *model.Overview) {
 	if err != nil {
 		return
 	}
-	data.RecordTimeCount = float64(timeCount)
+	data.RecordTimeCount = math.Round(float64(timeCount)*100) / 100
+}
+
+func genUnreadNotify(ctx context.Context, data *model.Overview) {
+	count, err := sysDao.SysNotify.Ctx(ctx).Where(sysDao.SysNotify.Columns().Status, 0).Count()
+	if err != nil {
+		return
+	}
+	data.UnreadMessageCount = count
 }

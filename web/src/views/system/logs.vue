@@ -119,7 +119,7 @@ const filter = ref({
 const getLogs = async () => {
     try {
         const params = {
-            page: pageNum.value,
+            pageNum: pageNum.value,
             pageSize: pageSize.value,
             sort: sort.value,
             ...filter.value,

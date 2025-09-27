@@ -6,7 +6,17 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/shirou/gopsutil/v3/disk"
 )
+
+func GetDiskUsage() int {
+	diskInfo, err := disk.Usage("/")
+	if err != nil {
+		return 1
+	}
+	return int(diskInfo.UsedPercent)
+}
 
 func GetDefaultFFmpegPath() (string, error) {
 	path, err := exec.LookPath("ffmpeg")

@@ -10,6 +10,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/events"
 	"github.com/shichen437/gowlive/internal/pkg/interfaces"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
+	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
 func NewManager(ctx context.Context, session *lives.LiveSession) Manager {
@@ -70,6 +71,17 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 	})
 	ed.AddEventListener("LiveEnd", removeEvtListener)
 	ed.AddEventListener("ListenStop", removeEvtListener)
+
+	ed.AddEventListener("RecordingStoppedDueToDiskSpace", events.NewEventListener(func(event *events.Event) {
+		session := event.Object.(*lives.LiveSession)
+		if session.Id != m.session.Id {
+			return
+		}
+		g.Log().Warningf(ctx, "Received RecordingStoppedDueToDiskSpace event for session %d. Removing recorder.", m.session.Id)
+		if err := m.RemoveRecorder(ctx); err != nil {
+			g.Log().Errorf(ctx, "Failed to remove recorder on RecordingStoppedDueToDiskSpace event for session %d: %v", m.session.Id, err)
+		}
+	}))
 }
 
 func (m *manager) Start(ctx context.Context) error {
@@ -91,6 +103,10 @@ func (m *manager) AddRecorder(ctx context.Context) error {
 	defer m.lock.Unlock()
 	if m.recorder != nil {
 		return gerror.New("this live has a recorder")
+	}
+	if utils.GetDiskUsage() > 95 {
+		g.Log().Warningf(ctx, "Disk usage > 95%%, cannot start recording for session %d", m.session.Id)
+		return gerror.New("disk usage > 95%")
 	}
 	recorder, err := newRecorder(m.session)
 	if err != nil {

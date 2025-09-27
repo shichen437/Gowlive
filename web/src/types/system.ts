@@ -6,6 +6,15 @@ export interface SysLogs {
   createdAt: string;
 }
 
+export interface SysNotify {
+  id: number;
+  level: string;
+  title: string;
+  content: string;
+  status: number;
+  createdAt: string;
+}
+
 export interface PushChannel {
   id: number;
   name: string;

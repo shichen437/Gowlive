@@ -18,4 +18,5 @@ type LiveHistory struct {
 	Duration  float64     `json:"duration"  orm:"duration"   description:""`
 	CreatedAt *gtime.Time `json:"createdAt" orm:"created_at" description:""`
 	UpdatedAt *gtime.Time `json:"updatedAt" orm:"updated_at" description:""`
+	IsDelete  int         `json:"isDelete"  orm:"is_delete"  description:""`
 }

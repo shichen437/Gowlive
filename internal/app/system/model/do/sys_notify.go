@@ -9,16 +9,14 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
-// LiveHistory is the golang structure of table live_history for DAO operations like Where/Data.
-type LiveHistory struct {
-	g.Meta    `orm:"table:live_history, do:true"`
+// SysNotify is the golang structure of table sys_notify for DAO operations like Where/Data.
+type SysNotify struct {
+	g.Meta    `orm:"table:sys_notify, do:true"`
 	Id        interface{} //
-	LiveId    interface{} //
-	Anchor    interface{} //
-	StartedAt *gtime.Time //
-	EndedAt   *gtime.Time //
-	Duration  interface{} //
+	Title     interface{} //
+	Content   interface{} //
+	Level     interface{} //
+	Status    interface{} //
 	CreatedAt *gtime.Time //
 	UpdatedAt *gtime.Time //
-	IsDelete  interface{} //
 }

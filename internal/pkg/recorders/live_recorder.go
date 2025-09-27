@@ -61,6 +61,7 @@ func (r *recorder) Start(ctx context.Context) error {
 		return nil
 	}
 	go r.run(ctx)
+	go r.monitorDiskSpace(ctx)
 	r.ed.DispatchEvent(events.NewEvent("RecorderStart", r.session))
 	atomic.CompareAndSwapUint32(&r.state, pending, running)
 	return nil
@@ -216,4 +217,25 @@ func (r *recorder) getOutPathAndFilename(info *lives.LiveState) (string, string,
 	}
 	filename := buf.String()
 	return filename, outputPath, nil
+}
+
+func (r *recorder) monitorDiskSpace(ctx context.Context) {
+	ticker := time.NewTicker(3 * time.Minute)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			if atomic.LoadUint32(&r.state) != running {
+				return
+			}
+			if utils.GetDiskUsage() > 95 {
+				g.Log().Warningf(ctx, "Disk usage is over 95%%. Stopping recording for session %d.", r.session.Id)
+				r.ed.DispatchEvent(events.NewEvent("RecordingStoppedDueToDiskSpace", r.session))
+				return
+			}
+		case <-r.stop:
+			return
+		}
+	}
 }

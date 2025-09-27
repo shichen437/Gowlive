@@ -127,7 +127,7 @@ const { getLabel: getPlatformLabel } = useDict("live_platform");
 const getRooms = async () => {
   try {
     const params = {
-      page: pageNum.value,
+      pageNum: pageNum.value,
       pageSize: pageSize.value,
       sort: sort.value,
       ...filter.value,

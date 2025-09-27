@@ -21,4 +21,6 @@ const (
 
 	StatusActive  = 1
 	StatusDisable = 0
+
+	StorageThreshold = 90
 )

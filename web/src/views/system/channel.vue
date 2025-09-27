@@ -123,7 +123,7 @@ async function getChannels() {
     loading.value = true;
     try {
         const params = {
-            page: pageNum.value,
+            pageNum: pageNum.value,
             pageSize: pageSize.value,
         };
         const res: any = await listPushChannel(params);

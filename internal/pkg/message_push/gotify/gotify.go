@@ -32,6 +32,10 @@ func (p *MessagePush) Push(ctx context.Context, channel *model.PushChannel) (err
 	return gotify(channel.Url, "开播通知", "你关注的主播["+p.Anchor+"]开播了！")
 }
 
+func (p *MessagePush) PushMessage(ctx context.Context, channel *model.PushChannel, model *mp.MessageModel) (err error) {
+	return gotify(channel.Url, model.Title, model.Content)
+}
+
 func gotify(url string, title, message string) (err error) {
 	c := g.Client()
 	data := g.Map{

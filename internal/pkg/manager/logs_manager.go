@@ -19,12 +19,12 @@ type LogManager struct {
 
 var (
 	logManagerInstance *LogManager
-	once               sync.Once
+	logOnce            sync.Once
 )
 
 // 单例获取方法
 func GetLogManager() *LogManager {
-	once.Do(func() {
+	logOnce.Do(func() {
 		logManagerInstance = &LogManager{
 			queue:    make(chan entity.SysLogs, 30),
 			stopChan: make(chan struct{}),

@@ -157,3 +157,31 @@ func (r *SessionRegistry) RecordingCount() int {
 	}
 	return count
 }
+
+func (r *SessionRegistry) StopAll(ctx context.Context) {
+	r.mu.RLock()
+	var ids []int
+	for id := range r.sessions {
+		ids = append(ids, id)
+	}
+	r.mu.RUnlock()
+
+	if len(ids) == 0 {
+		return
+	}
+
+	g.Log().Info(ctx, "Stopping all live sessions...")
+	var wg sync.WaitGroup
+	for _, id := range ids {
+		wg.Add(1)
+		go func(sessionId int) {
+			defer wg.Done()
+			err := r.Remove(ctx, sessionId)
+			if err != nil {
+				g.Log().Errorf(ctx, "Failed to stop session %d: %v", sessionId, err)
+			}
+		}(id)
+	}
+	wg.Wait()
+	g.Log().Info(ctx, "All live sessions stopped.")
+}

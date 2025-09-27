@@ -25,6 +25,7 @@ import (
 	"github.com/shichen437/gowlive/internal/app/common/service"
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
+	"github.com/shichen437/gowlive/internal/pkg/registry"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
@@ -148,10 +149,12 @@ func bindRoute(group *ghttp.RouterGroup) {
 		Common.InternalDict,
 		Media.FileManage,
 		Stream.LiveManage, Stream.LiveHistory, Stream.LiveCookie,
-		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel)
+		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel, System.SysNotify)
 }
 
 func shutdown(sig os.Signal) {
+	registry.Get().StopAll(gctx.GetInitCtx())
 	manager.GetLogManager().Stop()
+	manager.GetNotfiyManager().Stop()
 	g.Log().Info(gctx.GetInitCtx(), "live monitor shutdown!")
 }

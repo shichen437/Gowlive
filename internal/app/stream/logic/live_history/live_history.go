@@ -5,7 +5,9 @@ import (
 
 	v1 "github.com/shichen437/gowlive/api/v1/stream"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
+	"github.com/shichen437/gowlive/internal/app/stream/model/do"
 	"github.com/shichen437/gowlive/internal/app/stream/service"
+	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
 type (
@@ -22,7 +24,7 @@ func New() service.ILiveHistory {
 
 func (s *sLiveHistory) List(ctx context.Context, req *v1.GetLiveHistoryListReq) (res *v1.GetLiveHistoryListRes, err error) {
 	res = &v1.GetLiveHistoryListRes{}
-	m := dao.LiveHistory.Ctx(ctx)
+	m := dao.LiveHistory.Ctx(ctx).Where(dao.LiveHistory.Columns().IsDelete, 0)
 	if req.LiveId != nil && *req.LiveId != 0 {
 		m = m.Where(dao.LiveHistory.Columns().LiveId, *req.LiveId)
 	}
@@ -42,6 +44,9 @@ func (s *sLiveHistory) List(ctx context.Context, req *v1.GetLiveHistoryListReq) 
 }
 
 func (s *sLiveHistory) Delete(ctx context.Context, req *v1.DeleteLiveHistoryReq) (res *v1.DeleteLiveHistoryRes, err error) {
-	_, err = dao.LiveHistory.Ctx(ctx).WherePri(req.Id).Delete()
+	_, err = dao.LiveHistory.Ctx(ctx).WherePri(req.Id).Update(do.LiveHistory{
+		IsDelete:  1,
+		UpdatedAt: utils.Now(),
+	})
 	return
 }

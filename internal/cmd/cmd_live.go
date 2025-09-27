@@ -30,16 +30,21 @@ func LiveMonitor() {
 }
 
 func getLiveSessionIds4Init(ctx context.Context) []int {
-	var ids []int
+	var list []*entity.LiveManage
 	err := dao.LiveManage.Ctx(ctx).
-		Fields(dao.LiveManage.Columns().Id).
 		Where(dao.LiveManage.Columns().MonitorType, 1).
-		Scan(&ids)
+		Scan(&list)
 	if err != nil {
 		g.Log().Errorf(ctx, "Failed to get live session ids from database: %v", err)
 		return nil
 	}
-
+	var ids []int
+	if len(list) <= 0 {
+		return ids
+	}
+	for _, v := range list {
+		ids = append(ids, v.Id)
+	}
 	return ids
 }
 

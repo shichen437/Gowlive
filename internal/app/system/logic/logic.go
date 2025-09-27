@@ -9,4 +9,5 @@ import (
 	_ "github.com/shichen437/gowlive/internal/app/system/logic/push_channel"
 	_ "github.com/shichen437/gowlive/internal/app/system/logic/settings"
 	_ "github.com/shichen437/gowlive/internal/app/system/logic/sys_logs"
+	_ "github.com/shichen437/gowlive/internal/app/system/logic/sys_notify"
 )

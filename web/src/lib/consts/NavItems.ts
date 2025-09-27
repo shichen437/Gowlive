@@ -32,7 +32,7 @@ export const configurableMenu = ref([
     children: [
       { title: "日志中心", to: "/system/logs" },
       { title: "推送渠道", to: "/system/channel" },
-      //   { title: "通知中心", to: "/system/notify" },
+      { title: "通知中心", to: "/system/notify" },
     ],
   },
   {
