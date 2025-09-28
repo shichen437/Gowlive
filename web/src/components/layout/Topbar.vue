@@ -26,6 +26,12 @@
             <Button @click="toggleFullscreen" variant="ghost" size="icon">
                 <component :is="isFullscreen ? Minimize : Maximize" class="h-5 w-5" />
             </Button>
+            <Button @click="cycle()" variant="ghost" size="icon">
+                <Sun class="h-5 w-5" v-if="mode === 'light'" />
+                <Moon class="h-5 w-5" v-else-if="mode === 'dark'" />
+                <SunMoon class="h-5 w-5" v-else />
+                <span class="sr-only">Toggle theme</span>
+            </Button>
             <Button variant="ghost" class="relative h-8 w-8 rounded-full">
                 <router-link to="/user/index">
                     <Avatar class="h-8 w-8">
@@ -42,6 +48,7 @@
 import { computed, onMounted, onUnmounted, ref, type Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/store/user';
+import { useTheme } from '@/composables/useTheme';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
     Breadcrumb,
@@ -54,7 +61,9 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import type { UserInfo } from '@/types/user';
-import { Maximize, Minimize } from 'lucide-vue-next';
+import { Maximize, Minimize, Moon, Sun, SunMoon } from 'lucide-vue-next';
+
+const { mode, cycle } = useTheme();
 
 const userStore = useUserStore();
 const userInfo: Ref<UserInfo | null> = computed(() => userStore.userInfo);
