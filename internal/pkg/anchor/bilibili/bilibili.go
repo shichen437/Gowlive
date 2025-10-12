@@ -58,7 +58,6 @@ func (d *Bilibili) getUserStatInfo(ctx context.Context, mid string) (*anchor.Anc
 		return nil, gerror.New("请求用户信息失败")
 	}
 	info := jsonData.Get("data")
-	g.Log().Info(ctx, info)
 	userInfo := &anchor.AnchorInfo{
 		UniqueId:       mid,
 		Platform:       platform,

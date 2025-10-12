@@ -43,9 +43,9 @@
                                     </Tooltip>
                                 </TooltipProvider>
                             </TableCell>
-                            <TableCell class="text-center">{{ anchor.followingCount }}</TableCell>
-                            <TableCell class="text-center">{{ anchor.followerCount }}</TableCell>
-                            <TableCell class="text-center">{{ anchor.likeCount }}</TableCell>
+                            <TableCell class="text-center">{{ formatBigNumber(anchor.followingCount) }}</TableCell>
+                            <TableCell class="text-center">{{ formatBigNumber(anchor.followerCount) }}</TableCell>
+                            <TableCell class="text-center">{{ formatBigNumber(anchor.likeCount) }}</TableCell>
                             <TableCell class="text-center">{{ anchor.videoCount }}</TableCell>
                             <TableCell class="text-center space-x-2">
                                 <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
@@ -124,6 +124,7 @@ import { Plus, Trash2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
+import { formatBigNumber } from "@/utils/convert";
 
 const showConfirmModal = ref(false);
 const anchors = ref<AnchorInfo[]>([]);

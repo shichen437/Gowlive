@@ -11,6 +11,7 @@ import (
 var (
 	checkLatestVersion = "checkLatestVersion"
 	storageWarning     = "storageWarning"
+	anchorInfo         = "anchorInfo"
 )
 
 func SystemCron(ctx context.Context) {
@@ -22,4 +23,9 @@ func SystemCron(ctx context.Context) {
 		g.Log().Info(ctx, "Add job - "+storageWarning)
 		system.StorageWarning(ctx)
 	}, storageWarning)
+	// 每天陵城 5 点执行
+	gcron.Add(ctx, "# 0 5 * * *", func(ctx context.Context) {
+		g.Log().Info(ctx, "Add job - "+anchorInfo)
+		AnchorInfoCron(ctx)
+	}, anchorInfo)
 }

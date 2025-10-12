@@ -3,7 +3,10 @@ package logic
 import (
 	"context"
 
+	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
 	v1 "github.com/shichen437/gowlive/api/v1/stream"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
 	"github.com/shichen437/gowlive/internal/app/stream/model/do"
@@ -71,20 +74,10 @@ func (c *sAnchorInfo) Add(ctx context.Context, req *v1.PostAnchorReq) (res *v1.P
 		err = gerror.New("重复添加")
 		return
 	}
-	_, err = dao.AnchorInfo.Ctx(ctx).Insert(do.AnchorInfo{
-		Url:            req.Url,
-		Platform:       anchorInfo.Platform,
-		AnchorName:     anchorInfo.AnchorName,
-		UniqueId:       anchorInfo.UniqueId,
-		Signature:      anchorInfo.Signature,
-		FollowerCount:  anchorInfo.FollowerCount,
-		FollowingCount: anchorInfo.FollowingCount,
-		LikeCount:      anchorInfo.LikeCount,
-		VideoCount:     anchorInfo.VideoCount,
-		CreatedAt:      utils.Now(),
-	})
+	err = saveAnchorInfo(ctx, req, anchorInfo)
 	if err != nil {
-		return nil, gerror.New("添加主播数据失败")
+		err = gerror.New("添加主播数据失败")
+		return
 	}
 	return
 }
@@ -101,4 +94,42 @@ func (c *sAnchorInfo) Delete(ctx context.Context, req *v1.DeleteAnchorReq) (res 
 		return
 	}
 	return
+}
+
+func saveAnchorInfo(ctx context.Context, req *v1.PostAnchorReq, anchorInfo *anchor.AnchorInfo) error {
+	return g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		result, txErr := dao.AnchorInfo.Ctx(ctx).Insert(do.AnchorInfo{
+			Url:            req.Url,
+			Platform:       anchorInfo.Platform,
+			AnchorName:     anchorInfo.AnchorName,
+			UniqueId:       anchorInfo.UniqueId,
+			Signature:      anchorInfo.Signature,
+			FollowerCount:  anchorInfo.FollowerCount,
+			FollowingCount: anchorInfo.FollowingCount,
+			LikeCount:      anchorInfo.LikeCount,
+			VideoCount:     anchorInfo.VideoCount,
+			CreatedAt:      utils.Now(),
+		})
+		if txErr != nil {
+			g.Log().Error(ctx, txErr)
+			return txErr
+		}
+		anchorId, txErr := result.LastInsertId()
+		if txErr != nil {
+			g.Log().Error(ctx, txErr)
+			return txErr
+		}
+		_, txErr = dao.AnchorInfoHistory.Ctx(ctx).Insert(do.AnchorInfoHistory{
+			AnchorId:       anchorId,
+			CollectedDate:  gtime.Now().Format("Y-m-d"),
+			AnchorName:     anchorInfo.AnchorName,
+			Signature:      anchorInfo.Signature,
+			FollowerCount:  anchorInfo.FollowerCount,
+			FollowingCount: anchorInfo.FollowingCount,
+			LikeCount:      anchorInfo.LikeCount,
+			VideoCount:     anchorInfo.VideoCount,
+			CreatedAt:      utils.Now(),
+		})
+		return nil
+	})
 }
