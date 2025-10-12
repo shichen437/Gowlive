@@ -34,3 +34,15 @@ export interface LiveCookie {
   cookie: string;
   remark: string;
 }
+
+export interface AnchorInfo {
+  id: number;
+  platform: string;
+  anchorName: string;
+  signature: string;
+  followingCount: number;
+  followerCount: number;
+  likeCount: number;
+  videoCount: number;
+  createdAt: string;
+}

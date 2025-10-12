@@ -148,7 +148,7 @@ func bindRoute(group *ghttp.RouterGroup) {
 	group.Bind(Admin.SysUser,
 		Common.InternalDict,
 		Media.FileManage,
-		Stream.LiveManage, Stream.LiveHistory, Stream.LiveCookie,
+		Stream.LiveManage, Stream.LiveHistory, Stream.LiveCookie, Stream.AnchorInfo,
 		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel, System.SysNotify)
 }
 

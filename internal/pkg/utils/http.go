@@ -3,6 +3,8 @@ package utils
 import (
 	"io"
 	"net/http"
+	"net/http/cookiejar"
+	"net/url"
 	"strings"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -43,4 +45,16 @@ func GetCookieList(cookie string) []*http.Cookie {
 		})
 	}
 	return cookiesList
+}
+
+func GetCookieMap(platform, cookie, refer string) map[string]string {
+	jar, _ := cookiejar.New(&cookiejar.Options{})
+	url, _ := url.Parse(refer)
+	jar.SetCookies(url, GetCookieList(cookie))
+	cookies := jar.Cookies(url)
+	cookieMap := make(map[string]string)
+	for _, c := range cookies {
+		cookieMap[c.Name] = c.Value
+	}
+	return cookieMap
 }

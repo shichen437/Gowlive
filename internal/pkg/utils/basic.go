@@ -1,7 +1,10 @@
 package utils
 
 import (
+	"math"
 	"math/rand"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -28,4 +31,62 @@ func SanitizeFilename(filename string) string {
 		"..", "",
 	)
 	return replacer.Replace(strings.ReplaceAll(filename, "\u0000", ""))
+}
+
+func FindFirstMatch(s, reg string) string {
+	re, err := regexp.Compile(reg)
+	if err != nil {
+		return ""
+	}
+	matches := re.FindStringSubmatch(s)
+	if len(matches) > 0 {
+		return matches[0]
+	}
+	return ""
+}
+
+func ParseChineseNumberToInt(s string) int {
+	if s == "" {
+		return 0
+	}
+
+	clean := strings.TrimSpace(s)
+	clean = strings.ReplaceAll(clean, ",", "")
+	clean = strings.ReplaceAll(clean, "，", "")
+
+	if clean == "" {
+		return 0
+	}
+
+	re := regexp.MustCompile(`^[\s]*([+-]?\d+(?:\.\d+)?)(?:\s*(万|亿))?`)
+	m := re.FindStringSubmatch(clean)
+	if len(m) == 0 {
+		return 0
+	}
+
+	numStr := m[1]
+	unit := m[2]
+
+	val, err := strconv.ParseFloat(numStr, 64)
+	if err != nil {
+		return 0
+	}
+
+	multiplier := 1.0
+	switch unit {
+	case "万":
+		multiplier = 1e4
+	case "亿":
+		multiplier = 1e8
+	}
+
+	val = val * multiplier
+
+	floored := math.Floor(val)
+
+	if floored < float64(math.MinInt64) || floored > float64(math.MaxInt64) {
+		return 0
+	}
+
+	return int(floored)
 }

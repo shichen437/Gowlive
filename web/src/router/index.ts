@@ -11,6 +11,7 @@ import Dashboard from "@/views/dashboard/index.vue";
 import Stream from "@/views/stream/index.vue";
 import StreamHistory from "@/views/stream/history.vue";
 import StreamCookie from "@/views/stream/cookie.vue";
+import StreamAuthor from "@/views/stream/author.vue";
 import SystemLogs from "@/views/system/logs.vue"
 import SystemNotify from "@/views/system/notify.vue"
 import SystemChannel from "@/views/system/channel.vue"
@@ -48,6 +49,12 @@ const routes = [
             name: "Stream",
             component: Stream,
             meta: { title: '房间列表' },
+          },
+          {
+            path: "author",
+            name: "StreamAuthor",
+            component: StreamAuthor,
+            meta: { title: '主播数据' },
           },
           {
             path: "cookie",
