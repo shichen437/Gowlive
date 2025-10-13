@@ -31,3 +31,11 @@ func (c *liveManageController) Update(ctx context.Context, req *v1.PutLiveManage
 func (c *liveManageController) Delete(ctx context.Context, req *v1.DeleteLiveManageReq) (res *v1.DeleteLiveManageRes, err error) {
 	return service.LiveManage().Delete(ctx, req)
 }
+
+func (c *liveManageController) Start(ctx context.Context, req *v1.PutLiveManageStartReq) (res *v1.PutLiveManageStartRes, err error) {
+	return service.LiveManage().Start(ctx, req)
+}
+
+func (c *liveManageController) Stop(ctx context.Context, req *v1.PutLiveManageStopReq) (res *v1.PutLiveManageStopRes, err error) {
+	return service.LiveManage().Stop(ctx, req)
+}

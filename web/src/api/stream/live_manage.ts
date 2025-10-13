@@ -38,3 +38,17 @@ export async function roomDetail(liveId: number) {
     method: "get",
   });
 }
+
+export async function startRoom(id: number) {
+  return request({
+    url: "/live/room/manage/start/" + id,
+    method: "put",
+  });
+}
+
+export async function stopRoom(id: number) {
+  return request({
+    url: "/live/room/manage/stop/" + id,
+    method: "put",
+  });
+}

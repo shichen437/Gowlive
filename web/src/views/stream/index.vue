@@ -33,6 +33,14 @@
               <TableCell class="text-center" :class="getStatusColor(room.status, room.isRecording)">{{
                 getStatusText(room.status, room.isRecording) }}</TableCell>
               <TableCell class="text-center space-x-2">
+                <Button v-if="room.status === 0" variant="ghost" size="icon"
+                  @click="openStartConfirmModal(room.liveId)">
+                  <Play class="w-4 h-4" />
+                </Button>
+                <Button v-else variant="ghost" size="icon" class="text-destructive hover:text-destructive"
+                  @click="openStopConfirmModal(room.liveId)">
+                  <Square class="w-4 h-4" />
+                </Button>
                 <Button variant="ghost" size="icon" @click="openEditRoomModal(room.liveId)">
                   <Pencil class="w-4 h-4" />
                 </Button>
@@ -75,12 +83,16 @@
   </div>
   <RoomModal ref="roomModal" @refresh="getRooms" />
   <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-    :onConfirm="handleDeleteRoom" title="确认删除" description="你确定要删除这个房间吗？此操作无法撤销。" />
+    :onConfirm="handleDeleteRoom" title="确认删除" description="你确定要删除该房间吗？此操作无法撤销。" />
+  <ConfirmModal :open="showStartConfirmModal" :onOpenChange="(open: any) => showStartConfirmModal = open"
+    :onConfirm="handleStartRoom" title="确认开始监控" description="你确定要开始监控该房间吗？" />
+  <ConfirmModal :open="showStopConfirmModal" :onOpenChange="(open: any) => showStopConfirmModal = open"
+    :onConfirm="handleStopRoom" title="确认停止监控" description="你确定要停止监控该房间吗？" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { roomList, deleteRoom } from "@/api/stream/live_manage";
+import { roomList, deleteRoom, startRoom, stopRoom } from "@/api/stream/live_manage";
 import type { RoomInfo } from "@/types/stream";
 import RoomModal from "@/components/modal/stream/RoomModal.vue";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
@@ -103,7 +115,7 @@ import {
   PaginationItem,
 } from '@/components/ui/pagination';
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2 } from "lucide-vue-next";
+import { Plus, Pencil, Trash2, Play, Square } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
@@ -121,6 +133,11 @@ const filter = ref({
   roomName: '',
   platform: '',
 });
+
+const showStartConfirmModal = ref(false);
+const roomToStart = ref<number | null>(null);
+const showStopConfirmModal = ref(false);
+const roomToStop = ref<number | null>(null);
 
 const { getLabel: getPlatformLabel } = useDict("live_platform");
 
@@ -167,6 +184,8 @@ const getStatusText = (status: number, isRecording: boolean) => {
       return "实时监控";
     case 2:
       return "定时监控";
+    case 3:
+      return "智能监控";
     default:
       return "未监控";
   }
@@ -217,6 +236,56 @@ async function handleDeleteRoom() {
   } finally {
     showConfirmModal.value = false;
     roomToDelete.value = null;
+  }
+}
+
+const openStartConfirmModal = (id: number) => {
+  roomToStart.value = id;
+  showStartConfirmModal.value = true;
+};
+
+const openStopConfirmModal = (id: number) => {
+  roomToStop.value = id;
+  showStopConfirmModal.value = true;
+};
+
+async function handleStartRoom() {
+  if (!roomToStart.value) {
+    return;
+  }
+  try {
+    const res: any = await startRoom(roomToStart.value);
+    if (res.code !== 0) {
+      toast.error(res.msg || "操作失败");
+      return;
+    }
+    getRooms();
+    toast.success("已开始监控");
+  } catch (error) {
+    console.error("Failed to start room:", error);
+  } finally {
+    showStartConfirmModal.value = false;
+    roomToStart.value = null;
+  }
+}
+
+async function handleStopRoom() {
+  if (!roomToStop.value) {
+    return;
+  }
+  try {
+    const res: any = await stopRoom(roomToStop.value);
+    if (res.code !== 0) {
+      toast.error(res.msg || "操作失败");
+      return;
+    }
+    getRooms();
+    toast.success("已停止监控");
+  } catch (error) {
+    console.error("Failed to stop room:", error);
+  } finally {
+    showStopConfirmModal.value = false;
+    roomToStop.value = null;
   }
 }
 </script>

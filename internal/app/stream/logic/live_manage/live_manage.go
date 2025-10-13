@@ -14,6 +14,7 @@ import (
 	"github.com/shichen437/gowlive/internal/app/stream/model/do"
 	"github.com/shichen437/gowlive/internal/app/stream/model/entity"
 	"github.com/shichen437/gowlive/internal/app/stream/service"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/crons"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
@@ -160,6 +161,72 @@ func (s *sLiveManage) Delete(ctx context.Context, req *v1.DeleteLiveManageReq) (
 	return
 }
 
+func (s *sLiveManage) Start(ctx context.Context, req *v1.PutLiveManageStartReq) (res *v1.PutLiveManageStartRes, err error) {
+	var tempData *entity.LiveManage
+	err = dao.LiveManage.Ctx(ctx).WherePri(req.Id).Scan(&tempData)
+	if err != nil {
+		return nil, gerror.New("获取直播间失败")
+	}
+	if tempData == nil || tempData.Id == 0 {
+		return nil, gerror.New("直播间不存在")
+	}
+	if tempData.MonitorType != consts.MonitorTypeStop {
+		return nil, gerror.New("直播间已在监控中")
+	}
+	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		_, err = dao.LiveManage.Ctx(ctx).WherePri(req.Id).Update(do.LiveManage{
+			MonitorType: consts.MonitorTypeStart,
+			UpdatedAt:   utils.Now(),
+		})
+		if err != nil {
+			return err
+		}
+		_, err = dao.LiveRoomInfo.Ctx(ctx).
+			Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).
+			Update(do.LiveRoomInfo{
+				Status:    consts.MonitorTypeStart,
+				UpdatedAt: utils.Now(),
+			})
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, gerror.New("开始监控直播间失败")
+	}
+
+	go listenerForQuickAdd(req.Id)
+	return
+}
+
+func (s *sLiveManage) Stop(ctx context.Context, req *v1.PutLiveManageStopReq) (res *v1.PutLiveManageStopRes, err error) {
+	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		_, err = dao.LiveManage.Ctx(ctx).WherePri(req.Id).Update(do.LiveManage{
+			MonitorType: consts.MonitorTypeStop,
+			UpdatedAt:   utils.Now(),
+		})
+		if err != nil {
+			return err
+		}
+		_, err = dao.LiveRoomInfo.Ctx(ctx).
+			Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).
+			Update(do.LiveRoomInfo{
+				Status:    consts.MonitorTypeStop,
+				UpdatedAt: utils.Now(),
+			})
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, gerror.New("停止监控直播间失败")
+	}
+	go listenerForDelete(req.Id)
+	return
+}
+
 func dealSortParams(m *gdb.Model, sort string) *gdb.Model {
 	switch sort {
 	case "id:asc":
@@ -210,6 +277,10 @@ func saveLiveConfig(ctx context.Context, req *v1.PostLiveManageReq, liveId *int6
 		}
 		return nil
 	})
+}
+
+func listenerForQuickAdd(liveId int) {
+	listenerForAdd(liveId, consts.MonitorTypeStart, "", "")
 }
 
 func listenerForAdd(liveId, monitorType int, monitorStartAt, monitorStopAt string) {

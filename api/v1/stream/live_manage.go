@@ -65,3 +65,19 @@ type DeleteLiveManageReq struct {
 type DeleteLiveManageRes struct {
 	g.Meta `mime:"application/json"`
 }
+
+type PutLiveManageStartReq struct {
+	g.Meta `path:"/live/room/manage/start/{id}" method:"put" tags:"直播管理" summary:"开始监控"`
+	Id     int `json:"id" dc:"直播房间ID" v:"min:1#直播房间ID不能为空"`
+}
+type PutLiveManageStartRes struct {
+	g.Meta `mime:"application/json"`
+}
+
+type PutLiveManageStopReq struct {
+	g.Meta `path:"/live/room/manage/stop/{id}" method:"put" tags:"直播管理" summary:"停止监控"`
+	Id     int `json:"id" dc:"直播房间ID" v:"min:1#直播房间ID不能为空"`
+}
+type PutLiveManageStopRes struct {
+	g.Meta `mime:"application/json"`
+}
