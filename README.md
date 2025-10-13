@@ -67,6 +67,10 @@ Gowlive 是一个基于 [GoFrame](https://goframe.org/) 和 [Vue3](https://vuejs
     ```bash
     docker pull shichen437/gowlive:latest
     ```
+    或者从 GitHub Container Registry 拉取:
+    ```bash
+    docker pull ghcr.io/shichen437/gowlive:latest
+    ```
 2.  运行容器:
     ```bash
     docker run -d \
