@@ -7,6 +7,7 @@ import (
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
 	"github.com/shichen437/gowlive/internal/app/stream/model/entity"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/crons"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
@@ -32,7 +33,7 @@ func LiveMonitor() {
 func getLiveSessionIds4Init(ctx context.Context) []int {
 	var list []*entity.LiveManage
 	err := dao.LiveManage.Ctx(ctx).
-		Where(dao.LiveManage.Columns().MonitorType, 1).
+		WhereIn(dao.LiveManage.Columns().MonitorType, []int{consts.MonitorTypeStart, consts.MonitorTypeIntelligent}).
 		Scan(&list)
 	if err != nil {
 		g.Log().Errorf(ctx, "Failed to get live session ids from database: %v", err)

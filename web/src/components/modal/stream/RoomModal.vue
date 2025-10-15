@@ -63,7 +63,7 @@
               <FormLabel>监控类型</FormLabel>
               <FormControl>
                 <RadioGroup
-                  class="grid grid-cols-3 gap-4"
+                  class="grid grid-cols-4 gap-2"
                   :model-value="field.value"
                   @update:model-value="field.onChange"
                 >
@@ -200,7 +200,8 @@ const dialogTitle = computed(() => isEditMode.value ? '编辑房间' : '添加�
 const monitorTypeOptions = [
   { value: 0, label: '停止监控' },
   { value: 1, label: '实时监控' },
-  { value: 2, label: '定时监控' }
+  { value: 2, label: '定时监控' },
+  { value: 3, label: '智能监控' }
 ];
 
 const formSchema = toTypedSchema(

@@ -4,8 +4,10 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/events"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
+	"github.com/shichen437/gowlive/internal/pkg/service"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
@@ -40,8 +42,12 @@ func (l *listener) Start() error {
 	defer atomic.CompareAndSwapUint32(&l.state, pending, running)
 
 	l.ed.DispatchEvent(events.NewEvent("ListenStart", l.session))
-	l.refresh()
-	go l.run()
+	isLive := l.refresh()
+	if l.session.Config.MonitorType == consts.MonitorTypeIntelligent {
+		go l.runForIntelligent(isLive)
+	} else {
+		go l.run()
+	}
 	return nil
 }
 
@@ -53,11 +59,11 @@ func (l *listener) Close() {
 	close(l.stop)
 }
 
-func (l *listener) refresh() {
+func (l *listener) refresh() bool {
 	info, err := l.session.LiveApi.GetInfo()
 	if err != nil {
 		g.Log().Error(gctx.GetInitCtx(), "failed to get live info")
-		return
+		return false
 	}
 
 	oldState := l.session.GetState()
@@ -89,6 +95,7 @@ func (l *listener) refresh() {
 	if !info.IsLive && (oldState.RoomName != info.RoomName || oldState.Anchor != info.Anchor) {
 		l.ed.DispatchEvent(events.NewEvent("NameChanged", l.session))
 	}
+	return info.IsLive
 }
 
 func getLatestStatus(info *lives.LiveState) status {
@@ -115,6 +122,52 @@ func (l *listener) run() {
 			return
 		case <-ticker.C:
 			l.refresh()
+		}
+	}
+}
+
+func (l *listener) runForIntelligent(isLive bool) {
+	var ticker *jitterbug.Ticker
+	var interval int
+
+	if isLive {
+		interval = max(l.session.Config.Interval, 30)
+	} else {
+		interval = service.GenIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
+	}
+
+	ticker = jitterbug.New(
+		time.Duration(interval)*time.Second,
+		jitterbug.Norm{
+			Stdev: time.Second * 5,
+		},
+	)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-l.stop:
+			return
+		case <-ticker.C:
+			currentIsLive := l.refresh()
+
+			var newInterval int
+			if currentIsLive {
+				newInterval = max(l.session.Config.Interval, 30)
+			} else {
+				newInterval = service.GenIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
+			}
+
+			if newInterval != interval {
+				ticker.Stop()
+				interval = newInterval
+				ticker = jitterbug.New(
+					time.Duration(interval)*time.Second,
+					jitterbug.Norm{
+						Stdev: time.Second * 5,
+					},
+				)
+			}
 		}
 	}
 }

@@ -35,7 +35,7 @@ type PostLiveManageReq struct {
 	RoomUrl        string `json:"roomUrl"  v:"required|url#房间地址不能为空|房间地址必须为有效URL"`
 	Interval       int    `json:"interval" v:"required|min:30#间隔时间不能为空|间隔时间最小为30s"`
 	Format         string `json:"format" v:"required|in:flv,mp4,mp3#录制格式不能为空|录制格式不合法"`
-	MonitorType    int    `json:"monitorType" v:"required|in:0,1,2#监控类型不能为空|监控类型参数不合法"`
+	MonitorType    int    `json:"monitorType" v:"required|in:0,1,2,3#监控类型不能为空|监控类型参数不合法"`
 	MonitorStartAt string `json:"monitorStartAt" v:"required-if:monitorType,2#定时监控开始时间不能为空"`
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#定时监控结束时间不能为空|定时监控结束时间不能与开始时间相同"`
 	Remark         string `json:"remark" v:"max-length:45#备注最大长度为45"`
@@ -49,7 +49,7 @@ type PutLiveManageReq struct {
 	Id             int    `json:"id" dc:"直播房间ID" v:"min:1#直播房间ID不能为空"`
 	Interval       int    `json:"interval" v:"required|min:30#间隔时间不能为空|间隔时间最小为30s"`
 	Format         string `json:"format" v:"required|in:flv,mp4,mp3#录制格式不能为空|录制格式不合法"`
-	MonitorType    int    `json:"monitorType" v:"required|in:0,1,2#监控类型不能为空|监控类型参数不合法"`
+	MonitorType    int    `json:"monitorType" v:"required|in:0,1,2,3#监控类型不能为空|监控类型参数不合法"`
 	MonitorStartAt string `json:"monitorStartAt" v:"required-if:monitorType,2#定时监控开始时间不能为空"`
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#定时监控结束时间不能为空|定时监控结束时间不能与开始时间相同"`
 	Remark         string `json:"remark" v:"max-length:45#备注最大长度为45"`

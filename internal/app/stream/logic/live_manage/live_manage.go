@@ -285,27 +285,27 @@ func listenerForQuickAdd(liveId int) {
 
 func listenerForAdd(liveId, monitorType int, monitorStartAt, monitorStopAt string) {
 	ctx := gctx.GetInitCtx()
-	if monitorType == 1 {
+	if monitorType == consts.MonitorTypeStart || monitorType == consts.MonitorTypeIntelligent {
 		registry.Get().Add(ctx, liveId)
 	}
-	if monitorType == 2 {
+	if monitorType == consts.MonitorTypeStop {
 		crons.AddStreamCron(ctx, liveId, monitorStartAt, monitorStopAt)
 	}
 }
 
 func listenerForUpdate(req *v1.PutLiveManageReq, tempData *entity.LiveManage) {
 	ctx := gctx.GetInitCtx()
-	if req.MonitorType == 0 {
+	if req.MonitorType == consts.MonitorTypeStop {
 		listenerForDelete(req.Id)
 	}
-	if req.MonitorType == 1 {
+	if req.MonitorType == consts.MonitorTypeStart || req.MonitorType == consts.MonitorTypeIntelligent {
 		if req.MonitorType != tempData.MonitorType || req.Format != tempData.Format || req.Interval != tempData.Interval {
 			listenerForDelete(req.Id)
 			registry.Get().Add(ctx, req.Id)
 			return
 		}
 	}
-	if req.MonitorType == 2 {
+	if req.MonitorType == consts.MonitorTypeCron {
 		if req.MonitorType != tempData.MonitorType || req.Format != tempData.Format ||
 			req.Interval != tempData.Interval || req.MonitorStartAt != tempData.MonitorStartAt ||
 			req.MonitorStopAt != tempData.MonitorStopAt {

@@ -163,13 +163,15 @@ onMounted(async () => {
 
 const getStatusColor = (status: number, isRecording: boolean) => {
   if (isRecording) {
-    return "text-red-500";
+    return "text-red-600";
   }
   switch (status) {
     case 1:
       return "text-cyan-600";
     case 2:
       return "text-green-600";
+    case 3:
+      return "text-violet-600";
     default:
       return "";
   }
