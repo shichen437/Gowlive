@@ -23,3 +23,7 @@ func (c *anchorInfoController) Add(ctx context.Context, req *v1.PostAnchorReq) (
 func (c *anchorInfoController) Delete(ctx context.Context, req *v1.DeleteAnchorReq) (res *v1.DeleteAnchorRes, err error) {
 	return service.AnchorInfo().Delete(ctx, req)
 }
+
+func (c *anchorInfoController) StatInfo(ctx context.Context, req *v1.GetAnchorStatInfoReq) (res *v1.GetAnchorStatInfoRes, err error) {
+	return service.AnchorInfo().StatInfo(ctx, req)
+}

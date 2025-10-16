@@ -96,7 +96,7 @@ func UpdateRoomInfo(ctx context.Context, liveSession *lives.LiveSession) {
 		})
 }
 
-func GenIntelligentInterval(ctx context.Context, liveId int) int {
+func GainIntelligentInterval(ctx context.Context, liveId int) int {
 	list := getCircularSectorsWithCache(ctx, liveId)
 	if len(list) <= 0 {
 		return consts.DefaultInterval
@@ -213,7 +213,7 @@ func sessionToArcSectors(start *gtime.Time, end *gtime.Time) []arcSector {
 	// 跨天：两段
 	res := make([]arcSector, 0, 2)
 	if startMin < 1440 {
-		res = append(res, arcSector{startMin: startMin, endMin: 1440})
+		res = append(res, arcSector{startMin: startMin, endMin: 1439})
 	}
 	if endMin > 0 {
 		res = append(res, arcSector{startMin: 0, endMin: endMin})
@@ -284,13 +284,12 @@ func parseHHMMToMinutes(hhmm string) (int, bool) {
 func isOutsideLiveDuration(sectors []*LiveDuration) bool {
 
 	if len(sectors) == 0 {
-		return true
+		return false
 	}
 
 	const windowMin = 20
 
 	t := time.Now()
-	// 当前时间的分钟偏移
 	curMin := t.Hour()*60 + t.Minute()
 
 	for _, s := range sectors {
@@ -301,13 +300,10 @@ func isOutsideLiveDuration(sectors []*LiveDuration) bool {
 		}
 
 		// 扩展前后20分钟，并裁剪到 [0,1440]
-		winStart := startMin - windowMin
-		if winStart < 0 {
-			winStart = 0
-		}
-		winEnd := endMin + windowMin
-		if winEnd > 1440 {
-			winEnd = 1440
+		winStart := max(startMin-windowMin, 0)
+		winEnd := min(endMin+windowMin, 1439)
+		if winStart > winEnd {
+			continue
 		}
 
 		if curMin >= winStart && curMin <= winEnd {

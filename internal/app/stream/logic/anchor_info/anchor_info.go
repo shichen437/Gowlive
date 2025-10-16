@@ -9,6 +9,7 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 	v1 "github.com/shichen437/gowlive/api/v1/stream"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
+	"github.com/shichen437/gowlive/internal/app/stream/model"
 	"github.com/shichen437/gowlive/internal/app/stream/model/do"
 	"github.com/shichen437/gowlive/internal/app/stream/model/entity"
 	"github.com/shichen437/gowlive/internal/app/stream/service"
@@ -93,6 +94,65 @@ func (c *sAnchorInfo) Delete(ctx context.Context, req *v1.DeleteAnchorReq) (res 
 		err = gerror.New("删除主播历史数据失败")
 		return
 	}
+	return
+}
+
+func (c *sAnchorInfo) StatInfo(ctx context.Context, req *v1.GetAnchorStatInfoReq) (res *v1.GetAnchorStatInfoRes, err error) {
+	res = &v1.GetAnchorStatInfoRes{}
+	info := &model.AnchorStatInfo{
+		WeekFollowersIncr:  0,
+		WeekLikeNumIncr:    0,
+		MonthFollowersIncr: 0,
+	}
+	var list []*entity.AnchorInfoHistory
+	m := dao.AnchorInfoHistory.Ctx(ctx).Where(dao.AnchorInfoHistory.Columns().AnchorId, req.Id)
+	count, err := m.Count()
+	if err != nil || count <= 0 {
+		return
+	}
+
+	thirtyOneDaysAgo := gtime.Now().AddDate(0, 0, -31).Format("Y-m-d")
+	m = m.WhereGTE(dao.AnchorInfoHistory.Columns().CollectedDate, thirtyOneDaysAgo)
+	err = m.OrderAsc(dao.AnchorInfoHistory.Columns().CollectedDate).Scan(&list)
+	if err != nil || len(list) <= 0 {
+		return
+	}
+
+	info.HistoryData = make([]*model.AnchorStatData, 0, len(list))
+	historyMap := make(map[string]*entity.AnchorInfoHistory, len(list))
+	for _, h := range list {
+		info.HistoryData = append(info.HistoryData, &model.AnchorStatData{
+			RecordDate: h.CollectedDate,
+			Followers:  h.FollowerCount,
+			LikeCount:  h.LikeCount,
+		})
+		historyMap[h.CollectedDate] = h
+	}
+
+	if len(list) < 2 {
+		res.Data = info
+		return
+	}
+
+	latestRecord := list[len(list)-1]
+	latestDate := gtime.NewFromStr(latestRecord.CollectedDate)
+
+	sevenDaysAgoDateStr := latestDate.AddDate(0, 0, -7).Format("Y-m-d")
+	if sevenDaysAgoRecord, ok := historyMap[sevenDaysAgoDateStr]; ok {
+		increase := latestRecord.FollowerCount - sevenDaysAgoRecord.FollowerCount
+		info.WeekFollowersIncr = increase
+		increase = latestRecord.LikeCount - sevenDaysAgoRecord.LikeCount
+		info.WeekLikeNumIncr = increase
+	}
+
+	// 30-day average
+	thirtyDaysAgoDateStr := latestDate.AddDate(0, 0, -30).Format("Y-m-d")
+	if thirtyDaysAgoRecord, ok := historyMap[thirtyDaysAgoDateStr]; ok {
+		increase := latestRecord.FollowerCount - thirtyDaysAgoRecord.FollowerCount
+		info.MonthFollowersIncr = increase
+	}
+
+	res.Data = info
 	return
 }
 

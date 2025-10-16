@@ -10,13 +10,8 @@
             <FormItem>
               <FormLabel>直播链接</FormLabel>
               <FormControl>
-                <Input 
-                  type="text" 
-                  placeholder="请输入直播链接" 
-                  v-bind="componentField" 
-                  :disabled="isEditMode"
-                  :class="{ 'border-red-500': errorMessage }"
-                />
+                <Input type="text" placeholder="请输入直播链接" v-bind="componentField" :disabled="isEditMode"
+                  :class="{ 'border-red-500': errorMessage }" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -27,12 +22,8 @@
               <FormItem>
                 <FormLabel>间隔时间 (秒)</FormLabel>
                 <FormControl>
-                  <Input 
-                    type="number" 
-                    placeholder="30-600" 
-                    v-bind="componentField"
-                    :class="{ 'border-red-500': errorMessage }"
-                  />
+                  <Input type="number" placeholder="30-600" v-bind="componentField"
+                    :class="{ 'border-red-500': errorMessage }" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -60,23 +51,31 @@
 
           <FormField v-slot="{ field, errorMessage }" name="monitorType">
             <FormItem>
-              <FormLabel>监控类型</FormLabel>
+              <FormLabel class="flex items-center">
+                监控类型
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger as-child>
+                      <Info class="w-4 h-4 ml-1" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>实时监控：根据设置的间隔时间轮询获取直播状态。</p>
+                      <p>定时监控：在指定时间段内根据间隔时间获取直播状态。</p>
+                      <p>智能监控：根据有效直播历史动态调整间隔时间大小，暂无历史时降级为实时监控。</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </FormLabel>
               <FormControl>
-                <RadioGroup
-                  class="grid grid-cols-4 gap-2"
-                  :model-value="field.value"
-                  @update:model-value="field.onChange"
-                >
+                <RadioGroup class="grid grid-cols-4 gap-2" :model-value="field.value"
+                  @update:model-value="field.onChange">
                   <div v-for="item in monitorTypeOptions" :key="item.value">
                     <RadioGroupItem :id="`monitor-type-${item.value}`" :value="item.value" class="sr-only" />
-                    <label
-                      :for="`monitor-type-${item.value}`"
-                      :class="cn(
-                        buttonVariants({ variant: field.value === item.value ? 'default' : 'outline' }), 
-                        'w-full cursor-pointer flex items-center justify-center h-9',
-                        errorMessage ? 'border-red-500' : ''
-                      )"
-                    >
+                    <label :for="`monitor-type-${item.value}`" :class="cn(
+                      buttonVariants({ variant: field.value === item.value ? 'default' : 'outline' }),
+                      'w-full cursor-pointer flex items-center justify-center h-9',
+                      errorMessage ? 'border-red-500' : ''
+                    )">
                       {{ item.label }}
                     </label>
                   </div>
@@ -92,16 +91,8 @@
                 <FormItem>
                   <FormLabel>监控开始时间</FormLabel>
                   <FormControl>
-                    <VueDatePicker 
-                      v-bind="componentField" 
-                      time-picker 
-                      auto-apply 
-                      model-type="HH:mm" 
-                      :format="'HH:mm'" 
-                      text-input 
-                      placeholder="HH:mm"
-                      :class="{ 'border-red-500': errorMessage }"
-                    />
+                    <VueDatePicker v-bind="componentField" time-picker auto-apply model-type="HH:mm" :format="'HH:mm'"
+                      text-input placeholder="HH:mm" :class="{ 'border-red-500': errorMessage }" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -110,16 +101,8 @@
                 <FormItem>
                   <FormLabel>监控结束时间</FormLabel>
                   <FormControl>
-                    <VueDatePicker 
-                      v-bind="componentField" 
-                      time-picker 
-                      auto-apply 
-                      model-type="HH:mm" 
-                      :format="'HH:mm'" 
-                      text-input 
-                      placeholder="HH:mm"
-                      :class="{ 'border-red-500': errorMessage }"
-                    />
+                    <VueDatePicker v-bind="componentField" time-picker auto-apply model-type="HH:mm" :format="'HH:mm'"
+                      text-input placeholder="HH:mm" :class="{ 'border-red-500': errorMessage }" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -131,12 +114,8 @@
             <FormItem>
               <FormLabel>备注</FormLabel>
               <FormControl>
-                <Input 
-                  type="text" 
-                  placeholder="请输入备注" 
-                  v-bind="componentField"
-                  :class="{ 'border-red-500': errorMessage }"
-                />
+                <Input type="text" placeholder="请输入备注" v-bind="componentField"
+                  :class="{ 'border-red-500': errorMessage }" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -187,6 +166,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Info } from 'lucide-vue-next';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
 
 const isOpen = ref(false);
@@ -239,9 +225,9 @@ const { handleSubmit, values, setValues, resetForm } = useForm({
 
 const onSubmit = handleSubmit(async (formValues) => {
   if (isSubmitting.value) return;
-  
+
   isSubmitting.value = true;
-  
+
   try {
     const payload = {
       ...formValues,
@@ -263,7 +249,7 @@ const onSubmit = handleSubmit(async (formValues) => {
       }
       toast.success('添加成功');
     }
-    
+
     isOpen.value = false;
     emit('refresh');
   } catch (error) {
@@ -280,7 +266,7 @@ const openModal = async (id?: number) => {
     try {
       const response = await roomDetail(id);
       const roomData = response.data.data as LiveManage;
-      
+
       const formattedData = {
         ...roomData,
         monitorType: Number(roomData.monitorType),
@@ -288,7 +274,7 @@ const openModal = async (id?: number) => {
         monitorStopAt: roomData.monitorStopAt || null,
         remark: roomData.remark || ''
       };
-      
+
       setValues(formattedData);
     } catch (error) {
       console.error('Failed to fetch room details:', error);

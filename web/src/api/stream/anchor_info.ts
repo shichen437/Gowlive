@@ -23,3 +23,10 @@ export async function deleteAnchor(id: number) {
     method: "delete",
   });
 }
+
+export async function getAnchorStatInfo(id: number) {
+  return request({
+    url: "/live/anchor/stat/" + id,
+    method: "get",
+  });
+}

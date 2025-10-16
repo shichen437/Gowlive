@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/shichen437/gowlive/api/v1/common"
+	"github.com/shichen437/gowlive/internal/app/stream/model"
 	"github.com/shichen437/gowlive/internal/app/stream/model/entity"
 )
 
@@ -32,4 +33,13 @@ type DeleteAnchorReq struct {
 }
 type DeleteAnchorRes struct {
 	g.Meta `mime:"application/json"`
+}
+
+type GetAnchorStatInfoReq struct {
+	g.Meta `path:"/live/anchor/stat/{id}" method:"get" tags:"主播数据" summary:"获取主播统计信息"`
+	Id     *int `json:"id" dc:"主播ID" v:"required#主播ID不能为空"`
+}
+type GetAnchorStatInfoRes struct {
+	g.Meta `mime:"application/json"`
+	Data   *model.AnchorStatInfo `json:"data"`
 }

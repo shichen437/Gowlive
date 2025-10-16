@@ -2,7 +2,7 @@ export interface LiveManage {
   id: number;
   roomUrl: string;
   interval: number;
-  format: 'flv' | 'mp4' | 'mp3';
+  format: "flv" | "mp4" | "mp3";
   monitorType: number;
   monitorStartAt: string;
   monitorStopAt: string;
@@ -45,4 +45,17 @@ export interface AnchorInfo {
   likeCount: number;
   videoCount: number;
   createdAt: string;
+}
+
+export interface AnchorStatInfo {
+  weekFollowersIncr: number;
+  weekLikeNumIncr: number;
+  monthFollowersIncr: number;
+  historyData: AnchorStatData[];
+}
+
+export interface AnchorStatData {
+  recordDate: string;
+  followers: number;
+  likeCount: number;
 }

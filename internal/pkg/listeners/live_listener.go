@@ -133,7 +133,7 @@ func (l *listener) runForIntelligent(isLive bool) {
 	if isLive {
 		interval = max(l.session.Config.Interval, 30)
 	} else {
-		interval = service.GenIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
+		interval = service.GainIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
 	}
 
 	ticker = jitterbug.New(
@@ -155,7 +155,7 @@ func (l *listener) runForIntelligent(isLive bool) {
 			if currentIsLive {
 				newInterval = max(l.session.Config.Interval, 30)
 			} else {
-				newInterval = service.GenIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
+				newInterval = service.GainIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
 			}
 
 			if newInterval != interval {

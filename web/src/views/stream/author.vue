@@ -48,6 +48,9 @@
                             <TableCell class="text-center">{{ formatBigNumber(anchor.likeCount) }}</TableCell>
                             <TableCell class="text-center">{{ anchor.videoCount }}</TableCell>
                             <TableCell class="text-center space-x-2">
+                                <Button variant="ghost" size="icon" @click="openStatModal(anchor.id)">
+                                    <BarChart class="w-4 h-4" />
+                                </Button>
                                 <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
                                     @click="openConfirmModal(anchor.id)">
                                     <Trash2 class="w-4 h-4" />
@@ -88,13 +91,15 @@
     <AuthorModal ref="authorModal" @refresh="getAnchors" />
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
         :onConfirm="handleDeleteAnchor" title="确认删除" description="你确定要删除该主播吗？此操作无法撤销。" />
+    <AnchorStatInfoModal ref="statModal" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { anchorList, deleteAnchor } from "@/api/stream/anchor_info";
+import { anchorList, deleteAnchor, getAnchorStatInfo } from "@/api/stream/anchor_info";
 import type { AnchorInfo } from "@/types/stream";
 import AuthorModal from "@/components/modal/stream/AuthorModal.vue";
+import AnchorStatInfoModal from "@/components/modal/stream/AnchorStatInfo.vue";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
 import FilterAuthorDropDownMenu from "@/components/dropdownmenu/stream/FilterAuthorDropDownMenu.vue";
 import {
@@ -120,7 +125,7 @@ import {
     TooltipContent,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-vue-next";
+import { BarChart, Plus, Trash2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
@@ -132,6 +137,7 @@ const pageNum = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
 const authorModal = ref<InstanceType<typeof AuthorModal> | null>(null);
+const statModal = ref<InstanceType<typeof AnchorStatInfoModal> | null>(null);
 const anchorToDelete = ref<number | null>(null);
 const filter = ref({
     platform: '',
@@ -171,6 +177,19 @@ const handleFilterChange = (newFilter: any) => {
 
 const openAddAnchorModal = () => {
     authorModal.value?.openModal();
+};
+
+const openStatModal = async (id: number) => {
+    try {
+        const response: any = await getAnchorStatInfo(id);
+        if (response.code === 0) {
+            statModal.value?.openModal(response.data.data);
+        } else {
+            toast.error(response.msg || "获取统计信息失败");
+        }
+    } catch (error) {
+        console.error("Failed to fetch anchor stats:", error);
+    }
 };
 
 const openConfirmModal = (id: number) => {

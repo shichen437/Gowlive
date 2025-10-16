@@ -16,6 +16,7 @@ type (
 		List(ctx context.Context, req *v1.GetAnchorListReq) (res *v1.GetAnchorListRes, err error)
 		Add(ctx context.Context, req *v1.PostAnchorReq) (res *v1.PostAnchorRes, err error)
 		Delete(ctx context.Context, req *v1.DeleteAnchorReq) (res *v1.DeleteAnchorRes, err error)
+		StatInfo(ctx context.Context, req *v1.GetAnchorStatInfoReq) (res *v1.GetAnchorStatInfoRes, err error)
 	}
 )
 
