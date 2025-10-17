@@ -17,4 +17,6 @@ import (
 
 	_ "github.com/shichen437/gowlive/internal/pkg/message_push/email"
 	_ "github.com/shichen437/gowlive/internal/pkg/message_push/gotify"
+
+	_ "github.com/shichen437/gowlive/internal/pkg/monitor"
 )

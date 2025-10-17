@@ -8,8 +8,7 @@ const (
 	MonitorTypeCron        = 2
 	MonitorTypeIntelligent = 3
 
-	DurationCacheKeyPrefix = "live:duration:"
-	DurationExpired        = 24 * time.Hour
+	DurationExpired = 24 * time.Hour
 
 	DefaultInterval = 30
 	MaxInterval     = 900

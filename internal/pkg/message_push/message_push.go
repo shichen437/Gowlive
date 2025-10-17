@@ -35,7 +35,7 @@ type Builder interface {
 
 func LivePush(ctx context.Context, anchor string) {
 	channels := service.GetAllPushChannel(ctx)
-	manager.GetNotfiyManager().AddInfoNotify("开播通知", "您关注的主播 【"+anchor+"】 开播了")
+	manager.GetNotfiyManager().AddInfoNotify("开播通知", "你关注的主播 【 "+anchor+" 】 开播了")
 	for _, v := range channels {
 		channelPush(ctx, v, anchor)
 	}

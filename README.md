@@ -6,6 +6,10 @@
   </p>
   <p>
   <a>
+    <img alt="MIT License" 
+      src="https://img.shields.io/github/license/shichen437/Gowlive">
+  </a>
+  <a>
     <img alt="Docker Image Version" 
       src="https://img.shields.io/docker/v/shichen437/gowlive?labelColor=%20%23FDB062&color=%20%23f79009">
   </a>
@@ -28,9 +32,9 @@ Gowlive 是一个基于 [GoFrame](https://goframe.org/) 和 [Vue3](https://vuejs
 
 ## 🚀 功能特性
 
--   🔴 **直播录制**: 支持实时录制和定时录制任务。
+-   🔴 **直播录制**: 支持实时录制/定时录制/智能录制任务。
 -   🕒 **直播历史**: 录制直播时记录直播历史。
--   🫥 **主播数据**: 记录主播基本信息并自动更新。
+-   🫥 **主播数据**: 记录主播基本信息并自动更新，展示统计图表。
 -   🍪 **Cookie管理**: 方便地管理不同平台的登录Cookie。
 -   📁 **文件管理**: 在线管理录制下来的视频文件。
 -   📜 **日志中心**: 记录系统运行日志，方便排查问题。
@@ -67,10 +71,7 @@ Gowlive 是一个基于 [GoFrame](https://goframe.org/) 和 [Vue3](https://vuejs
     ```bash
     docker pull shichen437/gowlive:latest
     ```
-    或者从 GitHub Container Registry 拉取:
-    ```bash
-    docker pull ghcr.io/shichen437/gowlive:latest
-    ```
+
 2.  运行容器:
     ```bash
     docker run -d \

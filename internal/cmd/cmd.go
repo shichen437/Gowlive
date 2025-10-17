@@ -26,6 +26,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
+	"github.com/shichen437/gowlive/internal/pkg/sse"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
@@ -59,6 +60,7 @@ var (
 					if err != nil {
 						panic(err)
 					}
+					group.ALL("/sse", sse.HandleSSE)
 					bindRoute(group)
 				})
 			})

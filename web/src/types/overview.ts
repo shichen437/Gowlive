@@ -5,3 +5,33 @@ export interface Overview {
     unreadMessageCount: number;
     parseMediaCount: number;
 }
+
+export interface MonitorInfo {
+    cpu: CpuInfo;
+    mem: MemoryInfo;
+    disk: DiskInfo;
+}
+
+export interface CpuInfo {
+    cpu: number;
+    cores: number;
+    modelName: string;
+    mhz: number;
+    percent: number;
+}
+
+export interface MemoryInfo {
+    total: number;
+    used: number;
+    available: number;
+    usedPercent: number;
+}
+
+export interface DiskInfo {
+    path: string;
+    fstype: string;
+    total: number;
+    free: number;
+    used: number;
+    usedPercent: number;
+}
