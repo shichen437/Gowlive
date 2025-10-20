@@ -9,6 +9,7 @@ import Index from "@/views/index.vue";
 // 子页面
 import Dashboard from "@/views/dashboard/index.vue";
 import Stream from "@/views/stream/index.vue";
+import StreamMetrics from "@/views/stream/metrics.vue";
 import StreamHistory from "@/views/stream/history.vue";
 import StreamCookie from "@/views/stream/cookie.vue";
 import StreamAuthor from "@/views/stream/author.vue";
@@ -38,6 +39,12 @@ const routes = [
         path: "stream",
         meta: { title: '直播管理' },
         children: [
+          {
+            path: "metrics",
+            name: "StreamMetrics",
+            component: StreamMetrics,
+            meta: { title: '监控指标' },
+          },
           {
             path: "history",
             name: "StreamHistory",

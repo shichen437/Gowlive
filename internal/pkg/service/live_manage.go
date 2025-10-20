@@ -96,15 +96,15 @@ func UpdateRoomInfo(ctx context.Context, liveSession *lives.LiveSession) {
 		})
 }
 
-func GainIntelligentInterval(ctx context.Context, liveId int) int {
+func IsNonLiveHours(ctx context.Context, liveId int) bool {
 	list := getCircularSectorsWithCache(ctx, liveId)
 	if len(list) <= 0 {
-		return consts.DefaultInterval
+		return false
 	}
 	if isOutsideLiveDuration(list) {
-		return consts.MaxInterval
+		return true
 	}
-	return consts.DefaultInterval
+	return false
 }
 
 func getCircularSectorsWithCache(ctx context.Context, liveId int) []*LiveDuration {

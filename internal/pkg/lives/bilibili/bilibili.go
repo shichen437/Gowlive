@@ -11,6 +11,7 @@ import (
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
+	"github.com/shichen437/gowlive/internal/pkg/metrics"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 	"github.com/tidwall/gjson"
 )
@@ -40,19 +41,30 @@ func (l *Bilibili) GetInfo() (info *lives.LiveState, err error) {
 	if l.RoomID == "" && l.parseRoomID() != nil {
 		return nil, gerror.New(l.Platform + "获取房间ID失败")
 	}
+	flag := lives.GetBucketManager().Acquire(gctx.GetInitCtx(), platform)
+	if flag != nil {
+		err = gerror.New("B站直播间获取令牌失败")
+		return
+	}
 	info, err = l.getRoomInfo()
 	if err != nil {
+		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
 		return nil, err
 	}
+	metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, true, false)
 	err = l.getUserInfo(info)
 	if err != nil {
+		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
 		return nil, err
 	}
+	metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, true, false)
 	if info.IsLive {
 		streamInfos, err := l.getStreamInfo()
 		if err != nil || len(streamInfos) == 0 {
+			metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
 			return nil, gerror.New(l.Platform + "获取直播流数据失败")
 		}
+		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, true, true)
 		info.StreamInfos = streamInfos
 	}
 	return info, nil

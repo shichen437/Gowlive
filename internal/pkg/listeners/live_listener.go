@@ -1,17 +1,19 @@
+// filename: listeners/listeners.go
 package listeners
 
 import (
+	"sync"
 	"sync/atomic"
 	"time"
-
-	"github.com/shichen437/gowlive/internal/pkg/consts"
-	"github.com/shichen437/gowlive/internal/pkg/events"
-	"github.com/shichen437/gowlive/internal/pkg/lives"
-	"github.com/shichen437/gowlive/internal/pkg/service"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/lthibault/jitterbug"
+
+	"github.com/shichen437/gowlive/internal/pkg/consts"
+	"github.com/shichen437/gowlive/internal/pkg/events"
+	"github.com/shichen437/gowlive/internal/pkg/lives"
+	"github.com/shichen437/gowlive/internal/pkg/providers"
 )
 
 type Listener interface {
@@ -22,8 +24,13 @@ type Listener interface {
 type listener struct {
 	session *lives.LiveSession
 	ed      events.Dispatcher
-	state   uint32
-	stop    chan struct{}
+
+	state uint32
+
+	stop     chan struct{}
+	stopOnce sync.Once
+
+	mu sync.RWMutex
 }
 
 func NewListener(session *lives.LiveSession) Listener {
@@ -39,10 +46,15 @@ func (l *listener) Start() error {
 	if !atomic.CompareAndSwapUint32(&l.state, begin, pending) {
 		return nil
 	}
-	defer atomic.CompareAndSwapUint32(&l.state, pending, running)
+
+	defer func() {
+		atomic.StoreUint32(&l.state, running)
+	}()
 
 	l.ed.DispatchEvent(events.NewEvent("ListenStart", l.session))
+
 	isLive := l.refresh()
+
 	if l.session.Config.MonitorType == consts.MonitorTypeIntelligent {
 		go l.runForIntelligent(isLive)
 	} else {
@@ -52,11 +64,27 @@ func (l *listener) Start() error {
 }
 
 func (l *listener) Close() {
-	if !atomic.CompareAndSwapUint32(&l.state, running, stopped) {
-		return
+	for {
+		cur := atomic.LoadUint32(&l.state)
+		if cur == stopped {
+			return
+		}
+		if cur != running && cur != pending {
+			if atomic.CompareAndSwapUint32(&l.state, cur, stopped) {
+				break
+			}
+			continue
+		}
+		if atomic.CompareAndSwapUint32(&l.state, cur, stopped) {
+			break
+		}
 	}
+
 	l.ed.DispatchEvent(events.NewEvent("ListenStop", l.session))
-	close(l.stop)
+
+	l.stopOnce.Do(func() {
+		close(l.stop)
+	})
 }
 
 func (l *listener) refresh() bool {
@@ -66,7 +94,10 @@ func (l *listener) refresh() bool {
 		return false
 	}
 
+	l.mu.RLock()
 	oldState := l.session.GetState()
+	l.mu.RUnlock()
+
 	oldStatus := status{
 		roomName:   oldState.RoomName,
 		anchor:     oldState.Anchor,
@@ -90,7 +121,9 @@ func (l *listener) refresh() bool {
 		l.ed.DispatchEvent(events.NewEvent(evtTyp, l.session))
 	}
 
+	l.mu.Lock()
 	l.session.UpdateState(*info)
+	l.mu.Unlock()
 
 	if !info.IsLive && (oldState.RoomName != info.RoomName || oldState.Anchor != info.Anchor) {
 		l.ed.DispatchEvent(events.NewEvent("NameChanged", l.session))
@@ -106,19 +139,38 @@ func getLatestStatus(info *lives.LiveState) status {
 	}
 }
 
+func (l *listener) calcInterval(isLive bool) int {
+	l.mu.RLock()
+	minInterval := l.session.Config.Interval
+	id := l.session.Id
+	platform := l.session.State.Platform
+	l.mu.RUnlock()
+
+	var interval int
+	if isLive {
+		interval = providers.GetRegularInterval(gctx.GetInitCtx(), id, platform)
+	} else {
+		interval = providers.GetIntelligentInterval(gctx.GetInitCtx(), id, platform)
+	}
+	if minInterval > 0 {
+		interval = max(minInterval, interval)
+	}
+	return max(interval, consts.DefaultInterval)
+}
+
 func (l *listener) run() {
-	interval := max(l.session.Config.Interval, 30)
+	interval := max(l.session.Config.Interval, consts.DefaultInterval)
 	ticker := jitterbug.New(
 		time.Duration(interval)*time.Second,
 		jitterbug.Norm{
 			Stdev: time.Second * 5,
 		},
 	)
-	defer ticker.Stop()
 
 	for {
 		select {
 		case <-l.stop:
+			ticker.Stop()
 			return
 		case <-ticker.C:
 			l.refresh()
@@ -127,41 +179,27 @@ func (l *listener) run() {
 }
 
 func (l *listener) runForIntelligent(isLive bool) {
-	var ticker *jitterbug.Ticker
-	var interval int
+	interval := l.calcInterval(isLive)
 
-	if isLive {
-		interval = max(l.session.Config.Interval, 30)
-	} else {
-		interval = service.GainIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
-		interval = max(l.session.Config.Interval, interval)
-	}
-
-	ticker = jitterbug.New(
+	ticker := jitterbug.New(
 		time.Duration(interval)*time.Second,
 		jitterbug.Norm{
 			Stdev: time.Second * 5,
 		},
 	)
-	defer ticker.Stop()
 
 	for {
 		select {
 		case <-l.stop:
+			ticker.Stop()
 			return
 		case <-ticker.C:
 			currentIsLive := l.refresh()
 
-			var newInterval int
-			if currentIsLive {
-				newInterval = max(l.session.Config.Interval, 30)
-			} else {
-				newInterval = service.GainIntelligentInterval(gctx.GetInitCtx(), l.session.Id)
-				newInterval = max(l.session.Config.Interval, newInterval)
-			}
+			newInterval := l.calcInterval(currentIsLive)
 
 			if newInterval != interval {
-				ticker.Stop()
+				old := ticker
 				interval = newInterval
 				ticker = jitterbug.New(
 					time.Duration(interval)*time.Second,
@@ -169,6 +207,7 @@ func (l *listener) runForIntelligent(isLive bool) {
 						Stdev: time.Second * 5,
 					},
 				)
+				old.Stop()
 			}
 		}
 	}

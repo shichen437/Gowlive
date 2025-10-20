@@ -16,6 +16,7 @@ import (
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
+	"github.com/shichen437/gowlive/internal/pkg/metrics"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 	"github.com/tidwall/gjson"
 )
@@ -37,6 +38,11 @@ func (b *builder) Build(url *url.URL) (lives.LiveApi, error) {
 func (l *Douyin) GetInfo() (info *lives.LiveState, err error) {
 	info = &lives.LiveState{
 		Platform: l.Platform,
+	}
+	flag := lives.GetBucketManager().Acquire(gctx.GetInitCtx(), platform)
+	if flag != nil {
+		err = gerror.New("抖音直播间获取令牌失败")
+		return
 	}
 	body, err := l.getRoomWebPageResp()
 	if err != nil {
@@ -69,19 +75,23 @@ func (l *Douyin) getRoomWebPageResp() (body string, err error) {
 	req, err := c.Get(gctx.GetInitCtx(), l.Url.String())
 	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Page: "+l.Url.String())
 	if err != nil {
+		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
 		g.Log().Error(gctx.GetInitCtx(), err.Error())
 		return
 	}
+	metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, true, false)
 	cookieWithOdinTt := fmt.Sprintf("odin_tt=%s; %s", utils.GenRandomString(160, randomCookieChars), req.Header.Get("Cookie"))
 	req.Header.Set("Cookie", cookieWithOdinTt)
 	c2 := g.Client()
 	resp, err := c2.Do(req.Request)
 	if err != nil {
+		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
 		g.Log().Error(gctx.GetInitCtx(), err.Error())
 		return
 	}
 	switch code := resp.StatusCode; code {
 	case http.StatusOK:
+		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, true, true)
 		body, err = utils.Text(resp)
 		if err != nil {
 			g.Log().Error(gctx.GetInitCtx(), err.Error())
@@ -92,6 +102,7 @@ func (l *Douyin) getRoomWebPageResp() (body string, err error) {
 		}
 		return
 	default:
+		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
 		err = gerror.Newf(`http response error`)
 		return
 	}

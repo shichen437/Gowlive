@@ -7,9 +7,7 @@
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <router-link to="/stream/index">
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle class="text-sm font-medium">房间总数</CardTitle>
               <Home class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -22,9 +20,7 @@
         </Card>
         <Card>
           <router-link to="/stream/index">
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle class="text-sm font-medium">正在录制</CardTitle>
               <MonitorDot class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -37,9 +33,7 @@
         </Card>
         <Card>
           <router-link to="/stream/history">
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle class="text-sm font-medium">录制时长</CardTitle>
               <Clock class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -52,9 +46,7 @@
         </Card>
         <Card>
           <router-link to="/system/notify">
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle class="text-sm font-medium">未读通知</CardTitle>
               <Bell class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -113,9 +105,7 @@
             <div>
               <div class="flex items-center space-x-2 mb-2">
                 <HardDrive class="h-4 w-4 text-muted-foreground" />
-                <span class="font-semibold"
-                  >磁盘 ({{ monitorInfo.disk.fstype }})</span
-                >
+                <span class="font-semibold">磁盘 ({{ monitorInfo.disk.fstype }})</span>
               </div>
               <p class="text-sm text-muted-foreground flex justify-between">
                 <span>总计:</span>
@@ -131,16 +121,12 @@
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
                 <span>使用率:</span>
-                <span
-                  :class="
-                    monitorInfo.disk.usedPercent > 90
-                      ? 'text-rose-600'
-                      : monitorInfo.disk.usedPercent >= 70
-                      ? 'text-amber-600'
-                      : ''
-                  "
-                  >{{ monitorInfo.disk.usedPercent.toFixed(2) }}%</span
-                >
+                <span :class="monitorInfo.disk.usedPercent > 90
+                  ? 'text-rose-600'
+                  : monitorInfo.disk.usedPercent >= 70
+                    ? 'text-amber-600'
+                    : ''
+                  ">{{ monitorInfo.disk.usedPercent.toFixed(2) }}%</span>
               </p>
             </div>
           </CardContent>
@@ -152,7 +138,6 @@
 
 <script setup lang="ts">
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import {
   Home,
   Clock,

@@ -23,6 +23,9 @@
             </Breadcrumb>
         </div>
         <div class="flex items-center gap-4">
+            <Button variant="ghost" size="icon">
+                <Rss class="h-5 w-5" />
+            </Button>
             <Button @click="toggleFullscreen" variant="ghost" size="icon">
                 <component :is="isFullscreen ? Minimize : Maximize" class="h-5 w-5" />
             </Button>
@@ -61,7 +64,7 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import type { UserInfo } from '@/types/user';
-import { Maximize, Minimize, Moon, Sun, SunMoon } from 'lucide-vue-next';
+import { Maximize, Minimize, Moon, Sun, SunMoon, Rss } from 'lucide-vue-next';
 
 const { mode, cycle } = useTheme();
 

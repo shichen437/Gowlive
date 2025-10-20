@@ -9,6 +9,7 @@ import (
 	"github.com/shichen437/gowlive/internal/app/stream/model/entity"
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/crons"
+	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
 )
@@ -16,6 +17,7 @@ import (
 func LiveMonitor() {
 	ctx := gctx.GetInitCtx()
 	defer g.Log().Info(ctx, "LiveMonitor Started!")
+	lives.GetBucketManager()
 	initCookieRegistry(ctx)
 	sessionIds := getLiveSessionIds4Init(ctx)
 	if len(sessionIds) > 0 {

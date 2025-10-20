@@ -12,4 +12,9 @@ const (
 
 	DefaultInterval = 30
 	MaxInterval     = 900
+
+	RequestFailedThreshold = 10
+
+	RequestsFailedWarningCKP = "live:requests:failed:warning:"
+	RequestsFailedWarningTtl = 1 * time.Hour
 )

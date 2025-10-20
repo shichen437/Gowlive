@@ -175,7 +175,7 @@ func (s *sLiveManage) Start(ctx context.Context, req *v1.PutLiveManageStartReq) 
 	}
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 		_, err = dao.LiveManage.Ctx(ctx).WherePri(req.Id).Update(do.LiveManage{
-			MonitorType: consts.MonitorTypeStart,
+			MonitorType: consts.MonitorTypeIntelligent,
 			UpdatedAt:   utils.Now(),
 		})
 		if err != nil {
@@ -184,7 +184,7 @@ func (s *sLiveManage) Start(ctx context.Context, req *v1.PutLiveManageStartReq) 
 		_, err = dao.LiveRoomInfo.Ctx(ctx).
 			Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).
 			Update(do.LiveRoomInfo{
-				Status:    consts.MonitorTypeStart,
+				Status:    consts.MonitorTypeIntelligent,
 				UpdatedAt: utils.Now(),
 			})
 		if err != nil {
@@ -280,7 +280,7 @@ func saveLiveConfig(ctx context.Context, req *v1.PostLiveManageReq, liveId *int6
 }
 
 func listenerForQuickAdd(liveId int) {
-	listenerForAdd(liveId, consts.MonitorTypeStart, "", "")
+	listenerForAdd(liveId, consts.MonitorTypeIntelligent, "", "")
 }
 
 func listenerForAdd(liveId, monitorType int, monitorStartAt, monitorStopAt string) {
@@ -288,7 +288,7 @@ func listenerForAdd(liveId, monitorType int, monitorStartAt, monitorStopAt strin
 	if monitorType == consts.MonitorTypeStart || monitorType == consts.MonitorTypeIntelligent {
 		registry.Get().Add(ctx, liveId)
 	}
-	if monitorType == consts.MonitorTypeStop {
+	if monitorType == consts.MonitorTypeCron {
 		crons.AddStreamCron(ctx, liveId, monitorStartAt, monitorStopAt)
 	}
 }

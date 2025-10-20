@@ -35,3 +35,17 @@ export interface DiskInfo {
     used: number;
     usedPercent: number;
 }
+
+export interface MetricsResult {
+    data: Map<string, MetricsData>;
+}
+
+export interface MetricsData {
+    platform: string;
+    totalRequests: number;
+    totalErrors: number;
+    totalPercent: number;
+    mainRequests: number;
+    mainErrors: number;
+    mainPercent: number;
+}

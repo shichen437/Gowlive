@@ -24,6 +24,7 @@ import (
 	"github.com/shichen437/gowlive/internal/app/admin/model/entity"
 	"github.com/shichen437/gowlive/internal/app/common/service"
 	"github.com/shichen437/gowlive/internal/pkg/consts"
+	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
 	"github.com/shichen437/gowlive/internal/pkg/sse"
@@ -158,5 +159,6 @@ func shutdown(sig os.Signal) {
 	registry.Get().StopAll(gctx.GetInitCtx())
 	manager.GetLogManager().Stop()
 	manager.GetNotfiyManager().Stop()
+	lives.GetBucketManager().Stop()
 	g.Log().Info(gctx.GetInitCtx(), "live monitor shutdown!")
 }

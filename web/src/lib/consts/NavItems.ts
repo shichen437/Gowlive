@@ -15,6 +15,7 @@ export const configurableMenu = ref([
       { title: "房间列表", to: "/stream/index" },
       { title: "直播历史", to: "/stream/history" },
       { title: "主播数据", to: "/stream/author" },
+      { title: "监控指标", to: "/stream/metrics" },
       { title: "Cookie", to: "/stream/cookie" },
     ],
   },

@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/gogf/gf/v2/util/grand"
 )
 
 func GenRandomString(length int, validChars string) string {
@@ -89,4 +91,26 @@ func ParseChineseNumberToInt(s string) int {
 	}
 
 	return int(floored)
+}
+
+func RandomSecondsBatesInt(lower, upper int, n int) int {
+	if n <= 0 {
+		n = 1
+	}
+	if lower >= upper {
+		return lower
+	}
+
+	sum := 0
+	for i := 0; i < n; i++ {
+		sum += grand.N(lower, upper)
+	}
+	iv := sum / n
+
+	if iv < lower {
+		iv = lower
+	} else if iv > upper {
+		iv = upper
+	}
+	return iv
 }
