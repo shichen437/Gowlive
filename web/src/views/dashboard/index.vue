@@ -105,7 +105,7 @@
             <div>
               <div class="flex items-center space-x-2 mb-2">
                 <HardDrive class="h-4 w-4 text-muted-foreground" />
-                <span class="font-semibold">磁盘 ({{ monitorInfo.disk.fstype }})</span>
+                <span class="font-semibold">磁盘 ({{ monitorInfo.disk.fstype != "" ? monitorInfo.disk.fstype : "N/A" }})</span>
               </div>
               <p class="text-sm text-muted-foreground flex justify-between">
                 <span>总计:</span>

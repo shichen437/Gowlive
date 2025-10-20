@@ -138,6 +138,12 @@ const routes = [
     name: "Login",
     component: Login,
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound.vue'),
+    meta: { title: '404' },
+  },
 ];
 
 const router = createRouter({
