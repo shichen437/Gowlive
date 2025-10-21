@@ -90,7 +90,7 @@ func (l *listener) Close() {
 func (l *listener) refresh() bool {
 	info, err := l.session.LiveApi.GetInfo()
 	if err != nil {
-		g.Log().Error(gctx.GetInitCtx(), "failed to get live info")
+		g.Log().Errorf(gctx.GetInitCtx(), "获取直播信息失败: %v", err)
 		return false
 	}
 

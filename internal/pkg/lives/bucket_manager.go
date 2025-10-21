@@ -11,8 +11,8 @@ var (
 	once          sync.Once
 	defaultLevels = []Level{
 		{LimitPerSec: 5},
-		{LimitPerSec: 10},
-		{LimitPerSec: 20},
+		{LimitPerSec: 8},
+		{LimitPerSec: 12},
 	}
 )
 

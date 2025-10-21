@@ -60,7 +60,7 @@ func (b *PlatformBucket) Acquire(ctx context.Context, n int) error {
 		return nil
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 7*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
 	ticker := time.NewTicker(200 * time.Millisecond)

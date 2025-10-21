@@ -23,6 +23,27 @@
             </Breadcrumb>
         </div>
         <div class="flex items-center gap-4">
+            <TooltipProvider v-if="isUnhealthy">
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <Button variant="ghost" size="icon">
+                            <Frown class="h-5 w-5 text-destructive" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <div class="grid gap-2">
+                            <p>
+                                <span class="mr-2">请求错误率:</span>
+                                <span>{{ healthInfo.errorPercent.toFixed(2) }}%</span>
+                            </p>
+                            <p>
+                                <span class="mr-2">磁盘使用率:</span>
+                                <span>{{ healthInfo.diskUsage.toFixed(2) }}%</span>
+                            </p>
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <Button @click="toggleFullscreen" variant="ghost" size="icon">
                 <component :is="isFullscreen ? Minimize : Maximize" class="h-5 w-5" />
             </Button>
@@ -41,13 +62,13 @@
                 <HoverCardContent class="w-80">
                     <div class="flex justify-between space-x-4">
                         <div class="space-y-1">
-                            <h4 class="text-lg font-semibold">
-                                v{{ features.version }}
-                            </h4>
+                            <h4 class="text-lg font-semibold">v{{ features.version }}</h4>
                             <div v-for="(category, key) in features.info" :key="key" class="text-sm">
                                 <p class="font-medium pt-2">{{ category.name }}</p>
                                 <ul class="list-disc list-inside">
-                                    <li v-for="item in category.items" :key="item.desc">{{ item.desc }}</li>
+                                    <li v-for="item in category.items" :key="item.desc">
+                                        {{ item.desc }}
+                                    </li>
                                 </ul>
                             </div>
                             <div class="flex pt-2">
@@ -63,21 +84,23 @@
             <Button variant="ghost" class="relative h-8 w-8 rounded-full">
                 <router-link to="/user/index">
                     <Avatar class="h-8 w-8">
-                        <AvatarFallback>{{ userInfo?.nickname?.charAt(0)?.toUpperCase() }}</AvatarFallback>
+                        <AvatarFallback>{{
+                            userInfo?.nickname?.charAt(0)?.toUpperCase()
+                            }}</AvatarFallback>
                     </Avatar>
                 </router-link>
             </Button>
-
         </div>
     </header>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, type Ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { useUserStore } from '@/store/user';
-import { useTheme } from '@/composables/useTheme';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { computed, onMounted, onUnmounted, ref, reactive, type Ref } from "vue";
+import { useRoute } from "vue-router";
+import { useUserStore } from "@/store/user";
+import { useTheme } from "@/composables/useTheme";
+import { createSSEConnection } from "@/lib/sse";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -85,13 +108,32 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import type { UserInfo } from '@/types/user';
-import { Maximize, Minimize, Moon, Sun, SunMoon, Megaphone, Calendar } from 'lucide-vue-next';
-import features from '@/lib/consts/feature.json';
+} from "@/components/ui/breadcrumb";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import type { UserInfo } from "@/types/user";
+import {
+    Maximize,
+    Minimize,
+    Moon,
+    Sun,
+    SunMoon,
+    Megaphone,
+    Calendar,
+    Frown,
+} from "lucide-vue-next";
+import features from "@/lib/consts/feature.json";
 
 const { mode, cycle } = useTheme();
 
@@ -100,7 +142,7 @@ const userInfo: Ref<UserInfo | null> = computed(() => userStore.userInfo);
 const route = useRoute();
 
 const breadcrumbs = computed(() => {
-    return route.matched.filter(item => item.meta && item.meta.title);
+    return route.matched.filter((item) => item.meta && item.meta.title);
 });
 
 const isFullscreen = ref(false);
@@ -117,14 +159,39 @@ const onFullscreenChange = () => {
     isFullscreen.value = !!document.fullscreenElement;
 };
 
+let sseClient: any = null;
+const healthInfo = reactive({
+    errorPercent: 0,
+    diskUsage: 0,
+});
+const isUnhealthy = computed(
+    () => healthInfo.errorPercent > 1 || healthInfo.diskUsage >= 85
+);
+
 onMounted(async () => {
     if (!userStore.userInfo) {
         await userStore.getUserInfo();
     }
-    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+
+    sseClient = createSSEConnection({
+        channel: "health",
+        onMessage: (msg) => {
+            if (msg.event === "health") {
+                healthInfo.errorPercent = msg.data.errorPercent;
+                healthInfo.diskUsage = msg.data.diskUsage;
+            }
+        },
+        onError: (error) => {
+            console.error("Health SSE error:", error);
+        },
+    });
 });
 
 onUnmounted(() => {
-    document.removeEventListener('fullscreenchange', onFullscreenChange);
+    document.removeEventListener("fullscreenchange", onFullscreenChange);
+    if (sseClient) {
+        sseClient.disconnect();
+    }
 });
 </script>

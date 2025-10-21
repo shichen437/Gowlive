@@ -19,6 +19,7 @@ import SystemChannel from "@/views/system/channel.vue"
 import MediaParse from "@/views/media/parse.vue"
 import MediaFollowers from "@/views/media/followers.vue"
 import MediaFile from "@/views/media/file.vue"
+import Help from "@/views/help/index.vue";
 import Users from "@/views/users/index.vue";
 import About from "@/views/about/index.vue";
 
@@ -118,6 +119,12 @@ const routes = [
             meta: { title: '日志中心' },
           },
         ],
+      },
+      {
+        path: "help/index",
+        name: "Help",
+        component: Help,
+        meta: { title: '常见问题' },
       },
       {
         path: "user/index",

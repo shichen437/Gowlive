@@ -12,6 +12,7 @@ import (
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/events"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	parser "github.com/shichen437/gowlive/internal/pkg/stream_parser"
@@ -229,7 +230,7 @@ func (r *recorder) monitorDiskSpace(ctx context.Context) {
 			if atomic.LoadUint32(&r.state) != running {
 				return
 			}
-			if utils.GetDiskUsage() > 95 {
+			if utils.GetDiskUsage() >= consts.DisableListenerDiskFreeThreshold {
 				g.Log().Warningf(ctx, "Disk usage is over 95%%. Stopping recording for session %d.", r.session.Id)
 				r.ed.DispatchEvent(events.NewEvent("RecordingStoppedDueToDiskSpace", r.session))
 				return

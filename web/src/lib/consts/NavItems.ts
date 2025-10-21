@@ -5,6 +5,7 @@ import {
   CircleUserRound,
   Info,
   Infinity,
+  CircleQuestionMark,
 } from "lucide-vue-next";
 
 export const configurableMenu = ref([
@@ -36,6 +37,11 @@ export const configurableMenu = ref([
       { title: "推送渠道", to: "/system/channel" },
       { title: "通知中心", to: "/system/notify" },
     ],
+  },
+  {
+    title: "常见问题",
+    icon: CircleQuestionMark,
+    to: "/help/index",
   },
   {
     title: "个人中心",

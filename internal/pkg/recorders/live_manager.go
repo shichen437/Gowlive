@@ -7,6 +7,7 @@ import (
 
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/events"
 	"github.com/shichen437/gowlive/internal/pkg/interfaces"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
@@ -46,7 +47,7 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 		}
 		err := m.AddRecorder(ctx)
 		if err != nil {
-			g.Log().Error(ctx, "failed to add recorder")
+			g.Log().Errorf(ctx, "failed to add recorder for session %d: %v", m.session.Id, err)
 			return
 		}
 		liveStartBiz(ctx, session.Id, session.State.Anchor)
@@ -104,9 +105,9 @@ func (m *manager) AddRecorder(ctx context.Context) error {
 	if m.recorder != nil {
 		return gerror.New("this live has a recorder")
 	}
-	if utils.GetDiskUsage() > 95 {
-		g.Log().Warningf(ctx, "Disk usage > 95%%, cannot start recording for session %d", m.session.Id)
-		return gerror.New("disk usage > 95%")
+	if utils.GetDiskUsage() > consts.DisableListenerDiskFreeThreshold {
+		g.Log().Warningf(ctx, "Disk usage > 90%%, cannot start recording for session %d", m.session.Id)
+		return gerror.New("disk usage > 90%")
 	}
 	recorder, err := newRecorder(m.session)
 	if err != nil {
