@@ -57,8 +57,12 @@ Gowlive 是一个基于 [GoFrame](https://goframe.org/) 和 [Vue3](https://vuejs
 <br>
 
 <div align="center">
-  <img src="resources/assets/screenshots/dashboard.jpg" alt="主页" width="45%">&nbsp;&nbsp;
+  <img src="resources/assets/screenshots/home.jpg" alt="主页" width="45%">&nbsp;&nbsp;
   <img src="resources/assets/screenshots/live.jpg" alt="直播" width="45%">
+</div>
+<div align="center">
+  <img src="resources/assets/screenshots/anchor.jpg" alt="主播" width="45%">&nbsp;&nbsp;
+  <img src="resources/assets/screenshots/push.jpg" alt="推送" width="45%">
 </div>
 
 ## 📦 部署
