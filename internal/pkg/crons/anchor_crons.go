@@ -49,6 +49,7 @@ func AnchorInfoCron(ctx context.Context) {
 		}
 		err = service.UpdateAnchorInfo(ctx, do.AnchorInfo{
 			AnchorName:     info.AnchorName,
+			UniqueId: 		info.UniqueId,
 			Signature:      info.Signature,
 			FollowerCount:  info.FollowerCount,
 			FollowingCount: info.FollowingCount,

@@ -6,19 +6,19 @@
   </p>
   <p>
   <a>
-    <img alt="MIT License" 
+    <img alt="MIT License"
       src="https://img.shields.io/github/license/shichen437/Gowlive">
   </a>
   <a>
-    <img alt="Docker Image Version" 
+    <img alt="Docker Image Version"
       src="https://img.shields.io/docker/v/shichen437/gowlive?labelColor=%20%23FDB062&color=%20%23f79009">
   </a>
   <a href="https://hub.docker.com/u/shichen437" target="_blank">
-    <img alt="Docker Pulls" 
+    <img alt="Docker Pulls"
       src="https://img.shields.io/docker/pulls/shichen437/gowlive?labelColor=%20%23528bff&color=%20%23155EEF">
   </a>
   <a>
-    <img alt="Docker Image Size" 
+    <img alt="Docker Image Size"
       src="https://img.shields.io/docker/image-size/shichen437/gowlive">
   </a>
 </p>

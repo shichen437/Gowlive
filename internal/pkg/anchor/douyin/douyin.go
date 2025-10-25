@@ -53,7 +53,7 @@ func (d *Douyin) ParseAnchorInfo(ctx context.Context) (info *anchor.AnchorInfo, 
 	if err != nil {
 		return
 	}
-	info.UniqueId = respBody.UserInfo.UniqueID
+	info.UniqueId = secId
 	info.AnchorName = respBody.UserInfo.Nickname
 	info.Signature = respBody.UserInfo.Signature
 	info.FollowingCount = respBody.UserInfo.FollowingCount
