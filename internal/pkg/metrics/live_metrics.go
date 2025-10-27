@@ -116,7 +116,7 @@ func (m *IndicatorManager) Record(ctx context.Context, platform string, result b
 						Title:   "直播监控告警",
 						Content: content,
 					})
-					manager.GetNotfiyManager().AddWarningNotify("直播监控告警", content)
+					manager.GetNotifyManager().AddWarningNotify("直播监控告警", content)
 				}
 			}()
 		}

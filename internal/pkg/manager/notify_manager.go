@@ -23,7 +23,7 @@ var (
 )
 
 // 单例获取方法
-func GetNotfiyManager() *NotifyManager {
+func GetNotifyManager() *NotifyManager {
 	notifyOnce.Do(func() {
 		notifyManagerInstance = &NotifyManager{
 			queue:    make(chan entity.SysNotify, 30),

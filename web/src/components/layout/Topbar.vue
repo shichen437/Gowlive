@@ -9,12 +9,15 @@
                             <BreadcrumbPage v-if="index === breadcrumbs.length - 1">
                                 {{ item.meta.title }}
                             </BreadcrumbPage>
-                            <BreadcrumbLink as="span" v-else-if="item.children && item.children.length > 0"
-                                class="cursor-default">
+                            <BreadcrumbLink as="span" v-else-if="
+                                item.children && item.children.length > 0
+                            " class="cursor-default">
                                 {{ item.meta.title }}
                             </BreadcrumbLink>
                             <BreadcrumbLink v-else :as-child="true">
-                                <router-link :to="item.path">{{ item.meta.title }}</router-link>
+                                <router-link :to="item.path">{{
+                                    item.meta.title
+                                    }}</router-link>
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator v-if="index < breadcrumbs.length - 1" />
@@ -34,11 +37,15 @@
                         <div class="grid gap-2">
                             <p>
                                 <span class="mr-2">请求错误率:</span>
-                                <span>{{ healthInfo.errorPercent.toFixed(2) }}%</span>
+                                <span>{{
+                                    healthInfo.errorPercent.toFixed(2)
+                                }}%</span>
                             </p>
                             <p>
                                 <span class="mr-2">磁盘使用率:</span>
-                                <span>{{ healthInfo.diskUsage.toFixed(2) }}%</span>
+                                <span>{{
+                                    healthInfo.diskUsage.toFixed(2)
+                                }}%</span>
                             </p>
                         </div>
                     </TooltipContent>
@@ -62,9 +69,13 @@
                 <HoverCardContent class="w-80">
                     <div class="flex justify-between space-x-4">
                         <div class="space-y-1">
-                            <h4 class="text-lg font-semibold">v{{ features.version }}</h4>
+                            <h4 class="text-lg font-semibold">
+                                v{{ features.version }}
+                            </h4>
                             <div v-for="(category, key) in features.info" :key="key" class="text-sm">
-                                <p class="font-medium pt-2">{{ category.name }}</p>
+                                <p class="font-medium pt-2" v-if="category.items.length > 0">
+                                    {{ category.name }}
+                                </p>
                                 <ul class="list-disc list-inside">
                                     <li v-for="item in category.items" :key="item.desc">
                                         {{ item.desc }}
@@ -165,7 +176,7 @@ const healthInfo = reactive({
     diskUsage: 0,
 });
 const isUnhealthy = computed(
-    () => healthInfo.errorPercent > 1 || healthInfo.diskUsage >= 85
+    () => healthInfo.errorPercent > 1 || healthInfo.diskUsage >= 85,
 );
 
 onMounted(async () => {

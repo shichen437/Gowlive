@@ -26,13 +26,28 @@
                     <template v-if="logs.length > 0">
                         <TableRow v-for="log in logs" :key="log.id">
                             <TableCell class="text-center">
-                                <Badge :variant="getTypeVariant(log.type)">{{ getTypeLabel(log.type) }}</Badge>
+                                <Badge :variant="getTypeVariant(log.type)">{{
+                                    getTypeLabel(log.type)
+                                    }}</Badge>
                             </TableCell>
                             <TableCell class="text-center">
                                 <Badge :variant="getStatusVariant(log.status)">{{ getStatusLabel(log.status) }}</Badge>
                             </TableCell>
-                            <TableCell class="text-center">{{ log.content }}</TableCell>
-                            <TableCell class="text-center">{{ log.createdAt }}</TableCell>
+                            <TableCell class="text-center">
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger as-child>
+                                            <div class="truncate max-w-xs mx-auto">{{ log.content }}</div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>{{ log.content }}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </TableCell>
+                            <TableCell class="text-center">{{
+                                log.createdAt
+                                }}</TableCell>
                             <TableCell class="text-center">
                                 <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
                                     @click="openConfirmModal(log.id)">
@@ -58,8 +73,10 @@
                 <PaginationPrevious />
                 <template v-for="(item, index) in items">
                     <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                        <Button class="w-10 h-10 p-0" :variant="item.value === currentPage ? 'secondary' : 'outline'"
-                            :disabled="item.value === currentPage">
+                        <Button class="w-10 h-10 p-0" :variant="item.value === currentPage
+                                ? 'secondary'
+                                : 'outline'
+                            " :disabled="item.value === currentPage">
                             {{ item.value }}
                         </Button>
                     </PaginationItem>
@@ -69,9 +86,9 @@
             </PaginationContent>
         </Pagination>
     </div>
-    <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
+    <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => (showConfirmModal = open)"
         :onConfirm="handleDeleteLog" title="确认删除" description="你确定要删除这条日志吗？此操作无法撤销。" />
-    <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => showConfirmDeleteAllModal = open"
+    <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
         :onConfirm="handleDeleteAllLogs" title="确认清空" description="你确定要清空所有日志吗？此操作无法撤销。" />
 </template>
 
@@ -97,7 +114,13 @@ import {
     PaginationNext,
     PaginationPrevious,
     PaginationItem,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
+import {
+    TooltipProvider,
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
@@ -110,10 +133,10 @@ const pageNum = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
 const logToDelete = ref<number | null>(null);
-const sort = ref('id:desc');
+const sort = ref("id:desc");
 const filter = ref({
-    type: '',
-    status: '',
+    type: "",
+    status: "",
 });
 
 const getLogs = async () => {
@@ -183,7 +206,7 @@ const getStatusVariant = (status: number) => {
 const handlePageChange = (newPage: number) => {
     pageNum.value = newPage;
     getLogs();
-}
+};
 
 const handleSortChange = (newSort: string) => {
     sort.value = newSort;

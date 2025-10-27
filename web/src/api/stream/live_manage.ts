@@ -17,6 +17,14 @@ export async function addRoom(data: any) {
   });
 }
 
+export async function addBatchRoom(data: any) {
+  return request({
+    url: "/live/room/manage/batch",
+    method: "post",
+    data: data,
+  });
+}
+
 export async function updateRoom(data: any) {
   return request({
     url: "/live/room/manage",

@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/gogf/gf/v2/database/gdb"
@@ -17,6 +19,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/crons"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
+	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
@@ -96,6 +99,53 @@ func (s *sLiveManage) Add(ctx context.Context, req *v1.PostLiveManageReq) (res *
 		return nil, gerror.Wrap(err, "添加直播间失败")
 	}
 	go listenerForAdd(int(liveId), req.MonitorType, req.MonitorStartAt, req.MonitorStopAt)
+	return
+}
+
+func (s *sLiveManage) BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchReq) (res *v1.PostLiveManageBatchRes, err error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	if len(req.RoomUrls) < 1 || len(req.RoomUrls) > 30 {
+		err = gerror.New("批量添加直播间数量限制为 1-30 个")
+		return
+	}
+	go func() {
+		newCtx := gctx.GetInitCtx()
+		errUrls := make([]string, 0)
+		for _, roomUrl := range req.RoomUrls {
+			liveApi, err := lives.New(roomUrl)
+			if err != nil {
+				g.Log().Errorf(newCtx, "链接 %s 获取解析 API 失败，错误信息：%v", roomUrl, err)
+				errUrls = append(errUrls, roomUrl)
+				continue
+			}
+			info, err := liveApi.GetInfo()
+			if err != nil || info == nil {
+				g.Log().Errorf(newCtx, "链接 %s 获取解析信息失败，错误信息：%v", roomUrl, err)
+				errUrls = append(errUrls, roomUrl)
+				continue
+			}
+			var liveId int64
+			buildReq := &v1.PostLiveManageReq{
+				RoomUrl:     roomUrl,
+				MonitorType: consts.MonitorTypeStop,
+				Interval:    req.Interval,
+				Format:      req.Format,
+				Remark:      req.Remark,
+			}
+			err = saveLiveConfig(newCtx, buildReq, &liveId, info)
+			if err != nil {
+				g.Log().Errorf(newCtx, "链接 %s 保存数据失败，错误信息：%v", roomUrl, err)
+				errUrls = append(errUrls, roomUrl)
+				continue
+			}
+		}
+		if len(errUrls) > 0 {
+			manager.GetNotifyManager().AddWarningNotify("批量添加直播间失败", "批量添加直播间失败，失败链接："+strings.Join(errUrls, ","))
+			return
+		}
+		manager.GetNotifyManager().AddInfoNotify("批量添加直播间成功", "批量添加直播间成功，链接数量："+strconv.Itoa(len(req.RoomUrls)))
+	}()
 	return
 }
 

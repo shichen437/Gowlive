@@ -16,6 +16,7 @@ type (
 		List(ctx context.Context, req *v1.GetRoomListReq) (res *v1.GetRoomListRes, err error)
 		Get(ctx context.Context, req *v1.GetLiveManageReq) (res *v1.GetLiveManageRes, err error)
 		Add(ctx context.Context, req *v1.PostLiveManageReq) (res *v1.PostLiveManageRes, err error)
+		BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchReq) (res *v1.PostLiveManageBatchRes, err error)
 		Update(ctx context.Context, req *v1.PutLiveManageReq) (res *v1.PutLiveManageRes, err error)
 		Delete(ctx context.Context, req *v1.DeleteLiveManageReq) (res *v1.DeleteLiveManageRes, err error)
 		Start(ctx context.Context, req *v1.PutLiveManageStartReq) (res *v1.PutLiveManageStartRes, err error)

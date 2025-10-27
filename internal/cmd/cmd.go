@@ -158,7 +158,7 @@ func bindRoute(group *ghttp.RouterGroup) {
 func shutdown(sig os.Signal) {
 	registry.Get().StopAll(gctx.GetInitCtx())
 	manager.GetLogManager().Stop()
-	manager.GetNotfiyManager().Stop()
+	manager.GetNotifyManager().Stop()
 	lives.GetBucketManager().Stop()
 	g.Log().Info(gctx.GetInitCtx(), "live monitor shutdown!")
 }

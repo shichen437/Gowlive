@@ -14,3 +14,4 @@ docker-compose.yaml
 *.db
 *.sqlite3
 main
+package.sh

@@ -10,9 +10,8 @@ var (
 	instance      *TokenBucketManager
 	once          sync.Once
 	defaultLevels = []Level{
+		{LimitPerSec: 3},
 		{LimitPerSec: 5},
-		{LimitPerSec: 8},
-		{LimitPerSec: 12},
 	}
 )
 
@@ -47,7 +46,7 @@ func NewTokenBucketManager(levels []Level) *TokenBucketManager {
 
 func (m *TokenBucketManager) Start() {
 	m.startOnce.Do(func() {
-		m.ticker = time.NewTicker(1 * time.Second)
+		m.ticker = time.NewTicker(2 * time.Second)
 		go func() {
 			for {
 				select {

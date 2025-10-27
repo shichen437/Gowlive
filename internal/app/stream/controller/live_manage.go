@@ -24,6 +24,10 @@ func (c *liveManageController) Add(ctx context.Context, req *v1.PostLiveManageRe
 	return service.LiveManage().Add(ctx, req)
 }
 
+func (c *liveManageController) BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchReq) (res *v1.PostLiveManageBatchRes, err error) {
+	return service.LiveManage().BatchAdd(ctx, req)
+}
+
 func (c *liveManageController) Update(ctx context.Context, req *v1.PutLiveManageReq) (res *v1.PutLiveManageRes, err error) {
 	return service.LiveManage().Update(ctx, req)
 }
