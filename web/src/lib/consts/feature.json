@@ -1,31 +1,20 @@
 {
-  "version": "0.0.6",
+  "version": "0.0.7",
   "date": "2025-10-28",
   "info": {
     "feature": {
       "name": "功能",
-      "items": [
-        {
-          "desc": "新增批量添加直播间"
-        },
-        {
-          "desc": "新增实时通知"
-        }
-      ]
+      "items": []
     },
     "enhance": {
       "name": "优化",
-      "items": [
-        {
-          "desc": "优化令牌桶数量及补充时间"
-        }
-      ]
+      "items": []
     },
     "fix": {
       "name": "修复",
       "items": [
         {
-          "desc": "抖音主播数据唯一ID"
+          "desc": "新部署时无法启动"
         }
       ]
     }
