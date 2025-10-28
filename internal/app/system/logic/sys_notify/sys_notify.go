@@ -31,13 +31,16 @@ func (s *sSysNotify) List(ctx context.Context, req *v1.GetNotifyListReq) (res *v
 	}
 	res.Total, err = m.Count()
 	if err != nil {
-		return nil, gerror.New("获取列表失败")
+		return nil, gerror.New("获取通知列表失败")
 	}
 	if res.Total <= 0 {
 		return
 	}
 	m = m.OrderAsc(dao.SysNotify.Columns().Status).OrderDesc(dao.SysNotify.Columns().Id)
-	m.Page(req.PageNum, req.PageSize).Scan(&res.Rows)
+	err = m.Page(req.PageNum, req.PageSize).Scan(&res.Rows)
+	if err != nil {
+		return nil, gerror.New("获取通知列表失败")
+	}
 	return
 }
 

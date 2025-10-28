@@ -96,6 +96,7 @@ func (s *sLiveManage) Add(ctx context.Context, req *v1.PostLiveManageReq) (res *
 	var liveId int64
 	err = saveLiveConfig(ctx, req, &liveId, info)
 	if err != nil {
+		g.Log().Error(ctx, err)
 		return nil, gerror.Wrap(err, "添加直播间失败")
 	}
 	go listenerForAdd(int(liveId), req.MonitorType, req.MonitorStartAt, req.MonitorStopAt)
@@ -184,6 +185,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 		})
 	}
 	if err != nil {
+		g.Log().Errorf(ctx, "更新直播间失败，错误信息：%v", err)
 		return nil, gerror.New("更新直播间失败")
 	}
 	go listenerForUpdate(req, tempData)
@@ -205,6 +207,8 @@ func (s *sLiveManage) Delete(ctx context.Context, req *v1.DeleteLiveManageReq) (
 		return nil
 	})
 	if err != nil {
+		g.Log().Errorf(ctx, "删除直播间失败，错误信息：%v", err)
+		err = gerror.New("删除直播间失败")
 		return
 	}
 	go listenerForDelete(req.LiveId)
@@ -305,12 +309,10 @@ func saveLiveConfig(ctx context.Context, req *v1.PostLiveManageReq, liveId *int6
 			CreatedAt:      utils.Now(),
 		})
 		if txErr != nil {
-			g.Log().Error(ctx, txErr)
 			return txErr
 		}
 		*liveId, txErr = result.LastInsertId()
 		if txErr != nil {
-			g.Log().Error(ctx, txErr)
 			return txErr
 		}
 		_, txErr = dao.LiveRoomInfo.Ctx(ctx).Insert(do.LiveRoomInfo{
@@ -322,7 +324,6 @@ func saveLiveConfig(ctx context.Context, req *v1.PostLiveManageReq, liveId *int6
 			CreatedAt: utils.Now(),
 		})
 		if txErr != nil {
-			g.Log().Error(ctx, txErr)
 			return txErr
 		}
 		return nil

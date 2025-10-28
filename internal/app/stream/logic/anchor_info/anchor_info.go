@@ -77,6 +77,7 @@ func (c *sAnchorInfo) Add(ctx context.Context, req *v1.PostAnchorReq) (res *v1.P
 	}
 	err = saveAnchorInfo(ctx, req, anchorInfo)
 	if err != nil {
+		g.Log().Errorf(ctx, "添加主播数据失败,错误信息：%v", err)
 		err = gerror.New("添加主播数据失败")
 		return
 	}
@@ -171,12 +172,10 @@ func saveAnchorInfo(ctx context.Context, req *v1.PostAnchorReq, anchorInfo *anch
 			CreatedAt:      utils.Now(),
 		})
 		if txErr != nil {
-			g.Log().Error(ctx, txErr)
 			return txErr
 		}
 		anchorId, txErr := result.LastInsertId()
 		if txErr != nil {
-			g.Log().Error(ctx, txErr)
 			return txErr
 		}
 		_, txErr = dao.AnchorInfoHistory.Ctx(ctx).Insert(do.AnchorInfoHistory{
@@ -190,6 +189,9 @@ func saveAnchorInfo(ctx context.Context, req *v1.PostAnchorReq, anchorInfo *anch
 			VideoCount:     anchorInfo.VideoCount,
 			CreatedAt:      utils.Now(),
 		})
+		if txErr != nil {
+			return txErr
+		}
 		return nil
 	})
 }
