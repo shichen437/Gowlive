@@ -17,6 +17,7 @@ import (
 func LiveMonitor() {
 	ctx := gctx.GetInitCtx()
 	defer g.Log().Info(ctx, "LiveMonitor Started!")
+	crons.AnchorInfoCron(ctx)
 	lives.GetBucketManager()
 	initCookieRegistry(ctx)
 	sessionIds := getLiveSessionIds4Init(ctx)

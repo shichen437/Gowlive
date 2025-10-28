@@ -6,17 +6,12 @@ import (
 	"time"
 
 	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/shichen437/gowlive/internal/app/stream/model/do"
 	"github.com/shichen437/gowlive/internal/pkg/anchor"
 	"github.com/shichen437/gowlive/internal/pkg/service"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
-
-func init() {
-	go AnchorInfoCron(gctx.GetInitCtx())
-}
 
 func AnchorInfoCron(ctx context.Context) {
 	g.Log().Info(ctx, "anchor info cron start...")
@@ -49,7 +44,7 @@ func AnchorInfoCron(ctx context.Context) {
 		}
 		err = service.UpdateAnchorInfo(ctx, do.AnchorInfo{
 			AnchorName:     info.AnchorName,
-			UniqueId: 		info.UniqueId,
+			UniqueId:       info.UniqueId,
 			Signature:      info.Signature,
 			FollowerCount:  info.FollowerCount,
 			FollowingCount: info.FollowingCount,
