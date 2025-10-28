@@ -11,17 +11,22 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
-type HealthHandler struct{}
+type GlobalHandler struct{}
 
-func (m *HealthHandler) OnConnect(channel string) {
-	if channel == consts.SSE_CHANNEL_HEALTH {
+type HealthDetail struct {
+	ErrorPercent int `json:"errorPercent"`
+	DiskUsage    int `json:"diskUsage"`
+}
+
+func (m *GlobalHandler) OnConnect(channel string) {
+	if channel == consts.SSE_CHANNEL_GLOBAL {
 		HealthInfo()
 		sse.StartAutoSend(channel, 20*time.Second, HealthInfo)
 	}
 }
 
-func (m *HealthHandler) OnDisconnect(channel string) {
-	if channel == consts.SSE_CHANNEL_HEALTH {
+func (m *GlobalHandler) OnDisconnect(channel string) {
+	if channel == consts.SSE_CHANNEL_GLOBAL {
 		sse.StopAutoSend(channel)
 	}
 }
@@ -40,9 +45,11 @@ func HealthInfo() {
 	if num > 0 {
 		percent /= num
 	}
-	msg := sse.GetSseMsgStr(consts.SSE_EVENT_TYPE_HEALTH, g.Map{
-		"errorPercent": percent,
-		"diskUsage":    diskUsage,
+	msg := sse.GetSseMsgStr(consts.SSE_EVENT_TYPE_GLOBAL, g.MapStrAny{
+		"health": HealthDetail{
+			ErrorPercent: percent,
+			DiskUsage:    diskUsage,
+		},
 	})
-	sse.BroadcastMessage(consts.SSE_CHANNEL_HEALTH, msg)
+	sse.BroadcastMessage(consts.SSE_CHANNEL_GLOBAL, msg)
 }

@@ -107,10 +107,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, reactive, type Ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/store/user";
 import { useTheme } from "@/composables/useTheme";
 import { createSSEConnection } from "@/lib/sse";
+import { toast } from 'vue-sonner';
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
     Breadcrumb,
@@ -151,6 +152,7 @@ const { mode, cycle } = useTheme();
 const userStore = useUserStore();
 const userInfo: Ref<UserInfo | null> = computed(() => userStore.userInfo);
 const route = useRoute();
+const router = useRouter()
 
 const breadcrumbs = computed(() => {
     return route.matched.filter((item) => item.meta && item.meta.title);
@@ -186,11 +188,27 @@ onMounted(async () => {
     document.addEventListener("fullscreenchange", onFullscreenChange);
 
     sseClient = createSSEConnection({
-        channel: "health",
+        channel: "global",
         onMessage: (msg) => {
-            if (msg.event === "health") {
-                healthInfo.errorPercent = msg.data.errorPercent;
-                healthInfo.diskUsage = msg.data.diskUsage;
+            if (msg.event === "global") {
+                if (msg.data.health) {
+                    healthInfo.errorPercent = msg.data.health.errorPercent;
+                    healthInfo.diskUsage = msg.data.health.diskUsage;
+                }
+                if (msg.data.notify) {
+                    if (msg.data.notify.level === 'info') {
+                        toast.info(msg.data.notify.title, { position: 'top-center', description: msg.data.notify.content });
+                    } else {
+                        toast.error(msg.data.notify.title, {
+                            position: 'top-center', duration: 7000, action: {
+                                label: '查看详情',
+                                onClick: () => {
+                                    router.push('/system/notify')
+                                }
+                            }
+                        });
+                    }
+                }
             }
         },
         onError: (error) => {

@@ -3,10 +3,13 @@ package manager
 import (
 	"sync"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/shichen437/gowlive/internal/app/system/dao"
 	"github.com/shichen437/gowlive/internal/app/system/model/do"
 	"github.com/shichen437/gowlive/internal/app/system/model/entity"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
+	"github.com/shichen437/gowlive/internal/pkg/sse"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
@@ -51,6 +54,10 @@ func (nm *NotifyManager) addNotify(level, title, content string) {
 		CreatedAt: utils.Now(),
 	}
 	nm.queue <- entry
+	msg := sse.GetSseMsgStr(consts.SSE_EVENT_TYPE_GLOBAL, g.MapStrAny{
+		"notify": entry,
+	})
+	sse.BroadcastMessage(consts.SSE_CHANNEL_GLOBAL, msg)
 }
 
 func (nm *NotifyManager) processNotify() {

@@ -8,5 +8,5 @@ import (
 func init() {
 	sse.RegisterChannelHandler(consts.SSE_CHANNEL_MONITOR, &MonitorHandler{})
 	sse.RegisterChannelHandler(consts.SSE_CHANNEL_METRIC, &MetricHandler{})
-	sse.RegisterChannelHandler(consts.SSE_CHANNEL_HEALTH, &HealthHandler{})
+	sse.RegisterChannelHandler(consts.SSE_CHANNEL_GLOBAL, &GlobalHandler{})
 }
