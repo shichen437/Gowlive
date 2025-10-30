@@ -32,4 +32,7 @@ func SystemCron(ctx context.Context) {
 		g.Log().Info(ctx, "Add job - "+anchorInfo)
 		AnchorInfoCron(ctx)
 	}, anchorInfo)
+
+	// 启动时执行一次
+	AnchorInfoCron(ctx)
 }

@@ -17,7 +17,7 @@
                             <BreadcrumbLink v-else :as-child="true">
                                 <router-link :to="item.path">{{
                                     item.meta.title
-                                    }}</router-link>
+                                }}</router-link>
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator v-if="index < breadcrumbs.length - 1" />
@@ -39,13 +39,13 @@
                                 <span class="mr-2">请求错误率:</span>
                                 <span>{{
                                     healthInfo.errorPercent.toFixed(2)
-                                }}%</span>
+                                    }}%</span>
                             </p>
                             <p>
                                 <span class="mr-2">磁盘使用率:</span>
                                 <span>{{
                                     healthInfo.diskUsage.toFixed(2)
-                                }}%</span>
+                                    }}%</span>
                             </p>
                         </div>
                     </TooltipContent>
@@ -97,7 +97,7 @@
                     <Avatar class="h-8 w-8">
                         <AvatarFallback>{{
                             userInfo?.nickname?.charAt(0)?.toUpperCase()
-                            }}</AvatarFallback>
+                        }}</AvatarFallback>
                     </Avatar>
                 </router-link>
             </Button>
@@ -145,7 +145,7 @@ import {
     Calendar,
     Frown,
 } from "lucide-vue-next";
-import features from "@/lib/consts/feature.json";
+import features from "@/lib/others/feature.json";
 
 const { mode, cycle } = useTheme();
 

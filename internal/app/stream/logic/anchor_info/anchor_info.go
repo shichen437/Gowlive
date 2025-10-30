@@ -58,10 +58,12 @@ func (c *sAnchorInfo) List(ctx context.Context, req *v1.GetAnchorListReq) (res *
 func (c *sAnchorInfo) Add(ctx context.Context, req *v1.PostAnchorReq) (res *v1.PostAnchorRes, err error) {
 	aApi, err := anchor.New(req.Url)
 	if err != nil {
+		g.Log().Errorf(ctx, "获取解析 api 失败，错误信息：%v", err)
 		return
 	}
 	anchorInfo, err := aApi.ParseAnchorInfo(ctx)
 	if err != nil {
+		g.Log().Errorf(ctx, "获取主播数据失败，错误信息：%v", err)
 		return
 	}
 	if anchorInfo == nil || anchorInfo.AnchorName == "" {

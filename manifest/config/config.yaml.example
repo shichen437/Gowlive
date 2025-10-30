@@ -13,6 +13,9 @@ logger:
   file: "{Y-m-d}.log"
   level: "all"
   stdout: true
+  rotateSize: "50M"
+  rotateBackupLimit: 10
+  rotateBackupExpire: "7d"
 
 database:
   logger:

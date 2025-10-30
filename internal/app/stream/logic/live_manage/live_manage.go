@@ -86,10 +86,12 @@ func (s *sLiveManage) Add(ctx context.Context, req *v1.PostLiveManageReq) (res *
 	defer s.lock.Unlock()
 	liveApi, err := lives.New(req.RoomUrl)
 	if err != nil {
+		g.Log().Errorf(ctx, "获取解析 api 失败，错误信息：%v", err)
 		return
 	}
 	info, err := liveApi.GetInfo()
 	if err != nil || info == nil {
+		g.Log().Errorf(ctx, "获取直播数据失败，错误信息：%v", err)
 		err = gerror.New("获取直播间信息失败")
 		return
 	}

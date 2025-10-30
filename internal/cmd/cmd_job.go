@@ -7,7 +7,8 @@ import (
 )
 
 func JobInit() {
-	g.Log().Info(gctx.GetInitCtx(), "Job server initing...")
-	crons.SystemCron(gctx.GetInitCtx())
-	g.Log().Info(gctx.GetInitCtx(), "Job server init done")
+	ctx := gctx.GetInitCtx()
+	g.Log().Info(ctx, "Job server initing...")
+	crons.SystemCron(ctx)
+	g.Log().Info(ctx, "Job server init done")
 }

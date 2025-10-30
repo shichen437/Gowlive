@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/goflyfox/gtoken/gtoken"
 	"github.com/gogf/gf/v2/frame/g"
@@ -65,13 +66,19 @@ var (
 					bindRoute(group)
 				})
 			})
-			JobInit()
-			LiveMonitor()
-			s.Run()
-			go func() {
-				gproc.AddSigHandlerShutdown(shutdown)
-				gproc.Listen()
-			}()
+			if err = s.Start(); err != nil {
+				g.Log().Errorf(ctx, "server 启动异常，错误信息：%v", err)
+				return err
+			}
+			g.Go(ctx, func(c context.Context) {
+				time.Sleep(1500 * time.Millisecond)
+				JobInit()
+				LiveMonitor()
+			}, func(c context.Context, err error) {
+				g.Log().Errorf(c, "starter 启动异常，错误信息：%v", err)
+			})
+			gproc.AddSigHandlerShutdown(shutdown)
+			gproc.Listen()
 			return nil
 		},
 	}
@@ -160,5 +167,5 @@ func shutdown(sig os.Signal) {
 	manager.GetLogManager().Stop()
 	manager.GetNotifyManager().Stop()
 	lives.GetBucketManager().Stop()
-	g.Log().Info(gctx.GetInitCtx(), "live monitor shutdown!")
+	g.Log().Info(gctx.GetInitCtx(), "all monitor shutdown!")
 }
