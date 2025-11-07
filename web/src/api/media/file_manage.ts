@@ -8,6 +8,14 @@ export async function listFiles(params: any) {
   });
 }
 
+export async function getRoomFilePath(params: any) {
+  return request({
+    url: "/media/file/roomPath",
+    method: "get",
+    params: params,
+  });
+}
+
 export async function deleteFile(data: any) {
   return request({
     url: "/media/file",

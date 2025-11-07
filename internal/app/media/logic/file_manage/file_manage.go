@@ -83,6 +83,34 @@ func (s *sFileManage) Delete(ctx context.Context, req *v1.DeleteFileReq) (res *v
 	return
 }
 
+func (s *sFileManage) AnchorFilePath(ctx context.Context, req *v1.GetAnchorFilePathReq) (res *v1.GetAnchorFilePathRes, err error) {
+	res = &v1.GetAnchorFilePathRes{}
+	if req.Anchor == "" || req.Platform == "" {
+		return
+	}
+	base, err := filepath.Abs(utils.DATA_PATH)
+	if err != nil {
+		return nil, gerror.New("获取系统目录信息失败")
+	}
+	cachePath := "stream/" + req.Platform
+	absPath, err := filepath.Abs(filepath.Join(base, cachePath))
+	if err != nil || !strings.HasPrefix(absPath, base) {
+		return nil, gerror.New("获取系统目录路径失败")
+	}
+	res.Path = cachePath
+	cachePath = res.Path + "/" + req.Anchor
+	absPath, err = filepath.Abs(filepath.Join(base, cachePath))
+	if err != nil || !strings.HasPrefix(absPath, base) {
+		return res, nil
+	}
+	_, err = os.Stat(absPath)
+	if err != nil {
+		return res, nil
+	}
+	res.Path = cachePath
+	return
+}
+
 func (s *sFileManage) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1.GetFilePlayRes, err error) {
 	return
 }

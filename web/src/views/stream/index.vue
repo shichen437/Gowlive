@@ -62,6 +62,9 @@
                                 <Button variant="ghost" size="icon" @click="openEditRoomModal(room.liveId)">
                                     <Pencil class="w-4 h-4" />
                                 </Button>
+                                <Button variant="ghost" size="icon" @click="handleGoToRoomFolder(room)">
+                                    <Folder class="w-4 h-4" />
+                                </Button>
                                 <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
                                     @click="openConfirmModal(room.liveId)">
                                     <Trash2 class="w-4 h-4" />
@@ -113,12 +116,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import {
     roomList,
     deleteRoom,
     startRoom,
     stopRoom,
 } from "@/api/stream/live_manage";
+import { getRoomFilePath } from "@/api/media/file_manage";
 import type { RoomInfo } from "@/types/stream";
 import RoomModal from "@/components/modal/stream/RoomModal.vue";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
@@ -142,10 +147,12 @@ import {
     PaginationItem,
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2, Play, Square, CopyPlus } from "lucide-vue-next";
+import { Plus, Pencil, Trash2, Play, Square, CopyPlus, Folder } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
+
+const router = useRouter();
 
 const showConfirmModal = ref(false);
 const rooms = ref<RoomInfo[]>([]);
@@ -253,6 +260,23 @@ const openEditRoomModal = (id: number) => {
 const openConfirmModal = (id: number) => {
     roomToDelete.value = id;
     showConfirmModal.value = true;
+};
+
+const handleGoToRoomFolder = async (room: RoomInfo) => {
+    let path = "";
+    try {
+        const res: any = await getRoomFilePath({
+            platform: room.platform,
+            anchor: room.anchor,
+        });
+        if (res.code === 0) {
+            path = res.data.path;
+        }
+    } catch (error) {
+        console.error("Failed to get room file path:", error);
+    } finally {
+        router.push({ path: "/media/file", query: { path } });
+    }
 };
 
 async function handleDeleteRoom() {

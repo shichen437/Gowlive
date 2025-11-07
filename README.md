@@ -120,7 +120,8 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 ### 1. 环境准备
 
 - [Go](https://go.dev/) (版本 >= 1.24)
-- [Node.js](https://nodejs.org/) (版本 >= 16)
+- [mise](https://mise.jdx.dev/getting-started.html)
+- [Node.js](https://nodejs.org/) (版本 >= 24)
 - [Yarn](https://yarnpkg.com/)
 
 ### 2. 克隆项目
@@ -136,15 +137,19 @@ cd Gowlive
 # 复制配置文件
 cp manifest/config/config.yaml.example manifest/config/config.yaml
 
+# 统一开发环境（需要安装 mise,可选）
+mise trust
+mise install
+
 # 安装 Go 依赖
 go mod tidy
 
 # 启动后端服务 (使用 GoFrame CLI 工具可实现热更新)
 # 首次运行需要安装 CLI
-make cli.install
+mise run cli.install
 
 # 启动！
-gf run main.go # 冷启动使用：go run main.go
+go run main.go # 热更新使用：gf run main.go
 ```
 
 ### 4. 前端启动
@@ -152,6 +157,10 @@ gf run main.go # 冷启动使用：go run main.go
 ```bash
 # 进入前端目录
 cd web
+
+# 统一开发环境（需要安装 mise,可选）
+mise trust
+mise install
 
 # 安装 Node.js 依赖
 npm install

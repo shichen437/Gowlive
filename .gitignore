@@ -15,3 +15,4 @@ docker-compose.yaml
 *.sqlite3
 main
 package.sh
+**/mise.local.toml

@@ -15,6 +15,7 @@ type (
 	IFileManage interface {
 		List(ctx context.Context, req *v1.GetFileListReq) (res *v1.GetFileListRes, err error)
 		Delete(ctx context.Context, req *v1.DeleteFileReq) (res *v1.DeleteFileRes, err error)
+		AnchorFilePath(ctx context.Context, req *v1.GetAnchorFilePathReq) (res *v1.GetAnchorFilePathRes, err error)
 		Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1.GetFilePlayRes, err error)
 	}
 )

@@ -16,6 +16,16 @@ type GetFileListRes struct {
 	Rows   []*model.FileInfo `json:"rows"`
 }
 
+type GetAnchorFilePathReq struct {
+	g.Meta   `path:"/media/file/roomPath" method:"get" tags:"文件管理" summary:"获取主播录制文件路径"`
+	Anchor   string `json:"anchor"`
+	Platform string `json:"platform"`
+}
+type GetAnchorFilePathRes struct {
+	g.Meta `mime:"application/json"`
+	Path   string `json:"path"`
+}
+
 type DeleteFileReq struct {
 	g.Meta   `path:"/media/file" method:"delete" tags:"文件管理" summary:"删除文件"`
 	Filename string `json:"filename" v:"required-with:Path#路径为空时文件名必选"`

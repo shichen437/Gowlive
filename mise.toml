@@ -1,0 +1,32 @@
+[tools]
+go = "1.24"
+
+[tasks.cli]
+description = "Install/Update to the latest GoFrame gf CLI"
+run = [
+  "bash -lc 'set -e; wget -O gf https://github.com/gogf/gf/releases/latest/download/gf_$(go env GOOS)_$(go env GOARCH)'",
+  "chmod +x gf",
+  "./gf install -y",
+  "rm ./gf"
+]
+
+[tasks."cli.install"]
+description = "Check and install gf CLI if missing"
+run = [
+  "bash -lc 'set -e; gf -v > /dev/null 2>&1 || { echo \"GoFrame CLI is not installed, start proceeding auto installation...\"; mise run cli; }'"
+]
+
+[tasks.dao]
+description = "Generate Go files for DAO/DO/Entity"
+depends = ["cli.install"]
+run = ["gf gen dao"]
+
+[tasks.service]
+description = "Generate Go files for Service"
+depends = ["cli.install"]
+run = ["gf gen service"]
+
+[tasks.image]
+description = "Build docker image"
+depends = ["cli.install"]
+run = ["gf docker -b -tn"]

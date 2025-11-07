@@ -74,8 +74,8 @@
                 <template v-for="(item, index) in items">
                     <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                         <Button class="w-10 h-10 p-0" :variant="item.value === currentPage
-                                ? 'secondary'
-                                : 'outline'
+                            ? 'secondary'
+                            : 'outline'
                             " :disabled="item.value === currentPage">
                             {{ item.value }}
                         </Button>
@@ -165,6 +165,8 @@ const getTypeLabel = (type: number) => {
             return "用户";
         case 2:
             return "直播";
+        case 3:
+            return "推送";
         default:
             return "未知";
     }

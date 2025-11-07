@@ -23,3 +23,7 @@ func (f *fileManageController) Delete(ctx context.Context, req *v1.DeleteFileReq
 func (f *fileManageController) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1.GetFilePlayRes, err error) {
 	return service.FileManage().Play(ctx, req)
 }
+
+func (f *fileManageController) AnchorFilePath(ctx context.Context, req *v1.GetAnchorFilePathReq) (res *v1.GetAnchorFilePathRes, err error) {
+	return service.FileManage().AnchorFilePath(ctx, req)
+}

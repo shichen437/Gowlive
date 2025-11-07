@@ -5,6 +5,8 @@ import (
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/shichen437/gowlive/internal/app/system/model"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
+	"github.com/shichen437/gowlive/internal/pkg/manager"
 	mp "github.com/shichen437/gowlive/internal/pkg/message_push"
 
 	"gopkg.in/mail.v2"
@@ -49,6 +51,7 @@ func (p *MessagePush) PushMessage(ctx context.Context, channel *model.PushChanne
 	err = d.DialAndSend(m)
 	if err != nil {
 		g.Log().Error(ctx, "邮箱推送失败，错误信息:"+err.Error())
+		manager.GetLogManager().AddErrorLog(consts.LogTypePush, "邮箱推送失败")
 	}
 	return err
 }

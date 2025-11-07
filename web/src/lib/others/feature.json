@@ -1,22 +1,29 @@
 {
   "version": "0.0.8",
-  "date": "2025-10-28",
+  "date": "2025-11-08",
   "info": {
     "feature": {
       "name": "功能",
-      "items": []
+      "items": [
+        {
+          "desc": "录屏文件跳转"
+        }
+      ]
     },
     "enhance": {
       "name": "优化",
-      "items": []
+      "items": [
+        {
+          "desc": "优化启动流程"
+        },
+        {
+          "desc": "添加渠道推送日志"
+        }
+      ]
     },
     "fix": {
       "name": "修复",
-      "items": [
-        {
-          "desc": "新部署时无法启动"
-        }
-      ]
+      "items": []
     }
   }
 }
