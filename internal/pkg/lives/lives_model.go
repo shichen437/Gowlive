@@ -50,6 +50,7 @@ type LiveConfig struct {
 	MonitorStartAt string
 	MonitorStopAt  string
 	Quality        int
+	SegmentTime    int
 }
 
 type LiveState struct {

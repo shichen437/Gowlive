@@ -7,6 +7,7 @@ export interface LiveManage {
   monitorStartAt: string;
   monitorStopAt: string;
   quality: 0 | 1 | 2 | 3 | 4;
+  segmentTime: number;
   remark: string;
 }
 

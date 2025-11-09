@@ -1,6 +1,8 @@
 package consts
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	MonitorTypeStop        = 0

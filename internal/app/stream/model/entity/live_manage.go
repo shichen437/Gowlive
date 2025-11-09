@@ -21,4 +21,5 @@ type LiveManage struct {
 	CreatedAt      *gtime.Time `json:"createdAt"      orm:"created_at"       description:""`
 	UpdatedAt      *gtime.Time `json:"updatedAt"      orm:"updated_at"       description:""`
 	Quality        int         `json:"quality"        orm:"quality"          description:""`
+	SegmentTime    int         `json:"segmentTime"    orm:"segment_time"     description:""`
 }

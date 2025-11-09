@@ -39,6 +39,7 @@ type PostLiveManageReq struct {
 	MonitorStartAt string `json:"monitorStartAt" v:"required-if:monitorType,2#定时监控开始时间不能为空"`
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#定时监控结束时间不能为空|定时监控结束时间不能与开始时间相同"`
 	Quality        int    `json:"quality" v:"required|in:0,1,2,3,4#清晰度不能为空|清晰度参数不合法"`
+	SegmentTime    int    `json:"segmentTime" v:"required#分片时间不能为空"`
 	Remark         string `json:"remark" v:"max-length:45#备注最大长度为45"`
 }
 type PostLiveManageRes struct {
@@ -65,6 +66,7 @@ type PutLiveManageReq struct {
 	MonitorStartAt string `json:"monitorStartAt" v:"required-if:monitorType,2#定时监控开始时间不能为空"`
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#定时监控结束时间不能为空|定时监控结束时间不能与开始时间相同"`
 	Quality        int    `json:"quality" v:"required|in:0,1,2,3,4#清晰度不能为空|清晰度参数不合法"`
+	SegmentTime    int    `json:"segmentTime" v:"required#分片时间不能为空"`
 	Remark         string `json:"remark" v:"max-length:45#备注最大长度为45"`
 }
 type PutLiveManageRes struct {

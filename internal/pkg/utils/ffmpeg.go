@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 
@@ -239,4 +240,41 @@ func (b *FFmpegBuilder) ExecuteWithProgress(ctx context.Context) (io.ReadCloser,
 	}()
 
 	return stdout, nil
+}
+
+func EnsureSuffix(path string, suffix string) string {
+	if strings.HasSuffix(strings.ToLower(path), strings.ToLower(suffix)) {
+		return path
+	}
+	return path + suffix
+}
+
+func BuildSegmentTemplate(file string, ext string) string {
+	dir, base := filepath.Dir(file), filepath.Base(file)
+	name, origExt := splitNameExt(base)
+
+	finalExt := origExt
+	if finalExt == "" {
+		finalExt = ensureDot(ext)
+	}
+
+	return filepath.Join(dir, name+"_%03d"+finalExt)
+}
+
+func splitNameExt(base string) (string, string) {
+	ext := filepath.Ext(base) // 包含点
+	if ext == "" {
+		return base, ""
+	}
+	return strings.TrimSuffix(base, ext), ext
+}
+
+func ensureDot(e string) string {
+	if e == "" {
+		return ""
+	}
+	if strings.HasPrefix(e, ".") {
+		return e
+	}
+	return "." + e
 }

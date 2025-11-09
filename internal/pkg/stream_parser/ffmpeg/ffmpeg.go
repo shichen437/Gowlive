@@ -6,11 +6,14 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"os/exec"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	parser "github.com/shichen437/gowlive/internal/pkg/stream_parser"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
@@ -34,6 +37,9 @@ type Parser struct {
 	closeOnce   *sync.Once
 	debug       bool
 	timeoutInUs string
+	referer     string
+	format      string
+	st          string
 	statusReq   chan struct{}
 	statusResp  chan map[string]string
 	cmdLock     sync.Mutex
@@ -50,6 +56,9 @@ func (b *builder) Build(cfg map[string]string) (parser.Parser, error) {
 		statusReq:   make(chan struct{}, 1),
 		statusResp:  make(chan map[string]string, 1),
 		timeoutInUs: cfg["timeout_in_us"],
+		referer:     cfg["referer"],
+		format:      cfg["format"],
+		st:          cfg["st"],
 	}, nil
 }
 
@@ -121,7 +130,7 @@ func (p *Parser) Status() (map[string]string, error) {
 	return <-p.statusResp, nil
 }
 
-func (p *Parser) ParseLiveStream(ctx context.Context, streamInfo *lives.StreamUrlInfo, file, refer string) (err error) {
+func (p *Parser) ParseLiveStream(ctx context.Context, streamInfo *lives.StreamUrlInfo, file string) (err error) {
 	url := streamInfo.Url
 	ffmpegPath, err := utils.GetDefaultFFmpegPath()
 	if err != nil {
@@ -132,32 +141,8 @@ func (p *Parser) ParseLiveStream(ctx context.Context, streamInfo *lives.StreamUr
 	if !exists {
 		ffUserAgent = userAgent
 	}
-	referer, exists := headers["Referer"]
-	if !exists {
-		referer = refer
-	}
-	args := []string{
-		"-nostats",
-		"-progress", "-",
-		"-y", "-re",
-		"-reconnect", "1",
-		"-reconnect_streamed", "1",
-		"-reconnect_delay_max", "5",
-		"-user_agent", ffUserAgent,
-		"-referer", referer,
-		"-rw_timeout", p.timeoutInUs,
-		"-i", url.String(),
-		"-c", "copy",
-		"-bsf:a", "aac_adtstoasc",
-	}
-	for k, v := range headers {
-		if k == "User-Agent" || k == "Referer" {
-			continue
-		}
-		args = append(args, "-headers", k+": "+v)
-	}
 
-	args = append(args, file)
+	args := p.buildArgs(ffUserAgent, file, url, headers)
 
 	func() {
 		p.cmdLock.Lock()
@@ -189,6 +174,74 @@ func (p *Parser) ParseLiveStream(ctx context.Context, streamInfo *lives.StreamUr
 		return err
 	}
 	return nil
+}
+
+func (p *Parser) buildArgs(ffUserAgent, file string, sUrl *url.URL, headers map[string]string) []string {
+	referer, exists := headers["Referer"]
+	if !exists {
+		referer = p.referer
+	}
+	args := []string{
+		"-nostats",
+		"-progress", "-",
+		"-y", "-re",
+		"-reconnect", "1",
+		"-reconnect_streamed", "1",
+		"-reconnect_delay_max", "5",
+		"-user_agent", ffUserAgent,
+		"-referer", referer,
+		"-rw_timeout", p.timeoutInUs,
+		"-i", sUrl.String(),
+	}
+	for k, v := range headers {
+		if k == "User-Agent" || k == "Referer" {
+			continue
+		}
+		args = append(args, "-headers", k+": "+v)
+	}
+	switch strings.ToLower(p.format) {
+	case "flv":
+		args = append(args, "-c", "copy", "-bsf:a", "aac_adtstoasc")
+		if gconv.Int(p.st) > 0 {
+			template := utils.BuildSegmentTemplate(file, ".flv")
+			args = append(args,
+				"-f", "segment",
+				"-segment_time", p.st,
+				"-reset_timestamps", "1",
+				template,
+			)
+		} else {
+			args = append(args, "-f", "flv", utils.EnsureSuffix(file, ".flv"))
+		}
+	case "mp4":
+		args = append(args, "-c", "copy", "-bsf:a", "aac_adtstoasc")
+		if gconv.Int(p.st) > 0 {
+			template := utils.BuildSegmentTemplate(file, ".mp4")
+			args = append(args,
+				"-f", "segment",
+				"-segment_time", p.st,
+				"-reset_timestamps", "1",
+				"-segment_format_options", "movflags=+faststart",
+				template,
+			)
+		} else {
+			args = append(args, "-movflags", "+faststart", "-f", "mp4", utils.EnsureSuffix(file, ".mp4"))
+		}
+	default:
+		args = append(args, "-vn", "-c:a", "libmp3lame", "-b:a", "192k")
+		if gconv.Int(p.st) > 0 {
+			template := utils.BuildSegmentTemplate(file, ".mp3")
+			args = append(args,
+				"-f", "segment",
+				"-segment_time", p.st,
+				"-reset_timestamps", "1",
+				template,
+			)
+		} else {
+			args = append(args, "-f", "mp3", utils.EnsureSuffix(file, ".mp3"))
+		}
+	}
+	return args
 }
 
 func (p *Parser) Stop() (err error) {

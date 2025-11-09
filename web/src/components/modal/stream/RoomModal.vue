@@ -17,7 +17,7 @@
                         </FormItem>
                     </FormField>
 
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-2 gap-4">
                         <FormField v-slot="{ componentField, errorMessage }" name="interval">
                             <FormItem>
                                 <FormLabel>间隔时间 (秒)</FormLabel>
@@ -47,6 +47,9 @@
                                 <FormMessage />
                             </FormItem>
                         </FormField>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
                         <FormField v-slot="{ componentField, errorMessage }" name="quality">
                             <FormItem>
                                 <FormLabel>清晰度
@@ -73,6 +76,27 @@
                                         <SelectItem :value="2">高清</SelectItem>
                                         <SelectItem :value="3">标清</SelectItem>
                                         <SelectItem :value="4">流畅</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField v-slot="{ componentField, errorMessage }" name="segmentTime">
+                            <FormItem>
+                                <FormLabel>切片时长</FormLabel>
+                                <Select v-bind="componentField">
+                                    <FormControl>
+                                        <SelectTrigger class="w-full" :class="{ 'border-red-500': errorMessage }">
+                                            <SelectValue placeholder="选择切片时长" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent class="w-[--radix-select-trigger-width]">
+                                        <SelectItem :value="0">不切片</SelectItem>
+                                        <SelectItem :value="900">15 分钟</SelectItem>
+                                        <SelectItem :value="1800">30 分钟</SelectItem>
+                                        <SelectItem :value="3600">1 小时</SelectItem>
+                                        <SelectItem :value="7200">2 小时</SelectItem>
+                                        <SelectItem :value="14400">4 小时</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -230,6 +254,7 @@ const formSchema = toTypedSchema(
         interval: z.coerce.number().min(30, { message: '间隔时间最小为30秒' }).max(600, { message: '间隔时间最大为600秒' }),
         format: z.enum(['flv', 'mp4', 'mp3']),
         quality: z.coerce.number(),
+        segmentTime: z.coerce.number(),
         monitorType: z.coerce.number(),
         monitorStartAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: '时间格式必须为 HH:mm' }).optional().nullable(),
         monitorStopAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: '时间格式必须为 HH:mm' }).optional().nullable(),
@@ -253,6 +278,7 @@ const { handleSubmit, values, setValues, resetForm } = useForm({
         format: 'flv',
         monitorType: 0,
         quality: 0,
+        segmentTime: 0,
         remark: '',
         monitorStartAt: null,
         monitorStopAt: null,
@@ -306,6 +332,7 @@ const openModal = async (id?: number) => {
             const formattedData = {
                 ...roomData,
                 quality: Number(roomData.quality),
+                segmentTime: Number(roomData.segmentTime),
                 monitorType: Number(roomData.monitorType),
                 monitorStartAt: roomData.monitorStartAt || null,
                 monitorStopAt: roomData.monitorStopAt || null,

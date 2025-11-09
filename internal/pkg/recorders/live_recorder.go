@@ -125,6 +125,9 @@ func (r *recorder) tryRecord(ctx context.Context) error {
 	}
 	parserCfg := map[string]string{
 		"timeout_in_us": strconv.Itoa(100000000),
+		"referer":       r.session.Config.RoomUrl,
+		"format":        r.session.Config.Format,
+		"st":            strconv.Itoa(r.session.Config.SegmentTime),
 	}
 	p, err := newParser(parserCfg)
 	if err != nil {
@@ -132,7 +135,7 @@ func (r *recorder) tryRecord(ctx context.Context) error {
 	}
 	r.setAndCloseParser(p)
 	r.startTime = time.Now()
-	err = r.parser.ParseLiveStream(ctx, streamInfo, fileName, r.session.Config.RoomUrl)
+	err = r.parser.ParseLiveStream(ctx, streamInfo, fileName)
 	removeEmptyFile(fileName)
 	return err
 }
