@@ -6,6 +6,7 @@ export interface LiveManage {
   monitorType: number;
   monitorStartAt: string;
   monitorStopAt: string;
+  quality: 0 | 1 | 2 | 3 | 4;
   remark: string;
 }
 

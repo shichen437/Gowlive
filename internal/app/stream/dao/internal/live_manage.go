@@ -31,6 +31,7 @@ type LiveManageColumns struct {
 	Remark         string //
 	CreatedAt      string //
 	UpdatedAt      string //
+	Quality        string //
 }
 
 // liveManageColumns holds the columns for the table live_manage.
@@ -45,6 +46,7 @@ var liveManageColumns = LiveManageColumns{
 	Remark:         "remark",
 	CreatedAt:      "created_at",
 	UpdatedAt:      "updated_at",
+	Quality:        "quality",
 }
 
 // NewLiveManageDao creates and returns a new DAO object for table data access.

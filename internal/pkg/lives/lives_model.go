@@ -49,6 +49,7 @@ type LiveConfig struct {
 	MonitorType    int
 	MonitorStartAt string
 	MonitorStopAt  string
+	Quality        int
 }
 
 type LiveState struct {

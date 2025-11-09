@@ -165,7 +165,8 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 	}
 	validNeedUpdate := false
 	if tempData.MonitorType != req.MonitorType || tempData.Interval != req.Interval || tempData.Format != req.Format ||
-		tempData.MonitorStartAt != req.MonitorStartAt || tempData.MonitorStopAt != req.MonitorStopAt || tempData.Remark != req.Remark {
+		tempData.MonitorStartAt != req.MonitorStartAt || tempData.MonitorStopAt != req.MonitorStopAt || tempData.Remark != req.Remark ||
+		tempData.Quality != req.Quality {
 		validNeedUpdate = true
 	}
 	if !validNeedUpdate {
@@ -177,6 +178,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 		MonitorType:    req.MonitorType,
 		MonitorStartAt: req.MonitorStartAt,
 		MonitorStopAt:  req.MonitorStopAt,
+		Quality:        req.Quality,
 		Remark:         req.Remark,
 		UpdatedAt:      utils.Now(),
 	})
@@ -307,6 +309,7 @@ func saveLiveConfig(ctx context.Context, req *v1.PostLiveManageReq, liveId *int6
 			MonitorType:    req.MonitorType,
 			MonitorStartAt: req.MonitorStartAt,
 			MonitorStopAt:  req.MonitorStopAt,
+			Quality:        req.Quality,
 			Remark:         req.Remark,
 			CreatedAt:      utils.Now(),
 		})
@@ -352,7 +355,8 @@ func listenerForUpdate(req *v1.PutLiveManageReq, tempData *entity.LiveManage) {
 		listenerForDelete(req.Id)
 	}
 	if req.MonitorType == consts.MonitorTypeStart || req.MonitorType == consts.MonitorTypeIntelligent {
-		if req.MonitorType != tempData.MonitorType || req.Format != tempData.Format || req.Interval != tempData.Interval {
+		if req.MonitorType != tempData.MonitorType || req.Format != tempData.Format || req.Interval != tempData.Interval ||
+			req.Quality != tempData.Quality {
 			listenerForDelete(req.Id)
 			registry.Get().Add(ctx, req.Id)
 			return

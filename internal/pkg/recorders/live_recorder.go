@@ -114,7 +114,7 @@ func (r *recorder) tryRecord(ctx context.Context) error {
 			return gerror.New("no stream info found in fallback")
 		}
 	}
-	streamInfo := streamInfos[0]
+	streamInfo := r.getQuality(streamInfos)
 
 	fileName, outputPath, err := r.getOutPathAndFilename(&state)
 	if err != nil {
@@ -135,6 +135,65 @@ func (r *recorder) tryRecord(ctx context.Context) error {
 	err = r.parser.ParseLiveStream(ctx, streamInfo, fileName, r.session.Config.RoomUrl)
 	removeEmptyFile(fileName)
 	return err
+}
+
+func (r *recorder) getQuality(streamInfos []*lives.StreamUrlInfo) *lives.StreamUrlInfo {
+	streamInfo := streamInfos[0]
+	if r.session.Config.Quality == 0 {
+		return streamInfo
+	}
+	if r.session.GetState().Platform == "douyin" {
+		streamMap := make(map[string]*lives.StreamUrlInfo)
+		for _, stream := range streamInfos {
+			streamMap[stream.Name] = stream
+		}
+		if r.session.Config.Format == "mp3" {
+			if stream, ok := streamMap["ao"]; ok {
+				return stream
+			} else {
+				return streamInfo
+			}
+		} else {
+			switch r.session.Config.Quality {
+			case 1:
+				if stream, ok := existsAndGetStreamInfo(streamMap, "uhd"); ok {
+					return stream
+				} else {
+					return streamInfo
+				}
+			case 2:
+				if stream, ok := existsAndGetStreamInfo(streamMap, "hd", "uhd"); ok {
+					return stream
+				} else {
+					return streamInfo
+				}
+			case 3:
+				if stream, ok := existsAndGetStreamInfo(streamMap, "sd", "hd", "uhd"); ok {
+					return stream
+				} else {
+					return streamInfo
+				}
+			case 4:
+				if stream, ok := existsAndGetStreamInfo(streamMap, "ld", "md", "sd", "hd", "uhd"); ok {
+					return stream
+				} else {
+					return streamInfo
+				}
+			default:
+				return streamInfo
+			}
+		}
+	}
+	return streamInfo
+}
+
+func existsAndGetStreamInfo(streamMap map[string]*lives.StreamUrlInfo, qn ...string) (*lives.StreamUrlInfo, bool) {
+	for _, q := range qn {
+		if stream, ok := streamMap[q]; ok {
+			return stream, true
+		}
+	}
+	return nil, false
 }
 
 func newParser(cfg map[string]string) (parser.Parser, error) {

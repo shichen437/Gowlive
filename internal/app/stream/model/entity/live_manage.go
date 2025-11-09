@@ -20,4 +20,5 @@ type LiveManage struct {
 	Remark         string      `json:"remark"         orm:"remark"           description:""`
 	CreatedAt      *gtime.Time `json:"createdAt"      orm:"created_at"       description:""`
 	UpdatedAt      *gtime.Time `json:"updatedAt"      orm:"updated_at"       description:""`
+	Quality        int         `json:"quality"        orm:"quality"          description:""`
 }
