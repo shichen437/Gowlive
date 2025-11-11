@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -30,6 +31,12 @@ func New() service.IMiddleware {
 }
 
 func (s *sMiddleware) Ctx(r *ghttp.Request) {
+	if strings.HasPrefix(r.URL.Path, "/media/file/play") {
+		if token := r.Cookie.Get("Gowlive-Token"); token != nil {
+			r.Header.Set("Authorization", "Bearer "+token.String())
+		}
+	}
+
 	customCtx := &model.Context{
 		Session: r.Session,
 	}

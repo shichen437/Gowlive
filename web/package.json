@@ -1,7 +1,7 @@
 {
   "name": "gowlive-web",
   "private": true,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,12 +16,14 @@
     "@vee-validate/zod": "^4.15.1",
     "@vuepic/vue-datepicker": "^11.0.2",
     "@vueuse/core": "^13.9.0",
+    "artplayer": "^5.3.0",
     "axios": "^1.12.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "js-beautify": "^1.15.4",
     "js-cookie": "^3.0.5",
     "lucide-vue-next": "^0.544.0",
+    "mpegts.js": "^1.8.0",
     "pinia": "^3.0.3",
     "reka-ui": "^2.6.0",
     "tailwind-merge": "^3.3.1",

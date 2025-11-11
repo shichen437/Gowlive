@@ -127,6 +127,12 @@ const routes = [
     ],
   },
   {
+    path: "/media/play",
+    name: "MediaPlay",
+    component: () => import("@/views/media/play.vue"),
+    meta: { title: "媒体播放" },
+  },
+  {
     path: "/login",
     name: "Login",
     component: Login,

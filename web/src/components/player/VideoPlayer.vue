@@ -1,0 +1,200 @@
+<template>
+    <div class="w-full h-full">
+        <div ref="playerContainer" class="w-full h-full"></div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import Artplayer from 'artplayer';
+import mpegts from 'mpegts.js';
+
+type MediaFormat = 'flv' | 'mp4' | 'mp3';
+
+const props = defineProps<{
+    url: string;
+    format: MediaFormat;
+    isLive: boolean;
+}>();
+
+const playerContainer = ref<HTMLElement | null>(null);
+let player: Artplayer | null = null;
+let flvPlayer: mpegts.Player | null = null;
+
+function destroyFlvPlayer() {
+    if (flvPlayer) {
+        try {
+            flvPlayer.unload();
+            flvPlayer.detachMediaElement();
+            flvPlayer.destroy();
+        } catch (e) {
+            console.warn('mpegts destroy error:', e);
+        } finally {
+            flvPlayer = null;
+        }
+    }
+}
+
+function destroyPlayer() {
+    destroyFlvPlayer();
+    if (player) {
+        try {
+            player.destroy();
+        } catch (e) {
+            console.warn('Artplayer destroy error:', e);
+        } finally {
+            player = null;
+        }
+    }
+}
+
+function createFlvCustomType() {
+    return {
+        flv: (video: HTMLMediaElement, url: string, art: Artplayer) => {
+            destroyFlvPlayer();
+
+            if (!mpegts.isSupported()) {
+                art.notice.show = ('当前环境不支持 FLV 播放');
+                return;
+            }
+
+            const mediaDataSource: mpegts.MediaDataSource = {
+                type: 'flv',
+                url,
+                isLive: props.isLive
+            };
+
+            const config: mpegts.Config = {
+                isLive: props.isLive,
+                enableStashBuffer: !props.isLive,
+                stashInitialSize: 512,
+                enableWorker: false,
+                autoCleanupSourceBuffer: !props.isLive,
+                accurateSeek: !props.isLive,
+                seekType: 'range',
+                lazyLoad: !props.isLive,
+                lazyLoadMaxDuration: 60,
+                lazyLoadRecoverDuration: 30,
+                statisticsInfoReportInterval: 1000
+            };
+
+            flvPlayer = mpegts.createPlayer(mediaDataSource, config);
+
+            flvPlayer.on(mpegts.Events.ERROR, (type, detail) => {
+                console.error('mpegts error:', type, detail);
+                art.notice.show = (`FLV 播放错误: ${type}`);
+            });
+
+            flvPlayer.attachMediaElement(video);
+            flvPlayer.load();
+            const onSeeking = () => {
+                try {
+                    if (!video.buffered || video.buffered.length === 0) return;
+
+                    const end = video.buffered.end(video.buffered.length - 1);
+
+                    if (video.currentTime >= end) {
+                        const safetyBack = 1;
+                        const target = Math.max(0, end - safetyBack);
+                        video.currentTime = target;
+                    }
+                } catch (e) {
+                    console.warn('seeking adjust error:', e);
+                }
+            };
+
+            video.addEventListener('seeking', onSeeking);
+
+            art.flv = flvPlayer;
+
+            art.on('destroy', () => {
+                video.removeEventListener('seeking', onSeeking);
+                destroyFlvPlayer();
+            });
+        },
+    };
+}
+
+function initializePlayer() {
+    const container = playerContainer.value;
+
+    if (!container) {
+        console.warn('VideoPlayer container is not mounted yet.');
+        return;
+    }
+
+    if (!props.url) {
+        console.warn('No media url provided to VideoPlayer.');
+        destroyPlayer();
+        return;
+    }
+
+    destroyPlayer();
+
+    const options: any = {
+        airplay: true,
+        aspectRatio: true,
+        autoplay: false,
+        container,
+        customType: {},
+        flip: true,
+        fullscreen: true,
+        fullscreenWeb: true,
+        lang: 'zh-cn',
+        isLive: props.isLive,
+        miniProgressBar: true,
+        muted: false,
+        mutex: true,
+        pip: true,
+        playbackRate: true,
+        poster: '',
+        setting: true,
+        screenshot: true,
+        theme: '#93c5fd',
+        url: props.url,
+        volume: 1,
+    };
+
+    if (props.format === 'flv') {
+        options.type = 'flv';
+        options.customType = createFlvCustomType();
+    }
+    if (props.format === 'mp3') {
+        options.fullscreen = false;
+        options.fullscreenWeb = false;
+        options.pip = false;
+        options.setting = false;
+        options.screenshot = false;
+    }
+
+    player = new Artplayer(options);
+    player.contextmenu.show = false;
+    player.on('ready', () => {
+        console.log('Player is ready!')
+    })
+    player.on('error', (error: unknown) => {
+        console.error('Artplayer error:', error);
+    });
+}
+
+onMounted(() => {
+    initializePlayer();
+});
+
+onBeforeUnmount(() => {
+    destroyPlayer();
+});
+
+watch(
+    () => [props.url, props.format],
+    ([newUrl, newFormat, newIsLive], [oldUrl, oldFormat, oldIsLive]) => {
+        if (
+            newUrl !== oldUrl ||
+            newFormat !== oldFormat ||
+            newIsLive !== oldIsLive
+        ) {
+            initializePlayer();
+        }
+    }
+);
+</script>

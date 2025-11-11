@@ -37,7 +37,7 @@ type DeleteFileRes struct {
 }
 
 type GetFilePlayReq struct {
-	g.Meta `path:"/media/file/play" method:"get,post" tags:"文件管理" summary:"媒体文件流式传输"`
+	g.Meta `path:"/media/file/play" method:"get,post,head,options,trace" tags:"文件管理" summary:"媒体文件流式传输"`
 	Path   string `p:"path" v:"required#文件路径不能为空"`
 }
 

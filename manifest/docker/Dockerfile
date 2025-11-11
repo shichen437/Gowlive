@@ -34,7 +34,7 @@ RUN rm -rf node_modules dist && \
 FROM --platform=linux/amd64 alpine:3.19
 
 LABEL maintainer="shichen437 <shichen437@126.com>"
-LABEL version="0.0.8"
+LABEL version="0.0.9"
 LABEL description="Gowlive"
 LABEL license="Mit"
 LABEL source="https://github.com/shichen437/Gowlive"

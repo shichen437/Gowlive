@@ -2,12 +2,16 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"io/fs"
+	"mime"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/net/ghttp"
 	v1 "github.com/shichen437/gowlive/api/v1/media"
 	"github.com/shichen437/gowlive/internal/app/media/model"
 	"github.com/shichen437/gowlive/internal/app/media/service"
@@ -112,7 +116,75 @@ func (s *sFileManage) AnchorFilePath(ctx context.Context, req *v1.GetAnchorFileP
 }
 
 func (s *sFileManage) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1.GetFilePlayRes, err error) {
-	return
+	r := ghttp.RequestFromCtx(ctx)
+	if r == nil {
+		return nil, gerror.New("invalid request context")
+	}
+	res = &v1.GetFilePlayRes{}
+
+	setupCORS(r)
+	if r.Method == http.MethodOptions {
+		r.Response.WriteHeader(http.StatusNoContent)
+		return res, nil
+	}
+
+	path := strings.TrimSpace(req.Path)
+	if path == "" {
+		writeErrorPlain(r, http.StatusBadRequest, "文件路径不能为空")
+		return
+	}
+
+	base, errAbs := filepath.Abs(utils.DATA_PATH)
+	if errAbs != nil {
+		writeErrorPlain(r, http.StatusInternalServerError, "获取系统目录信息失败")
+		return
+	}
+	abs, errAbsJoin := filepath.Abs(filepath.Join(base, path))
+	if errAbsJoin != nil || !strings.HasPrefix(abs, base) {
+		writeErrorPlain(r, http.StatusBadRequest, "非法文件路径")
+		return
+	}
+
+	fi, statErr := os.Stat(abs)
+	if statErr != nil {
+		if os.IsNotExist(statErr) {
+			writeErrorPlain(r, http.StatusNotFound, "文件不存在")
+		} else {
+			writeErrorPlain(r, http.StatusInternalServerError, "无法访问文件")
+		}
+		return
+	}
+	if fi.IsDir() {
+		writeErrorPlain(r, http.StatusBadRequest, "路径为目录，无法播放")
+		return
+	}
+
+	ctype := detectContentType(abs)
+	if !isSupportedMedia(ctype) {
+		writeErrorPlain(r, http.StatusUnsupportedMediaType, fmt.Sprintf("不支持的媒体类型: %s", ctype))
+		return
+	}
+
+	f, openErr := os.Open(abs)
+	if openErr != nil {
+		writeErrorPlain(r, http.StatusInternalServerError, "文件打开失败")
+		return
+	}
+	defer f.Close()
+
+	r.Response.Header().Set("Content-Type", ctype)
+	r.Response.Header().Set("Accept-Ranges", "bytes")
+
+	r.Response.Header().Set("Cache-Control", "no-store")
+
+	modTime := fi.ModTime()
+	if !modTime.IsZero() {
+		r.Response.Header().Set("Last-Modified", modTime.UTC().Format(http.TimeFormat))
+	}
+
+	http.ServeContent(r.Response.Writer, r.Request, fi.Name(), modTime, f)
+
+	return res, nil
 }
 
 func isHiddenFile(file fs.FileInfo) bool {
@@ -124,4 +196,56 @@ func isHiddenFile(file fs.FileInfo) bool {
 
 func matchPattern(filename, pattern string) bool {
 	return strings.Contains(filename, pattern)
+}
+
+func detectContentType(path string) string {
+	ext := strings.ToLower(filepath.Ext(path))
+	switch ext {
+	case ".mp4":
+		return "video/mp4"
+	case ".mp3":
+		return "audio/mpeg"
+	case ".flv":
+		return "video/x-flv"
+	default:
+		ctype := mime.TypeByExtension(ext)
+		if ctype == "" {
+			ctype = "application/octet-stream"
+		}
+		return ctype
+	}
+}
+
+func isSupportedMedia(ctype string) bool {
+	if strings.HasPrefix(ctype, "video/mp4") {
+		return true
+	}
+	if strings.HasPrefix(ctype, "audio/mpeg") {
+		return true
+	}
+	if ctype == "video/x-flv" || strings.HasPrefix(ctype, "video/flv") {
+		return true
+	}
+	return false
+}
+
+func writeErrorPlain(r *ghttp.Request, code int, msg string) {
+	r.Response.ClearBuffer()
+	r.Response.WriteHeader(code)
+	_, _ = r.Response.Writer.Write([]byte(msg))
+	r.Exit()
+}
+
+func setupCORS(r *ghttp.Request) {
+	origin := r.Header.Get("Origin")
+	if origin == "" {
+		return
+	}
+	h := r.Response.Header()
+	h.Set("Vary", "Origin")
+	h.Set("Access-Control-Allow-Origin", origin)
+	h.Set("Access-Control-Allow-Credentials", "true")
+	h.Set("Access-Control-Allow-Headers", "Authorization, Range, Content-Type")
+	h.Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, HEAD, CONNECT, TRACE")
+	h.Set("Access-Control-Expose-Headers", "Content-Range, Accept-Ranges, Content-Length, Last-Modified")
 }
