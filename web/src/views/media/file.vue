@@ -21,7 +21,7 @@
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="w-[40px]"></TableHead>
+                        <TableHead class="w-10"></TableHead>
                         <TableHead>文件名</TableHead>
                         <TableHead>文件大小</TableHead>
                         <TableHead>上次修改时间</TableHead>
@@ -52,6 +52,10 @@
                             <Button variant="ghost" size="icon" v-if="canPlay(file)" @click="handlePlay(file)">
                                 <CirclePlay class="w-4 h-4" />
                             </Button>
+                            <Button variant="ghost" size="icon" v-if="canPlay(file)"
+                                @click="openFileCheckConfirmModal(file)">
+                                <FileCheck class="w-4 h-4" />
+                            </Button>
                             <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
                                 @click="openConfirmModal(file)" v-if="!file.isFolder && !file.filename.endsWith('.db')">
                                 <Trash2 class="w-4 h-4" />
@@ -64,12 +68,15 @@
     </div>
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
         :onConfirm="handleDeleteFile" title="确认删除" description="你确定要删除该文件吗？此操作无法撤销。" />
+    <ConfirmModal :open="showFileCheckConfirmModal" :onOpenChange="(open: any) => showFileCheckConfirmModal = open"
+        :onConfirm="performFileCheck" title="确认检查" description="你确定要为该文件创建检测任务吗？" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { listFiles, deleteFile } from "@/api/media/file_manage";
+import { postTask } from "@/api/media/file_check";
 import type { FileInfo } from "@/types/media";
 import {
     Breadcrumb,
@@ -87,7 +94,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Folder, File, Trash2, CirclePlay, Database, Film, CassetteTape } from "lucide-vue-next";
+import { Folder, File, Trash2, CirclePlay, Database, Film, CassetteTape, FileCheck } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Button } from "@/components/ui/button";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
@@ -100,6 +107,8 @@ const files = ref<FileInfo[]>([]);
 const currentPath = ref(".");
 const showConfirmModal = ref(false);
 const fileToDelete = ref<FileInfo | null>(null);
+const showFileCheckConfirmModal = ref(false);
+const fileToCheck = ref<FileInfo | null>(null);
 
 function canPlay(file: FileInfo) {
     return isVideo(file) || isAudio(file);
@@ -196,6 +205,33 @@ async function handleDeleteFile() {
     } finally {
         showConfirmModal.value = false;
         fileToDelete.value = null;
+    }
+}
+
+const openFileCheckConfirmModal = (file: FileInfo) => {
+    fileToCheck.value = file;
+    showFileCheckConfirmModal.value = true;
+};
+
+async function performFileCheck() {
+    if (!fileToCheck.value) {
+        return;
+    }
+    try {
+        const res: any = await postTask({
+            path: currentPath.value,
+            filename: fileToCheck.value.filename,
+        });
+        if (res.code !== 0) {
+            toast.error(res.msg || "创建任务失败");
+            return;
+        }
+        toast.success("创建任务成功");
+    } catch (error) {
+        console.error("Failed to create file check task:", error);
+    } finally {
+        showFileCheckConfirmModal.value = false;
+        fileToCheck.value = null;
     }
 }
 

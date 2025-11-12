@@ -8,6 +8,17 @@ func Now() *gtime.Time {
 	return gtime.NewFromStrFormat(gtime.Now().Local().Format("Y-m-d H:i:s"), "Y-m-d H:i:s")
 }
 
+func DiffNowSeconds(t *gtime.Time) int {
+	if t == nil {
+		return 0
+	}
+	diff := int(Now().Sub(t).Seconds())
+	if diff <= 0 {
+		return 1
+	}
+	return diff
+}
+
 func CalcNextDate(cycleNum, cycleType, cycleDay int, startDate *gtime.Time) *gtime.Time {
 	if cycleType == 0 {
 		return nil

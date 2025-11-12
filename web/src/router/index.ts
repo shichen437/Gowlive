@@ -16,10 +16,13 @@ import StreamAuthor from "@/views/stream/author.vue";
 import SystemLogs from "@/views/system/logs.vue";
 import SystemNotify from "@/views/system/notify.vue";
 import SystemChannel from "@/views/system/channel.vue";
+import MediaCheck from "@/views/media/check.vue";
 import MediaFile from "@/views/media/file.vue";
+import MediaPlay from "@/views/media/play.vue";
 import Help from "@/views/help/index.vue";
 import Users from "@/views/users/index.vue";
 import About from "@/views/about/index.vue";
+import NotFound from "@/views/NotFound.vue";
 
 const routes = [
   {
@@ -80,6 +83,12 @@ const routes = [
             component: MediaFile,
             meta: { title: "文件管理" },
           },
+          {
+            path: "check",
+            name: "MediaCheck",
+            component: MediaCheck,
+            meta: { title: "文件检测" },
+          },
         ],
       },
       {
@@ -129,7 +138,7 @@ const routes = [
   {
     path: "/media/play",
     name: "MediaPlay",
-    component: () => import("@/views/media/play.vue"),
+    component: MediaPlay,
     meta: { title: "媒体播放" },
   },
   {
@@ -140,7 +149,7 @@ const routes = [
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
-    component: () => import("@/views/NotFound.vue"),
+    component: NotFound,
     meta: { title: "404" },
   },
 ];

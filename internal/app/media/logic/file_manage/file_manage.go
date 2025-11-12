@@ -32,12 +32,8 @@ func New() service.IFileManage {
 
 func (s *sFileManage) List(ctx context.Context, req *v1.GetFileListReq) (res *v1.GetFileListRes, err error) {
 	res = &v1.GetFileListRes{}
-	base, err := filepath.Abs(utils.DATA_PATH)
+	absPath, err := utils.FileAbsPath(req.Path, "")
 	if err != nil {
-		return nil, gerror.New("获取系统目录信息失败")
-	}
-	absPath, err := filepath.Abs(filepath.Join(base, req.Path))
-	if err != nil || !strings.HasPrefix(absPath, base) {
 		return nil, gerror.New("获取系统目录路径失败")
 	}
 	files, err := os.ReadDir(absPath)
@@ -72,12 +68,8 @@ func (s *sFileManage) Delete(ctx context.Context, req *v1.DeleteFileReq) (res *v
 	if req.Filename == "" || strings.Contains(req.Filename, "gowlive.db") {
 		return
 	}
-	base, err := filepath.Abs(utils.DATA_PATH)
+	absPath, err := utils.FileAbsPath(req.Path, "")
 	if err != nil {
-		return nil, gerror.New("获取系统目录信息失败")
-	}
-	absPath, err := filepath.Abs(filepath.Join(base, req.Path))
-	if err != nil || !strings.HasPrefix(absPath, base) {
 		return nil, gerror.New("获取系统目录路径失败")
 	}
 	err = os.RemoveAll(filepath.Join(absPath, req.Filename))
@@ -92,19 +84,15 @@ func (s *sFileManage) AnchorFilePath(ctx context.Context, req *v1.GetAnchorFileP
 	if req.Anchor == "" || req.Platform == "" {
 		return
 	}
-	base, err := filepath.Abs(utils.DATA_PATH)
-	if err != nil {
-		return nil, gerror.New("获取系统目录信息失败")
-	}
 	cachePath := "stream/" + req.Platform
-	absPath, err := filepath.Abs(filepath.Join(base, cachePath))
-	if err != nil || !strings.HasPrefix(absPath, base) {
-		return nil, gerror.New("获取系统目录路径失败")
+	absPath, err := utils.FileAbsPath(cachePath, "")
+	if err != nil {
+		return res, nil
 	}
 	res.Path = cachePath
 	cachePath = res.Path + "/" + req.Anchor
-	absPath, err = filepath.Abs(filepath.Join(base, cachePath))
-	if err != nil || !strings.HasPrefix(absPath, base) {
+	absPath, err = utils.FileAbsPath(cachePath, "")
+	if err != nil {
 		return res, nil
 	}
 	_, err = os.Stat(absPath)
@@ -134,13 +122,8 @@ func (s *sFileManage) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1
 		return
 	}
 
-	base, errAbs := filepath.Abs(utils.DATA_PATH)
-	if errAbs != nil {
-		writeErrorPlain(r, http.StatusInternalServerError, "获取系统目录信息失败")
-		return
-	}
-	abs, errAbsJoin := filepath.Abs(filepath.Join(base, path))
-	if errAbsJoin != nil || !strings.HasPrefix(abs, base) {
+	abs, errAbsJoin := utils.FileAbsPath(path, "")
+	if errAbsJoin != nil {
 		writeErrorPlain(r, http.StatusBadRequest, "非法文件路径")
 		return
 	}

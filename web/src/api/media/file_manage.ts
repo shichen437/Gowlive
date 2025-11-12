@@ -23,11 +23,3 @@ export async function deleteFile(data: any) {
     data: data,
   });
 }
-
-export async function playFile(data: any) {
-  return request({
-    url: "/media/file/play",
-    method: "delete",
-    data: data,
-  });
-}

@@ -23,7 +23,10 @@ export const configurableMenu = ref([
   {
     title: "媒体中心",
     icon: Disc3,
-    children: [{ title: "文件管理", to: "/media/file" }],
+    children: [
+      { title: "文件管理", to: "/media/file" },
+      { title: "文件检测", to: "/media/check" },
+    ],
   },
   {
     title: "系统管理",

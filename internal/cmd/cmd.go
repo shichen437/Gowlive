@@ -72,6 +72,7 @@ var (
 			}
 			g.Go(ctx, func(c context.Context) {
 				time.Sleep(1500 * time.Millisecond)
+				CheckFile()
 				JobInit()
 				LiveMonitor()
 			}, func(c context.Context, err error) {
@@ -157,7 +158,7 @@ func initDir() {
 func bindRoute(group *ghttp.RouterGroup) {
 	group.Bind(Admin.SysUser,
 		Common.InternalDict,
-		Media.FileManage,
+		Media.FileManage, Media.FileCheck,
 		Stream.LiveManage, Stream.LiveHistory, Stream.LiveCookie, Stream.AnchorInfo,
 		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel, System.SysNotify)
 }
@@ -166,6 +167,7 @@ func shutdown(sig os.Signal) {
 	registry.Get().StopAll(gctx.GetInitCtx())
 	manager.GetLogManager().Stop()
 	manager.GetNotifyManager().Stop()
+	manager.GetFileCheckManager().Close()
 	lives.GetBucketManager().Stop()
 	g.Log().Info(gctx.GetInitCtx(), "all monitor shutdown!")
 }

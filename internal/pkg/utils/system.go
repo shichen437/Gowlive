@@ -26,6 +26,14 @@ func GetDefaultFFmpegPath() (string, error) {
 	return path, err
 }
 
+func GetDefaultFFprobePath() (string, error) {
+	path, err := exec.LookPath("ffprobe")
+	if errors.Is(err, exec.ErrDot) {
+		path, err = exec.LookPath("./ffprobe")
+	}
+	return path, err
+}
+
 func GetOutputPath() string {
 	return STREAM_PATH
 }
@@ -35,7 +43,7 @@ func GetDownloadPath() string {
 }
 
 func GetTempDownloadPath() string {
-	return "./resource/temp/download"
+	return "./resources/temp/download"
 }
 
 func IsTimeRange(st, et string) bool {
