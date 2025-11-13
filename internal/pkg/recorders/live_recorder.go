@@ -15,6 +15,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/events"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
+	mr "github.com/shichen437/gowlive/internal/pkg/manager"
 	parser "github.com/shichen437/gowlive/internal/pkg/stream_parser"
 	ffmpeg_parser "github.com/shichen437/gowlive/internal/pkg/stream_parser/ffmpeg"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
@@ -266,13 +267,13 @@ func (r *recorder) getOutPathAndFilename(info *lives.LiveState) (string, string,
 		format = "flv"
 	}
 	buf := new(bytes.Buffer)
-	outTmpl := utils.GetOutputPathTemplate()
+	outTmpl := utils.GetOutputPathTemplate(mr.GetSettingsManager().GetSetting(consts.SKArchiveStrategy))
 	err := outTmpl.Execute(buf, info)
 	if err != nil {
 		return "", "", gerror.New("failed to get outputPath template")
 	}
 	outputPath := buf.String()
-	filenameTmpl := utils.GetFilenameTemplate(outputPath, format)
+	filenameTmpl := utils.GetFilenameTemplate(outputPath, format, mr.GetSettingsManager().GetSetting(consts.SKFilenameTemplate))
 	buf.Reset()
 	err = filenameTmpl.Execute(buf, info)
 	if err != nil {

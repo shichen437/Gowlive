@@ -6,7 +6,8 @@ import (
 )
 
 var (
-	cookieManager = NewCookieManager()
+	cookieManager *CookieManager
+	cookieOnce    sync.Once
 )
 
 type CookieManager struct {
@@ -14,13 +15,12 @@ type CookieManager struct {
 	cookies map[string]string
 }
 
-func NewCookieManager() *CookieManager {
-	return &CookieManager{
-		cookies: make(map[string]string),
-	}
-}
-
 func GetCookieManager() *CookieManager {
+	cookieOnce.Do(func() {
+		cookieManager = &CookieManager{
+			cookies: make(map[string]string),
+		}
+	})
 	return cookieManager
 }
 

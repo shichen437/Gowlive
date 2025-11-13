@@ -7,3 +7,19 @@ export async function latestVersion() {
     method: "get",
   });
 }
+
+export async function getSettings(params: any) {
+  return request({
+    url: "/system/settings",
+    method: "get",
+    params: params,
+  });
+}
+
+export async function updateSettings(data: any) {
+  return request({
+    url: "/system/settings",
+    method: "put",
+    data: data,
+  });
+}

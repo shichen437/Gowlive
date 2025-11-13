@@ -23,4 +23,8 @@ const (
 	StatusDisable = 0
 
 	StorageThreshold = 90
+
+	SKFilenameTemplate = "sk_filename_template"
+	SKArchiveStrategy  = "sk_archive_strategy"
+	SKLiveEndNotify    = "sk_live_end_notify"
 )

@@ -134,6 +134,7 @@ function initializePlayer() {
     const options: any = {
         airplay: true,
         aspectRatio: true,
+        autoOrientation: true,
         autoplay: false,
         container,
         customType: {},
@@ -150,7 +151,7 @@ function initializePlayer() {
         poster: '',
         setting: true,
         screenshot: true,
-        theme: '#93c5fd',
+        theme: '#de7897',
         url: props.url,
         volume: 1,
     };
@@ -158,6 +159,9 @@ function initializePlayer() {
     if (props.format === 'flv') {
         options.type = 'flv';
         options.customType = createFlvCustomType();
+    } else {
+        options.id = options.url
+        options.autoPlayback = true
     }
     if (props.format === 'mp3') {
         options.fullscreen = false;

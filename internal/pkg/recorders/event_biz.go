@@ -10,7 +10,9 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
 	"github.com/shichen437/gowlive/internal/app/stream/model/do"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
+	mr "github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/message_push"
 	"github.com/shichen437/gowlive/internal/pkg/service"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
@@ -23,13 +25,17 @@ var (
 func liveStartBiz(ctx context.Context, liveId int, anchor string) {
 	g.Log().Info(ctx, "liveStartBiz", liveId)
 	liveStartTimes.Store(liveId, utils.Now())
-	go message_push.LivePush(gctx.GetInitCtx(), anchor)
+	go message_push.LivePush(gctx.GetInitCtx(), anchor, true)
 }
 
 func liveEndBiz(ctx context.Context, liveId int, anchor string) {
 	g.Log().Info(ctx, "liveEndBiz", liveId)
 	startTime := getStartTime(ctx, liveId)
 	addHistory(ctx, liveId, anchor, startTime, utils.Now())
+	enable := mr.GetSettingsManager().GetSetting(consts.SKLiveEndNotify)
+	if enable == 1 {
+		go message_push.LivePush(gctx.GetInitCtx(), anchor, false)
+	}
 }
 
 func addHistory(ctx context.Context, liveId int, anchor string, startTime, endTime *gtime.Time) {

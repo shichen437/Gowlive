@@ -22,22 +22,12 @@ func init() {
 
 type builder struct{}
 
-func (b *builder) Build(channelType string, anchor string) (mp.MessagePush, error) {
-	return &MessagePush{
-		Anchor: anchor,
-	}, nil
+func (b *builder) Build(channelType string) (mp.MessagePush, error) {
+	return &MessagePush{}, nil
 }
 
 type MessagePush struct {
 	Anchor string
-}
-
-func (p *MessagePush) Push(ctx context.Context, channel *model.PushChannel) (err error) {
-	var model mp.MessageModel
-	model.Title = "开播通知"
-	model.Content = "你关注的主播 【 " + p.Anchor + " 】开播了！"
-	err = p.PushMessage(ctx, channel, &model)
-	return err
 }
 
 func (p *MessagePush) PushMessage(ctx context.Context, channel *model.PushChannel, model *mp.MessageModel) (err error) {

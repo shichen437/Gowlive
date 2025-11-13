@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/service"
@@ -38,7 +39,7 @@ func GetFileCheckManager() *FileCheckManager {
 			ctx:    ctx,
 			cancel: cancel,
 		}
-		for i := 0; i < workerNums; i++ {
+		for range make([]int, workerNums) {
 			fileCheckManager.wg.Add(1)
 			go fileCheckManager.autoExec()
 		}
@@ -108,12 +109,14 @@ func checkMedia(ctx context.Context, tid int) {
 	service.UpdateCheckTaskProgress(ctx, task.Id, consts.MediaCheckProgressQcing)
 	err = utils.QuickCheckFile(ctx, absPath)
 	if err != nil {
+		g.Log().Errorf(ctx, "QuickCheckFile failed: %v", err)
 		service.UpdateCheckTask(ctx, task.Id, consts.MediaCheckProgressQcError, consts.MediaCheckFileStatusError, current)
 		return
 	}
 	service.UpdateCheckTaskProgress(ctx, task.Id, consts.MediaCheckProgressCcing)
 	err = utils.CompletedCheckFile(ctx, absPath)
 	if err != nil {
+		g.Log().Errorf(ctx, "CompletedCheckFile failed: %v", err)
 		service.UpdateCheckTask(ctx, task.Id, consts.MediaCheckProgressCcError, consts.MediaCheckFileStatusError, current)
 		return
 	}

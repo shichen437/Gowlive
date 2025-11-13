@@ -17,3 +17,11 @@ CREATE INDEX idx_file_check_status ON file_check_task (
     progress,
     file_status
 );
+
+CREATE TABLE IF NOT EXISTS sys_settings(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- ID
+    s_key text NOT NULL unique, -- 配置名
+    s_value tinyint(2) NOT NULL, -- 配置值
+    created_at datetime(0) NOT NULL, -- Created Time
+    updated_at datetime(0) DEFAULT NULL -- Updated Time
+);

@@ -1,44 +1,69 @@
 <template>
-    <div class="space-y-6">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column -->
-            <div class="lg:col-span-1">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Left Navigation -->
+        <div class="md:col-span-1">
+            <nav class="space-y-1 py-4">
+                <Button variant="ghost" class="w-full justify-start"
+                    :class="{ 'bg-accent text-accent-foreground': activeView === 'account' }"
+                    @click="activeView = 'account'">
+                    账户信息
+                </Button>
+                <Button variant="ghost" class="w-full justify-start"
+                    :class="{ 'bg-accent text-accent-foreground': activeView === 'live-settings' }"
+                    @click="activeView = 'live-settings'">
+                    直播设置
+                </Button>
+            </nav>
+        </div>
+
+        <!-- Right Content -->
+        <div class="md:col-span-3">
+            <div v-if="activeView === 'account'">
                 <Card>
-                    <CardHeader class="flex flex-col items-center gap-4 text-center">
-                        <Avatar class="h-24 w-24 text-3xl">
-                            <AvatarFallback>{{ userInfo?.nickname?.charAt(0)?.toUpperCase() }}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <h2 class="text-xl font-semibold">{{ userInfo?.nickname }}</h2>
-                            <p class="text-sm text-muted-foreground">{{ userInfo?.username }}</p>
+                    <!-- 右侧内容区卡片：互换左右列 -->
+                    <CardHeader class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                        <!-- 原右列（头像/按钮）改为左列 -->
+                        <div class="md:col-span-1 flex flex-col items-center justify-center space-y-4">
+                            <Avatar class="h-24 w-24 text-3xl">
+                                <AvatarFallback>{{ userInfo?.nickname?.charAt(0)?.toUpperCase() }}</AvatarFallback>
+                            </Avatar>
+                            <div class="flex gap-4 justify-center">
+                                <Button @click="showProfileModal = true">修改信息</Button>
+                                <Button variant="outline" @click="showPwdModal = true">修改密码</Button>
+                            </div>
                         </div>
-                    </CardHeader>
-                    <CardContent>
-                        <ul class="space-y-3">
-                            <li class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-muted-foreground">性别</span>
-                                <div>
-                                    <Mars v-if="userInfo?.sex === 1" class="h-5 w-5 text-blue-500" />
-                                    <Venus v-else class="h-5 w-5 text-pink-500" />
+
+                        <!-- 原左列（信息列表）改为右列 -->
+                        <div class="md:col-span-3 space-y-4">
+                            <div class="flex items-center">
+                                <span class="w-20 text-sm text-muted-foreground">用户名</span>
+                                <div class="ml-auto text-right">
+                                    <p class="text-muted-foreground text-right">{{ userInfo?.username }}</p>
                                 </div>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-muted-foreground">状态</span>
-                                <Badge :variant="userInfo?.status === 1 ? 'default' : 'destructive'">
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-20 text-sm text-muted-foreground">昵称</span>
+                                <p class="ml-auto">{{ userInfo?.nickname }}</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-20 text-sm text-muted-foreground">性别</span>
+                                <div class="ml-auto text-right">
+                                    <Mars v-if="userInfo?.sex === 1" class="h-5 w-5 text-blue-500 inline-block" />
+                                    <Venus v-else class="h-5 w-5 text-pink-500 inline-block" />
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-20 text-sm text-muted-foreground">状态</span>
+                                <Badge class="ml-auto" :variant="userInfo?.status === 1 ? 'default' : 'destructive'">
                                     {{ formattedStatus }}
                                 </Badge>
-                            </li>
-                        </ul>
-                    </CardContent>
-                    <CardFooter class="grid grid-cols-2 gap-4">
-                        <Button @click="showProfileModal = true">修改信息</Button>
-                        <Button variant="outline" @click="showPwdModal = true">修改密码</Button>
-                    </CardFooter>
+                            </div>
+                        </div>
+                    </CardHeader>
                 </Card>
             </div>
-            <!-- Right Column -->
-            <div class="lg:col-span-2">
-                <!-- Content for the right column can be added here in the future -->
+            <div v-if="activeView === 'live-settings'">
+                <LiveSettings />
             </div>
         </div>
     </div>
@@ -52,8 +77,6 @@ import { useUserStore } from '@/store/user';
 import type { UserInfo } from '@/types/user';
 import {
     Card,
-    CardContent,
-    CardFooter,
     CardHeader,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -62,12 +85,14 @@ import { Badge } from '@/components/ui/badge';
 import { Mars, Venus } from 'lucide-vue-next';
 import UpdateProfileModal from '@/components/modal/admin/UpdateProfileModal.vue';
 import UpdatePwdModal from '@/components/modal/admin/UpdatePwdModal.vue';
+import LiveSettings from './LiveSettings.vue';
 
 const userStore = useUserStore();
 const userInfo: Ref<UserInfo | null> = computed(() => userStore.userInfo);
 
 const showProfileModal = ref(false);
 const showPwdModal = ref(false);
+const activeView = ref('account');
 
 const formattedStatus = computed(() => {
     if (userInfo.value?.status === 1) return '活跃';

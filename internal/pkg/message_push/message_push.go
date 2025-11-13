@@ -2,6 +2,7 @@ package message_push
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	"github.com/shichen437/gowlive/internal/app/system/model"
@@ -9,6 +10,13 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/service"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+)
+
+const (
+	LiveStartTitle          = "开播通知"
+	LiveEndTitle            = "下播通知"
+	LiveStartNotifyTemplate = "你关注的主播 【 %s 】 开播啦！"
+	LiveEndNotifyTemplate   = "你关注的主播 【 %s 】 已下播。"
 )
 
 var (
@@ -21,7 +29,6 @@ type MessageModel struct {
 }
 
 type MessagePush interface {
-	Push(ctx context.Context, channel *model.PushChannel) (err error)
 	PushMessage(ctx context.Context, channel *model.PushChannel, mp *MessageModel) (err error)
 }
 
@@ -30,15 +37,20 @@ func Register(channelType string, b Builder) {
 }
 
 type Builder interface {
-	Build(string, string) (MessagePush, error)
+	Build(string) (MessagePush, error)
 }
 
-func LivePush(ctx context.Context, anchor string) {
-	channels := service.GetAllPushChannel(ctx)
-	manager.GetNotifyManager().AddInfoNotify("开播通知", "你关注的主播 【 "+anchor+" 】 开播了")
-	for _, v := range channels {
-		channelPush(ctx, v, anchor)
+func LivePush(ctx context.Context, anchor string, isLiving bool) {
+	var title, content string
+	if isLiving {
+		title = LiveStartTitle
+		content = fmt.Sprintf(LiveStartNotifyTemplate, anchor)
+	} else {
+		title = LiveEndTitle
+		content = fmt.Sprintf(LiveEndNotifyTemplate, anchor)
 	}
+	manager.GetNotifyManager().AddInfoNotify(title, content)
+	PushMessage(ctx, &MessageModel{Title: title, Content: content})
 }
 
 func PushMessage(ctx context.Context, mp *MessageModel) (err error) {
@@ -49,28 +61,12 @@ func PushMessage(ctx context.Context, mp *MessageModel) (err error) {
 	return
 }
 
-func channelPush(ctx context.Context, v *model.PushChannel, anchor string) error {
-	b, err := getBuilder(v.Type)
-	if err != nil {
-		return err
-	}
-	builder, err := b.Build(v.Type, anchor)
-	if err != nil {
-		return gerror.New("不支持的渠道类型！")
-	}
-	err = builder.Push(ctx, v)
-	if err != nil {
-		return gerror.New(v.Type + "消息推送失败")
-	}
-	return nil
-}
-
 func channelPushMessage(ctx context.Context, v *model.PushChannel, mp *MessageModel) error {
 	b, err := getBuilder(v.Type)
 	if err != nil {
 		return err
 	}
-	builder, err := b.Build(v.Type, "")
+	builder, err := b.Build(v.Type)
 	if err != nil {
 		return gerror.New("不支持的渠道类型！")
 	}
