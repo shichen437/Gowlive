@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"fmt"
+	"net/url"
 	"strconv"
 	"strings"
 	"sync"
@@ -9,7 +11,9 @@ import (
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/os/gtime"
 	v1 "github.com/shichen437/gowlive/api/v1/stream"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
 	"github.com/shichen437/gowlive/internal/app/stream/model"
@@ -22,6 +26,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
+	"github.com/xuri/excelize/v2"
 )
 
 type sLiveManage struct {
@@ -286,7 +291,7 @@ func (s *sLiveManage) Stop(ctx context.Context, req *v1.PutLiveManageStopReq) (r
 	return
 }
 
-func (c *sLiveManage) Top(ctx context.Context, req *v1.PutLiveManageTopReq) (res *v1.PutLiveManageTopRes, err error) {
+func (s *sLiveManage) Top(ctx context.Context, req *v1.PutLiveManageTopReq) (res *v1.PutLiveManageTopRes, err error) {
 	count, err := dao.LiveRoomInfo.Ctx(ctx).Where(dao.LiveRoomInfo.Columns().IsTop, 1).Count()
 	if err != nil {
 		return nil, gerror.New("获取置顶直播间数量失败")
@@ -305,7 +310,7 @@ func (c *sLiveManage) Top(ctx context.Context, req *v1.PutLiveManageTopReq) (res
 	return
 }
 
-func (c *sLiveManage) UnTop(ctx context.Context, req *v1.PutLiveManageUnTopReq) (res *v1.PutLiveManageUnTopRes, err error) {
+func (s *sLiveManage) UnTop(ctx context.Context, req *v1.PutLiveManageUnTopReq) (res *v1.PutLiveManageUnTopRes, err error) {
 	_, err = dao.LiveRoomInfo.Ctx(ctx).Data(g.Map{
 		"is_top":     0,
 		"topped_at":  nil,
@@ -313,6 +318,27 @@ func (c *sLiveManage) UnTop(ctx context.Context, req *v1.PutLiveManageUnTopReq) 
 	}).Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).Update()
 	if err != nil {
 		return nil, gerror.New("取消置顶直播间失败")
+	}
+	return
+}
+
+func (s *sLiveManage) Export(ctx context.Context, req *v1.ExportRoomInfoReq) (res *v1.ExportRoomInfoRes, err error) {
+	list, err := getExportData(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if len(list) == 0 {
+		return nil, gerror.New("没有需要导出的数据")
+	}
+	r := g.RequestFromCtx(ctx)
+	r.Response.ClearBuffer()
+	r.Response.Header().Set("Cache-Control", "no-store")
+	ustr := gtime.Now().UnixMilli()
+	switch req.ExportType {
+	case 1:
+		exportExcel(r, ustr, list)
+	default:
+		exportTxt(r, ustr, list)
 	}
 	return
 }
@@ -412,4 +438,95 @@ func listenerForDelete(liveId int) {
 	registry.Get().Remove(ctx, liveId)
 	crons.RemoveStreamCron(liveId)
 	g.Log().Info(ctx, "listenerForDelete", liveId)
+}
+
+func getExportData(ctx context.Context, req *v1.ExportRoomInfoReq) ([]*model.ExportRoomInfo, error) {
+	var list []*model.ExportRoomInfo
+	m := dao.LiveRoomInfo.Ctx(ctx)
+	if req.Anchor != "" {
+		m = m.WhereLike(dao.LiveRoomInfo.Columns().Anchor, "%"+req.Anchor+"%")
+	}
+	if req.RoomName != "" {
+		m = m.WhereLike(dao.LiveRoomInfo.Columns().RoomName, "%"+req.RoomName+"%")
+	}
+	if req.Platform != "" {
+		m = m.Where(dao.LiveRoomInfo.Columns().Platform, req.Platform)
+	}
+	m = dealSortParams(m, req.Sort)
+	count, err := m.Count()
+	if err != nil || count <= 0 {
+		return nil, gerror.New("获取直播间信息失败")
+	}
+	err = m.Scan(&list)
+	if err != nil {
+		return nil, gerror.New("获取直播间信息失败")
+	}
+	ids := make([]int, count)
+	for i, item := range list {
+		ids[i] = item.LiveId
+	}
+	var mList []*entity.LiveManage
+	err = dao.LiveManage.Ctx(ctx).WhereIn(dao.LiveManage.Columns().Id, ids).Scan(&mList)
+	if err != nil {
+		return nil, gerror.New("获取直播间配置失败")
+	}
+	mMap := make(map[int]*entity.LiveManage, count)
+	for _, item := range mList {
+		mMap[item.Id] = item
+	}
+	for _, item := range list {
+		if m, ok := mMap[item.LiveId]; ok {
+			item.Url = m.RoomUrl
+		}
+	}
+	return list, nil
+}
+
+func exportTxt(r *ghttp.Request, ustr int64, list []*model.ExportRoomInfo) {
+	r.Response.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	filename := fmt.Sprintf("房间信息_%d.txt", ustr)
+	disposition := fmt.Sprintf("attachment; filename=%s; filename*=UTF-8''%s", filename, url.QueryEscape(filename))
+	r.Response.Header().Set("Content-Disposition", disposition)
+
+	var builder strings.Builder
+	for _, item := range list {
+		if item.Url == "" {
+			continue
+		}
+		builder.WriteString(item.Url)
+		builder.WriteString("\n")
+	}
+	r.Response.Write([]byte(builder.String()))
+}
+
+func exportExcel(r *ghttp.Request, ustr int64, list []*model.ExportRoomInfo) {
+	r.Response.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	filename := fmt.Sprintf("房间信息_%d.xlsx", ustr)
+	disposition := fmt.Sprintf("attachment; filename=%s; filename*=UTF-8''%s", filename, url.QueryEscape(filename))
+	r.Response.Header().Set("Content-Disposition", disposition)
+	f := excelize.NewFile()
+
+	const sheet = "房间信息"
+	index, _ := f.NewSheet(sheet)
+	f.SetActiveSheet(index)
+	_ = f.SetSheetRow(sheet, "A1", &[]string{"直播间URL", "平台", "主播名称", "房间名称"})
+	for i, row := range list {
+		cell := fmt.Sprintf("A%d", i+2)
+		_ = f.SetSheetRow(sheet, cell, &[]string{
+			row.Url,
+			row.Platform,
+			row.Anchor,
+			row.RoomName,
+		})
+	}
+	_ = f.SetColWidth(sheet, "A", "D", 18)
+	_ = f.SetPanes(sheet, &excelize.Panes{
+		Freeze:      true,
+		Split:       false,
+		XSplit:      0,
+		YSplit:      1,
+		TopLeftCell: "A2",
+		ActivePane:  "bottomLeft",
+	})
+	f.Write(r.Response.Writer)
 }

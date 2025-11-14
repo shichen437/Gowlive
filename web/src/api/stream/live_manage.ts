@@ -74,3 +74,12 @@ export async function unTopRoom(id: number) {
     method: "put",
   });
 }
+
+export async function exportRoomInfo(params: any) {
+  return request({
+    url: "/live/room/export",
+    method: "get",
+    params,
+    responseType: "blob",
+  });
+}

@@ -37,27 +37,33 @@ service.interceptors.request.use(
   (error) => {
     console.error(error);
     return Promise.reject(error);
-  }
+  },
 );
 
 // 3. 响应拦截器
 service.interceptors.response.use(
   (res) => {
+    const ct = (res.headers?.["content-type"] || "").toLowerCase();
+    const isBinary =
+      res.request?.responseType === "blob" ||
+      res.request?.responseType === "arraybuffer" ||
+      ct.includes("application/octet-stream") ||
+      ct.includes(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      ) ||
+      ct.includes("text/plain");
+
+    if (isBinary) {
+      return res;
+    }
+
     const code = res.data.code || 0;
     const msg = errorCode[code] || res.data.msg || errorCode["default"];
-
-    if (
-      res.request.responseType === "blob" ||
-      res.request.responseType === "arraybuffer"
-    ) {
-      return res.data;
-    }
 
     if (code === 401 || code === -401) {
       if (!isRelogin.show) {
         isRelogin.show = true;
         toast.error("登录状态已过期,请重新登录.");
-        // Correctly instantiate the pinia store and call the action
         const userStore = useUserStore(pinia);
         userStore.logout().then(() => {
           isRelogin.show = false;
@@ -90,7 +96,7 @@ service.interceptors.response.use(
     }
     toast.error(message);
     return Promise.reject(error);
-  }
+  },
 );
 
 export default service;

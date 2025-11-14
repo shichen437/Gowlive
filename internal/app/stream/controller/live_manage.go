@@ -51,3 +51,7 @@ func (c *liveManageController) Top(ctx context.Context, req *v1.PutLiveManageTop
 func (c *liveManageController) UnTop(ctx context.Context, req *v1.PutLiveManageUnTopReq) (res *v1.PutLiveManageUnTopRes, err error) {
 	return service.LiveManage().UnTop(ctx, req)
 }
+
+func (c *liveManageController) Export(ctx context.Context, req *v1.ExportRoomInfoReq) (res *v1.ExportRoomInfoRes, err error) {
+	return service.LiveManage().Export(ctx, req)
+}

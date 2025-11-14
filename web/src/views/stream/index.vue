@@ -12,6 +12,7 @@
                 </Button>
             </div>
             <div class="flex items-center space-x-2">
+                <ExportRoomDropDownMenu @export="handleExport" />
                 <SortRoomDropDownMenu v-model:sort="sort" @update:sort="handleSortChange" />
                 <FilterRoomDropDownMenu v-model:filter="filter" @update:filter="handleFilterChange" />
             </div>
@@ -144,6 +145,7 @@ import {
     stopRoom,
     topRoom,
     unTopRoom,
+    exportRoomInfo,
 } from "@/api/stream/live_manage";
 import { getRoomFilePath } from "@/api/media/file_manage";
 import type { RoomInfo } from "@/types/stream";
@@ -152,6 +154,7 @@ import ConfirmModal from "@/components/modal/ConfirmModal.vue";
 import BatchAddRoomModal from "@/components/modal/stream/BatchAddRoomModal.vue";
 import SortRoomDropDownMenu from "@/components/dropdownmenu/stream/SortRoomDropDownMenu.vue";
 import FilterRoomDropDownMenu from "@/components/dropdownmenu/stream/FilterRoomDropDownMenu.vue";
+import ExportRoomDropDownMenu from "@/components/dropdownmenu/stream/ExportRoomDropDownMenu.vue";
 import {
     Table,
     TableBody,
@@ -215,7 +218,7 @@ const getRooms = async () => {
             sort: sort.value,
             ...filter.value,
         };
-        const response = await roomList(params);
+        const response: any = await roomList(params);
         rooms.value = response.data.rows || [];
         total.value = response.data.total || 0;
     } catch (error) {
@@ -405,4 +408,61 @@ async function handleUnTopRoom(id: number) {
         console.error("Failed to un-top room:", error);
     }
 }
+
+const handleExport = async (exportType: number) => {
+    try {
+        const params = {
+            sort: sort.value,
+            ...filter.value,
+            exportType: exportType,
+        };
+        const response: any = await exportRoomInfo(params);
+        const ct: string = response.headers?.['content-type'] || '';
+        if (ct == "application/json") {
+            let text: string;
+            if (response.data instanceof Blob) {
+                text = await response.data.text();
+            } else if (response.data instanceof ArrayBuffer) {
+                text = new TextDecoder('utf-8').decode(response.data);
+            } else {
+                text = String(response.data);
+            }
+            const payload = JSON.parse(text);
+            const code = payload?.code ?? -1;
+            const msg = payload?.msg || '导出失败';
+            if (code !== 0) {
+                toast.error(msg);
+                return;
+            }
+        }
+        const cd: string = response.headers?.['content-disposition'] || '';
+        const star = cd.match(/filename\*=UTF-8''([^;]+)/i);
+        const normal = cd.match(/filename="([^"]+)"/i);
+        let fileName = star?.[1] ? decodeURIComponent(star[1]) : (normal?.[1] || 'rooms');
+
+        const wantedExt = exportType === 1 ? '.xlsx' : '.txt';
+        const wantedMime =
+            exportType === 1
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'text/plain; charset=utf-8';
+
+        if (!fileName.toLowerCase().endsWith(wantedExt)) {
+            fileName = fileName.replace(/\.[^./\\]+$/, '');
+            fileName += wantedExt;
+        }
+
+        const blob = new Blob([response.data], { type: wantedMime });
+
+        const link = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error("Failed to export rooms:", error);
+    }
+};
 </script>

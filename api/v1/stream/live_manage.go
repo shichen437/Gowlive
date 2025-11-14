@@ -112,3 +112,15 @@ type PutLiveManageUnTopReq struct {
 type PutLiveManageUnTopRes struct {
 	g.Meta `mime:"application/json"`
 }
+
+type ExportRoomInfoReq struct {
+	g.Meta     `path:"/live/room/export" method:"get" tags:"直播管理" summary:"导出直播间信息"`
+	ExportType int    `json:"exportType" dc:"导出类型" v:"required|in:0,1#导出类型不能为空|导出类型不合法"`
+	Anchor     string `json:"anchor"`
+	RoomName   string `json:"roomName"`
+	Platform   string `json:"platform"`
+	Sort       string `json:"sort"`
+}
+type ExportRoomInfoRes struct {
+	g.Meta `mime:"application/json"`
+}
