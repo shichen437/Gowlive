@@ -96,3 +96,19 @@ type PutLiveManageStopReq struct {
 type PutLiveManageStopRes struct {
 	g.Meta `mime:"application/json"`
 }
+
+type PutLiveManageTopReq struct {
+	g.Meta `path:"/live/room/manage/top/{id}" method:"put" tags:"直播管理" summary:"置顶房间"`
+	Id     int `json:"id" dc:"直播房间ID" v:"min:1#直播房间ID不能为空"`
+}
+type PutLiveManageTopRes struct {
+	g.Meta `mime:"application/json"`
+}
+
+type PutLiveManageUnTopReq struct {
+	g.Meta `path:"/live/room/manage/unTop/{id}" method:"put" tags:"直播管理" summary:"取消置顶房间"`
+	Id     int `json:"id" dc:"直播房间ID" v:"min:1#直播房间ID不能为空"`
+}
+type PutLiveManageUnTopRes struct {
+	g.Meta `mime:"application/json"`
+}

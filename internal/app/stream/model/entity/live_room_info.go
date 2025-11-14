@@ -18,4 +18,6 @@ type LiveRoomInfo struct {
 	Status    int         `json:"status"    orm:"status"     description:""`
 	CreatedAt *gtime.Time `json:"createdAt" orm:"created_at" description:""`
 	UpdatedAt *gtime.Time `json:"updatedAt" orm:"updated_at" description:""`
+	IsTop     int         `json:"isTop"     orm:"is_top"     description:""`
+	ToppedAt  *gtime.Time `json:"toppedAt"  orm:"topped_at"  description:""`
 }

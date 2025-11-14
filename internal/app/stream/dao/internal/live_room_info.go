@@ -29,6 +29,8 @@ type LiveRoomInfoColumns struct {
 	Status    string //
 	CreatedAt string //
 	UpdatedAt string //
+	IsTop     string //
+	ToppedAt  string //
 }
 
 // liveRoomInfoColumns holds the columns for the table live_room_info.
@@ -41,6 +43,8 @@ var liveRoomInfoColumns = LiveRoomInfoColumns{
 	Status:    "status",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
+	IsTop:     "is_top",
+	ToppedAt:  "topped_at",
 }
 
 // NewLiveRoomInfoDao creates and returns a new DAO object for table data access.

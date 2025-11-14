@@ -25,3 +25,10 @@ CREATE TABLE IF NOT EXISTS sys_settings(
     created_at datetime(0) NOT NULL, -- Created Time
     updated_at datetime(0) DEFAULT NULL -- Updated Time
 );
+
+ALTER TABLE live_room_info ADD COLUMN is_top int NOT NULL DEFAULT 0;
+ALTER TABLE live_room_info ADD COLUMN topped_at datetime(0) DEFAULT NULL;
+CREATE INDEX idx_room_info_top ON live_room_info (
+    is_top,
+    topped_at
+);

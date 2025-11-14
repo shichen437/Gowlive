@@ -60,3 +60,17 @@ export async function stopRoom(id: number) {
     method: "put",
   });
 }
+
+export async function topRoom(id: number) {
+  return request({
+    url: "/live/room/manage/top/" + id,
+    method: "put",
+  });
+}
+
+export async function unTopRoom(id: number) {
+  return request({
+    url: "/live/room/manage/unTop/" + id,
+    method: "put",
+  });
+}

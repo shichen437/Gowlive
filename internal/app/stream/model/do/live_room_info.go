@@ -12,12 +12,14 @@ import (
 // LiveRoomInfo is the golang structure of table live_room_info for DAO operations like Where/Data.
 type LiveRoomInfo struct {
 	g.Meta    `orm:"table:live_room_info, do:true"`
-	Id        interface{} //
-	LiveId    interface{} //
-	RoomName  interface{} //
-	Anchor    interface{} //
-	Platform  interface{} //
-	Status    interface{} //
+	Id        any         //
+	LiveId    any         //
+	RoomName  any         //
+	Anchor    any         //
+	Platform  any         //
+	Status    any         //
 	CreatedAt *gtime.Time //
 	UpdatedAt *gtime.Time //
+	IsTop     any         //
+	ToppedAt  *gtime.Time //
 }

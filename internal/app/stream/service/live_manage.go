@@ -21,6 +21,8 @@ type (
 		Delete(ctx context.Context, req *v1.DeleteLiveManageReq) (res *v1.DeleteLiveManageRes, err error)
 		Start(ctx context.Context, req *v1.PutLiveManageStartReq) (res *v1.PutLiveManageStartRes, err error)
 		Stop(ctx context.Context, req *v1.PutLiveManageStopReq) (res *v1.PutLiveManageStopRes, err error)
+		Top(ctx context.Context, req *v1.PutLiveManageTopReq) (res *v1.PutLiveManageTopRes, err error)
+		UnTop(ctx context.Context, req *v1.PutLiveManageUnTopReq) (res *v1.PutLiveManageUnTopRes, err error)
 	}
 )
 

@@ -286,7 +286,40 @@ func (s *sLiveManage) Stop(ctx context.Context, req *v1.PutLiveManageStopReq) (r
 	return
 }
 
+func (c *sLiveManage) Top(ctx context.Context, req *v1.PutLiveManageTopReq) (res *v1.PutLiveManageTopRes, err error) {
+	count, err := dao.LiveRoomInfo.Ctx(ctx).Where(dao.LiveRoomInfo.Columns().IsTop, 1).Count()
+	if err != nil {
+		return nil, gerror.New("获取置顶直播间数量失败")
+	}
+	if count >= consts.MaxTopCount {
+		return nil, gerror.New("置顶直播间数量已达上限")
+	}
+	_, err = dao.LiveRoomInfo.Ctx(ctx).Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).Update(do.LiveRoomInfo{
+		IsTop:     1,
+		ToppedAt:  utils.Now(),
+		UpdatedAt: utils.Now(),
+	})
+	if err != nil {
+		return nil, gerror.New("置顶直播间失败")
+	}
+	return
+}
+
+func (c *sLiveManage) UnTop(ctx context.Context, req *v1.PutLiveManageUnTopReq) (res *v1.PutLiveManageUnTopRes, err error) {
+	_, err = dao.LiveRoomInfo.Ctx(ctx).Data(g.Map{
+		"is_top":     0,
+		"topped_at":  nil,
+		"updated_at": utils.Now(),
+	}).Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).Update()
+	if err != nil {
+		return nil, gerror.New("取消置顶直播间失败")
+	}
+	return
+}
+
 func dealSortParams(m *gdb.Model, sort string) *gdb.Model {
+	m = m.OrderDesc(dao.LiveRoomInfo.Columns().IsTop)
+	m = m.OrderDesc(dao.LiveRoomInfo.Columns().ToppedAt)
 	switch sort {
 	case "id:asc":
 		m = m.OrderAsc(dao.LiveRoomInfo.Columns().LiveId)

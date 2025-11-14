@@ -19,6 +19,7 @@ export interface RoomInfo {
   platform: string;
   status: number;
   isRecording: boolean;
+  isTop: boolean;
 }
 
 export interface LiveHistory {

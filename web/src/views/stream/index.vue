@@ -30,7 +30,7 @@
                 </TableHeader>
                 <TableBody>
                     <template v-if="rooms.length > 0">
-                        <TableRow v-for="room in rooms" :key="room.id">
+                        <TableRow v-for="room in rooms" :key="room.id" :class="{ 'bg-muted/80': room.isTop }">
                             <TableCell class="text-center">{{
                                 room.anchor
                                 }}</TableCell>
@@ -62,13 +62,33 @@
                                 <Button variant="ghost" size="icon" @click="openEditRoomModal(room.liveId)">
                                     <Pencil class="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="icon" @click="handleGoToRoomFolder(room)">
-                                    <Folder class="w-4 h-4" />
-                                </Button>
-                                <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
-                                    @click="openConfirmModal(room.liveId)">
-                                    <Trash2 class="w-4 h-4" />
-                                </Button>
+
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger as-child>
+                                        <Button variant="ghost" size="icon">
+                                            <MoreHorizontal class="w-4 h-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem v-if="!room.isTop" @click="handleTopRoom(room.liveId)">
+                                            <Pin class="w-4 h-4 mr-2" />
+                                            <span>置顶</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem v-else @click="handleUnTopRoom(room.liveId)">
+                                            <PinOff class="w-4 h-4 mr-2" />
+                                            <span>取消置顶</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem @click="handleGoToRoomFolder(room)">
+                                            <Folder class="w-4 h-4 mr-2" />
+                                            <span>打开文件夹</span>
+                                        </DropdownMenuItem>
+                                        <Separator class="my-1" />
+                                        <DropdownMenuItem @click="openConfirmModal(room.liveId)" variant="destructive">
+                                            <Trash2 class="w-4 h-4 mr-2" />
+                                            <span>删除</span>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </TableCell>
                         </TableRow>
                     </template>
@@ -91,8 +111,8 @@
                 <template v-for="(item, index) in items">
                     <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                         <Button class="w-10 h-10 p-0" :variant="item.value === currentPage
-                                ? 'secondary'
-                                : 'outline'
+                            ? 'secondary'
+                            : 'outline'
                             " :disabled="item.value === currentPage">
                             {{ item.value }}
                         </Button>
@@ -122,6 +142,8 @@ import {
     deleteRoom,
     startRoom,
     stopRoom,
+    topRoom,
+    unTopRoom,
 } from "@/api/stream/live_manage";
 import { getRoomFilePath } from "@/api/media/file_manage";
 import type { RoomInfo } from "@/types/stream";
@@ -139,6 +161,12 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
     Pagination,
     PaginationContent,
     PaginationEllipsis,
@@ -147,7 +175,8 @@ import {
     PaginationItem,
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2, Play, Square, CopyPlus, Folder } from "lucide-vue-next";
+import { Separator } from "@/components/ui/separator";
+import { Plus, Pencil, Trash2, Play, Square, CopyPlus, Folder, Pin, PinOff, MoreHorizontal } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
@@ -346,6 +375,34 @@ async function handleStopRoom() {
     } finally {
         showStopConfirmModal.value = false;
         roomToStop.value = null;
+    }
+}
+
+async function handleTopRoom(id: number) {
+    try {
+        const res: any = await topRoom(id);
+        if (res.code !== 0) {
+            toast.error(res.msg || "置顶失败");
+            return;
+        }
+        getRooms();
+        toast.success("置顶成功");
+    } catch (error) {
+        console.error("Failed to top room:", error);
+    }
+}
+
+async function handleUnTopRoom(id: number) {
+    try {
+        const res: any = await unTopRoom(id);
+        if (res.code !== 0) {
+            toast.error(res.msg || "取消置顶失败");
+            return;
+        }
+        getRooms();
+        toast.success("取消置顶成功");
+    } catch (error) {
+        console.error("Failed to un-top room:", error);
     }
 }
 </script>
