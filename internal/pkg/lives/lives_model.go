@@ -4,6 +4,7 @@ import (
 	"net/url"
 	"sync"
 
+	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/shichen437/gowlive/internal/pkg/interfaces"
 )
 
@@ -11,6 +12,7 @@ type LiveSession struct {
 	Id              int
 	Config          LiveConfig
 	State           LiveState
+	StartedAt       *gtime.Time
 	LiveApi         LiveApi
 	EventDispatcher interfaces.Module
 	ListenerManager interfaces.Module

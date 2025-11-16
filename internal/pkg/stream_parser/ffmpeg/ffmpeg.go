@@ -4,13 +4,13 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"net/url"
 	"os"
 	"os/exec"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/gogf/gf/v2/util/gconv"
@@ -148,6 +148,7 @@ func (p *Parser) ParseLiveStream(ctx context.Context, streamInfo *lives.StreamUr
 		p.cmdLock.Lock()
 		defer p.cmdLock.Unlock()
 		p.cmd = exec.Command(ffmpegPath, args...)
+		p.cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 		if p.cmdStdIn, err = p.cmd.StdinPipe(); err != nil {
 			return
 		}
@@ -248,16 +249,8 @@ func (p *Parser) Stop() (err error) {
 	p.closeOnce.Do(func() {
 		p.cmdLock.Lock()
 		defer p.cmdLock.Unlock()
-		if p.cmd != nil && p.cmd.ProcessState == nil {
-			if p.cmdStdIn != nil && p.cmd.Process != nil {
-				if _, err = p.cmdStdIn.Write([]byte("q")); err != nil {
-					err = fmt.Errorf("error sending stop command to ffmpeg: %v", err)
-				}
-			} else if p.cmdStdIn == nil {
-				err = fmt.Errorf("p.cmdStdIn == nil")
-			} else if p.cmd.Process == nil {
-				err = fmt.Errorf("p.cmd.Process == nil")
-			}
+		if p.cmd != nil && p.cmd.Process != nil && p.cmd.ProcessState == nil {
+			err = syscall.Kill(-p.cmd.Process.Pid, syscall.SIGTERM)
 		}
 	})
 	return err

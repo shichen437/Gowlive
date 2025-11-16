@@ -3,7 +3,6 @@ package recorders
 import (
 	"context"
 	"fmt"
-	"sync"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
@@ -18,30 +17,23 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
-var (
-	liveStartTimes = &sync.Map{}
-)
-
-func liveStartBiz(ctx context.Context, liveId int, anchor string) {
-	g.Log().Info(ctx, "liveStartBiz", liveId)
-	liveStartTimes.Store(liveId, utils.Now())
-	go message_push.LivePush(gctx.GetInitCtx(), anchor, true)
+func liveStartBiz(ctx context.Context, session *lives.LiveSession) {
+	g.Log().Info(ctx, "liveStartBiz", session.Id)
+	session.StartedAt = utils.Now()
+	go message_push.LivePush(gctx.GetInitCtx(), session.State.Anchor, true)
 }
 
-func liveEndBiz(ctx context.Context, liveId int, anchor string) {
-	g.Log().Info(ctx, "liveEndBiz", liveId)
-	startTime := getStartTime(ctx, liveId)
-	addHistory(ctx, liveId, anchor, startTime, utils.Now())
+func liveEndBiz(ctx context.Context, session *lives.LiveSession) {
+	g.Log().Info(ctx, "liveEndBiz", session.Id)
+	startTime := session.StartedAt
+	addHistory(ctx, session.Id, session.State.Anchor, startTime, utils.Now())
 	enable := mr.GetSettingsManager().GetSetting(consts.SKLiveEndNotify)
 	if enable == 1 {
-		go message_push.LivePush(gctx.GetInitCtx(), anchor, false)
+		go message_push.LivePush(gctx.GetInitCtx(), session.State.Anchor, false)
 	}
 }
 
 func addHistory(ctx context.Context, liveId int, anchor string, startTime, endTime *gtime.Time) {
-	if startTime != nil {
-		liveStartTimes.Delete(liveId)
-	}
 	if startTime == nil || endTime == nil {
 		g.Log().Warningf(ctx, "Invalid start or end time for liveId %d.", liveId)
 		return
@@ -57,21 +49,6 @@ func addHistory(ctx context.Context, liveId int, anchor string, startTime, endTi
 	if err != nil {
 		g.Log().Errorf(ctx, "Failed to save live history for liveId %d: %v", liveId, err)
 	}
-}
-
-func getStartTime(ctx context.Context, liveId int) *gtime.Time {
-	iStartTime, ok := liveStartTimes.Load(liveId)
-	if !ok {
-		return nil
-	}
-
-	startTime, ok := iStartTime.(*gtime.Time)
-	if !ok {
-		g.Log().Errorf(ctx, "Invalid start time type in map for liveId %d", liveId)
-		return nil
-	}
-
-	return startTime
 }
 
 func (*manager) updateName(ctx context.Context, session *lives.LiveSession) {

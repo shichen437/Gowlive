@@ -45,12 +45,12 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 		if session.Id != m.session.Id {
 			return
 		}
+		liveStartBiz(ctx, session)
 		err := m.AddRecorder(ctx)
 		if err != nil {
 			g.Log().Errorf(ctx, "failed to add recorder for session %d: %v", m.session.Id, err)
 			return
 		}
-		liveStartBiz(ctx, session.Id, session.State.Anchor)
 	}))
 
 	ed.AddEventListener("NameChanged", events.NewEventListener(func(event *events.Event) {
@@ -67,7 +67,7 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 			return
 		}
 		if err := m.RemoveRecorder(ctx); err == nil {
-			liveEndBiz(ctx, session.Id, session.State.Anchor)
+			liveEndBiz(ctx, session)
 		}
 	})
 	ed.AddEventListener("LiveEnd", removeEvtListener)
@@ -78,8 +78,10 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 		if session.Id != m.session.Id {
 			return
 		}
-		g.Log().Warningf(ctx, "Received RecordingStoppedDueToDiskSpace event for session %d. Removing recorder.", m.session.Id)
-		if err := m.RemoveRecorder(ctx); err != nil {
+g.Log().Warningf(ctx, "Received RecordingStoppedDueToDiskSpace event for session %d. Removing recorder.", m.session.Id)
+		if err := m.RemoveRecorder(ctx); err == nil {
+			liveEndBiz(ctx, session)
+		} else {
 			g.Log().Errorf(ctx, "Failed to remove recorder on RecordingStoppedDueToDiskSpace event for session %d: %v", m.session.Id, err)
 		}
 	}))
@@ -94,7 +96,7 @@ func (m *manager) Start(ctx context.Context) error {
 
 func (m *manager) Close(ctx context.Context) {
 	if err := m.RemoveRecorder(ctx); err == nil {
-		liveEndBiz(ctx, m.session.Id, m.session.State.Anchor)
+		liveEndBiz(ctx, m.session)
 	}
 	g.Log().Infof(ctx, "RecorderManager Closed for session %d!", m.session.Id)
 }

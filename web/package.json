@@ -1,7 +1,7 @@
 {
   "name": "gowlive-web",
   "private": true,
-  "version": "0.0.9",
+  "version": "0.0.10",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,7 +20,6 @@
     "axios": "^1.12.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "js-beautify": "^1.15.4",
     "js-cookie": "^3.0.5",
     "lucide-vue-next": "^0.544.0",
     "mpegts.js": "^1.8.0",
@@ -40,6 +39,7 @@
     "@types/node": "^24.4.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.7.0",
+    "js-beautify": "^1.15.4",
     "typescript": "~5.8.3",
     "vite": "^5.3.5",
     "vue-tsc": "^3.0.5"
