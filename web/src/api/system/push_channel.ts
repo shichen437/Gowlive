@@ -9,6 +9,20 @@ export async function listPushChannel(params: any) {
 }
 
 export async function addPushChannel(data: any) {
+  if (data.type === "gotify") {
+    data.email = undefined;
+    data.webhook = undefined;
+  }
+  if (data.type === "email") {
+    data.webhook = undefined;
+  }
+  if (
+    data.type === "lark" ||
+    data.type === "dingTalk" ||
+    data.type === "weCom"
+  ) {
+    data.email = undefined;
+  }
   return request({
     url: "/system/push/channel",
     method: "post",
@@ -17,6 +31,20 @@ export async function addPushChannel(data: any) {
 }
 
 export async function updatePushChannel(data: any) {
+  if (data.type === "gotify") {
+    data.email = undefined;
+    data.webhook = undefined;
+  }
+  if (data.type === "email") {
+    data.webhook = undefined;
+  }
+  if (
+    data.type === "lark" ||
+    data.type === "dingTalk" ||
+    data.type === "weCom"
+  ) {
+    data.email = undefined;
+  }
   return request({
     url: "/system/push/channel",
     method: "put",

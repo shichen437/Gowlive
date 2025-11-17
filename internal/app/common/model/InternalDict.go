@@ -41,6 +41,24 @@ func init() {
 			DictValue: "gotify",
 			DictSort:  2,
 		},
+		{
+			DictType:  ChannelType,
+			DictLabel: "飞书",
+			DictValue: "lark",
+			DictSort:  3,
+		},
+		{
+			DictType:  ChannelType,
+			DictLabel: "钉钉",
+			DictValue: "dingTalk",
+			DictSort:  4,
+		},
+		{
+			DictType:  ChannelType,
+			DictLabel: "企业微信",
+			DictValue: "weCom",
+			DictSort:  5,
+		},
 	})
 }
 

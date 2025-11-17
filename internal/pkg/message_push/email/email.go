@@ -21,13 +21,10 @@ func init() {
 }
 
 type builder struct{}
+type MessagePush struct{}
 
 func (b *builder) Build(channelType string) (mp.MessagePush, error) {
 	return &MessagePush{}, nil
-}
-
-type MessagePush struct {
-	Anchor string
 }
 
 func (p *MessagePush) PushMessage(ctx context.Context, channel *model.PushChannel, model *mp.MessageModel) (err error) {

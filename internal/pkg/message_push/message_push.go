@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/shichen437/gowlive/internal/app/system/model"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/service"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gcache"
 )
 
 const (
@@ -20,7 +24,8 @@ const (
 )
 
 var (
-	builders sync.Map
+	builders      sync.Map
+	limitKeyLocks sync.Map
 )
 
 type MessageModel struct {
@@ -72,6 +77,7 @@ func channelPushMessage(ctx context.Context, v *model.PushChannel, mp *MessageMo
 	}
 	err = builder.PushMessage(ctx, v, mp)
 	if err != nil {
+		g.Log().Error(ctx, err)
 		return gerror.New(v.Type + "消息推送失败")
 	}
 	return nil
@@ -83,4 +89,32 @@ func getBuilder(channelType string) (Builder, error) {
 		return nil, gerror.New("不支持的渠道类型！")
 	}
 	return builder.(Builder), nil
+}
+
+func CheckLimit(ctx context.Context, key string) error {
+	mu := getLimitKeyLock(key)
+	mu.Lock()
+	defer mu.Unlock()
+	limit, err := gcache.Get(ctx, key)
+	if err != nil {
+		return gerror.New("获取限制缓存失败")
+	}
+	if limit == nil {
+		gcache.Set(ctx, key, 1, time.Minute)
+	} else {
+		if limit.Int() > consts.WebhookPushLimitPerMinute {
+			return gerror.New("消息推送超出限制")
+		}
+		gcache.Update(ctx, key, limit.Int()+1)
+	}
+	return nil
+}
+
+func getLimitKeyLock(key string) *sync.Mutex {
+	if l, ok := limitKeyLocks.Load(key); ok {
+		return l.(*sync.Mutex)
+	}
+	mu := &sync.Mutex{}
+	actual, _ := limitKeyLocks.LoadOrStore(key, mu)
+	return actual.(*sync.Mutex)
 }

@@ -20,27 +20,29 @@ type GetPushChannelListRes struct {
 }
 
 type PostPushChannelReq struct {
-	g.Meta `path:"/system/push/channel" method:"post" tags:"消息推送" summary:"添加渠道"`
-	Name   string                 `json:"name" v:"required#渠道名称不能为空"`
-	Type   string                 `p:"type" json:"type" v:"required|in:gotify,email#渠道类型不能为空|不支持的渠道类型"`
-	Status int                    `json:"status" v:"required#渠道启用状态不能为空"`
-	Url    string                 `json:"url" v:"required-if:type,gotify#Url不能为空"`
-	Remark string                 `json:"remark" v:"max-length:45#备注最大长度为45"`
-	Email  *PushChannelEmailModel `json:"email" v:"required-if:type,email"`
+	g.Meta  `path:"/system/push/channel" method:"post" tags:"消息推送" summary:"添加渠道"`
+	Name    string                   `json:"name" v:"required#渠道名称不能为空"`
+	Type    string                   `p:"type" json:"type" v:"required|in:gotify,email,lark,dingTalk,weCom#渠道类型不能为空|不支持的渠道类型"`
+	Status  int                      `json:"status" v:"required#渠道启用状态不能为空"`
+	Url     string                   `json:"url" v:"required-if:type,gotify#Url不能为空"`
+	Remark  string                   `json:"remark" v:"max-length:45#备注最大长度为45"`
+	Email   *PushChannelEmailModel   `json:"email" v:"required-if:type,email"`
+	Webhook *PushChannelWebhookModel `json:"webhook" v:"required-if:type,lark,type,dingTalk,type,weCom"`
 }
 type PostPushChannelRes struct {
 	g.Meta `mime:"application/json"`
 }
 
 type PutPushChannelReq struct {
-	g.Meta `path:"/system/push/channel" method:"put" tags:"消息推送" summary:"修改渠道"`
-	Id     int                    `json:"id" v:"required#渠道ID不能为空"`
-	Name   string                 `json:"name" v:"required#渠道名称不能为空"`
-	Type   string                 `p:"type" json:"type" v:"required|in:gotify,email#渠道类型不能为空|不支持的渠道类型"`
-	Status int                    `json:"status" v:"required#渠道启用状态不能为空"`
-	Url    string                 `json:"url" v:"required-if:type,gotify#Url不能为空"`
-	Remark string                 `json:"remark" v:"max-length:45#备注最大长度为45"`
-	Email  *PushChannelEmailModel `json:"email" v:"required-if:type,email"`
+	g.Meta  `path:"/system/push/channel" method:"put" tags:"消息推送" summary:"修改渠道"`
+	Id      int                      `json:"id" v:"required#渠道ID不能为空"`
+	Name    string                   `json:"name" v:"required#渠道名称不能为空"`
+	Type    string                   `p:"type" json:"type" v:"required|in:gotify,email,lark,dingTalk,weCom#渠道类型不能为空|不支持的渠道类型"`
+	Status  int                      `json:"status" v:"required#渠道启用状态不能为空"`
+	Url     string                   `json:"url" v:"required-if:type,gotify#Url不能为空"`
+	Remark  string                   `json:"remark" v:"max-length:45#备注最大长度为45"`
+	Email   *PushChannelEmailModel   `json:"email" v:"required-if:type,email"`
+	Webhook *PushChannelWebhookModel `json:"webhook" v:"required-if:type,lark,type,dingTalk,type,weCom"`
 }
 type PutPushChannelRes struct {
 	g.Meta `mime:"application/json"`
@@ -69,4 +71,11 @@ type PushChannelEmailModel struct {
 	Server   string `json:"server" v:"required#邮箱服务器不能为空"`
 	Port     int    `json:"port" v:"required#邮箱端口不能为空"`
 	AuthCode string `json:"authCode" v:"required#邮箱授权码不能为空"`
+}
+
+type PushChannelWebhookModel struct {
+	WebhookUrl  string `json:"webhookUrl" v:"required|url#webhookUrl不能为空|webhookUrl格式不正确"`
+	MessageType int    `json:"messageType" v:"required|in:0,1,2#消息类型不能为空|消息类型参数不正确"`
+	Sign        string `json:"sign"`
+	At          string `json:"at"`
 }

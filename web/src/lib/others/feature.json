@@ -4,7 +4,11 @@
   "info": {
     "feature": {
       "name": "功能",
-      "items": []
+      "items": [
+        {
+          "desc": "新增支持推送渠道"
+        }
+      ]
     },
     "enhance": {
       "name": "优化",

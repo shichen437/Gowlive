@@ -23,6 +23,7 @@ export interface PushChannel {
   url: string;
   remark: string;
   email: PushChannelEmail;
+  webhook: PushChannelWebhook;
   createdAt: string;
 }
 
@@ -34,4 +35,13 @@ export interface PushChannelEmail {
   server: string;
   port: number;
   authCode: string;
+}
+
+export interface PushChannelWebhook {
+  id: number;
+  channelId: number;
+  webhookUrl: string;
+  messageType: number;
+  sign: string;
+  at: string;
 }

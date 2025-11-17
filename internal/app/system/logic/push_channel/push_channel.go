@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"slices"
 
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -12,6 +13,10 @@ import (
 	"github.com/shichen437/gowlive/internal/app/system/model/entity"
 	"github.com/shichen437/gowlive/internal/app/system/service"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
+)
+
+var (
+	webhookTypeArr = []string{"lark", "dingTalk", "weCom"}
 )
 
 type sPushChannel struct {
@@ -77,6 +82,19 @@ func (s *sPushChannel) Post(ctx context.Context, req *v1.PostPushChannelReq) (re
 				return err
 			}
 		}
+		if slices.Contains(webhookTypeArr, req.Type) {
+			_, err = dao.PushChannelWebhook.Ctx(ctx).Insert(do.PushChannelWebhook{
+				ChannelId:   channelId,
+				WebhookUrl:  req.Webhook.WebhookUrl,
+				MessageType: req.Webhook.MessageType,
+				Sign:        req.Webhook.Sign,
+				At:          req.Webhook.At,
+				CreatedAt:   utils.Now(),
+			})
+			if err != nil {
+				return err
+			}
+		}
 		return nil
 	})
 	return
@@ -108,6 +126,18 @@ func (s *sPushChannel) Put(ctx context.Context, req *v1.PutPushChannelReq) (res 
 				return err
 			}
 		}
+		if slices.Contains(webhookTypeArr, req.Type) {
+			_, err = dao.PushChannelWebhook.Ctx(ctx).Where(dao.PushChannelWebhook.Columns().ChannelId, req.Id).Update(do.PushChannelWebhook{
+				WebhookUrl:  req.Webhook.WebhookUrl,
+				MessageType: req.Webhook.MessageType,
+				Sign:        req.Webhook.Sign,
+				At:          req.Webhook.At,
+				UpdatedAt:   utils.Now(),
+			})
+			if err != nil {
+				return err
+			}
+		}
 		return nil
 	})
 	return
@@ -131,6 +161,17 @@ func (s *sPushChannel) Get(ctx context.Context, req *v1.GetPushChannelReq) (res 
 			res.Email = email
 		}
 	}
+	if slices.Contains(webhookTypeArr, res.Type) {
+		var webhook *entity.PushChannelWebhook
+		err = dao.PushChannelWebhook.Ctx(ctx).Where(dao.PushChannelWebhook.Columns().ChannelId, req.Id).Limit(1).Scan(&webhook)
+		if err != nil {
+			err = gerror.New("获取渠道详情失败")
+			return
+		}
+		if webhook != nil {
+			res.Webhook = webhook
+		}
+	}
 	return
 }
 
@@ -141,6 +182,10 @@ func (s *sPushChannel) Delete(ctx context.Context, req *v1.DeletePushChannelReq)
 			return err
 		}
 		_, err = dao.PushChannelEmail.Ctx(ctx).Where(dao.PushChannelEmail.Columns().ChannelId, req.Id).Delete()
+		if err != nil {
+			return err
+		}
+		_, err = dao.PushChannelWebhook.Ctx(ctx).Where(dao.PushChannelWebhook.Columns().ChannelId, req.Id).Delete()
 		if err != nil {
 			return err
 		}
