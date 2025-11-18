@@ -8,7 +8,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 )
 
-var AssistFormatArray = []string{"flv", "mp4", "mp3"}
+var AssistFormatArray = []string{"flv", "mp4", "mp3", "mkv", "ts"}
 
 type Builder interface {
 	Build(pm map[string]string) (Parser, error)

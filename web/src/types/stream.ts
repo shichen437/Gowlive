@@ -2,7 +2,7 @@ export interface LiveManage {
   id: number;
   roomUrl: string;
   interval: number;
-  format: "flv" | "mp4" | "mp3";
+  format: "flv" | "mp4" | "mkv" | "ts" | "mp3";
   monitorType: number;
   monitorStartAt: string;
   monitorStopAt: string;

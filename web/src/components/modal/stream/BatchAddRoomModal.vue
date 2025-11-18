@@ -42,7 +42,9 @@
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent class="w-[--radix-select-trigger-width]">
+                                        <SelectItem value="mkv">MKV</SelectItem>
                                         <SelectItem value="flv">FLV</SelectItem>
+                                        <SelectItem value="ts">TS</SelectItem>
                                         <SelectItem value="mp4">MP4</SelectItem>
                                         <SelectItem value="mp3">MP3(仅音频)</SelectItem>
                                     </SelectContent>
@@ -117,7 +119,7 @@ const formSchema = toTypedSchema(
             .number()
             .min(30, { message: "间隔时间最小为30秒" })
             .max(600, { message: "间隔时间最大为600秒" }),
-        format: z.enum(["flv", "mp4", "mp3"]),
+        format: z.enum(["flv", "mp4", "mp3", "mkv", "ts"]),
         remark: z
             .string()
             .max(45, { message: "备注最长为45个字符" })
@@ -131,7 +133,7 @@ const { handleSubmit, resetForm } = useForm({
     initialValues: {
         roomUrls: "",
         interval: 30,
-        format: "flv",
+        format: "mkv",
         remark: "",
     },
 });

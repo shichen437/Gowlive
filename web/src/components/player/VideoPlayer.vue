@@ -9,7 +9,7 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import Artplayer from 'artplayer';
 import mpegts from 'mpegts.js';
 
-type MediaFormat = 'flv' | 'mp4' | 'mp3';
+type MediaFormat = 'flv' | 'mp4' | 'mp3' | 'mkv' | 'ts';
 
 const props = defineProps<{
     url: string;
@@ -20,32 +20,78 @@ const props = defineProps<{
 const playerContainer = ref<HTMLElement | null>(null);
 let player: Artplayer | null = null;
 let flvPlayer: mpegts.Player | null = null;
+let tsPlayer: mpegts.Player | null = null;
 
-function destroyFlvPlayer() {
-    if (flvPlayer) {
-        try {
-            flvPlayer.unload();
-            flvPlayer.detachMediaElement();
-            flvPlayer.destroy();
-        } catch (e) {
-            console.warn('mpegts destroy error:', e);
-        } finally {
-            flvPlayer = null;
-        }
+function initializePlayer() {
+    const container = playerContainer.value;
+
+    if (!container) {
+        console.warn('VideoPlayer container is not mounted yet.');
+        return;
     }
+
+    if (!props.url) {
+        console.warn('No media url provided to VideoPlayer.');
+        destroyPlayer();
+        return;
+    }
+
+    destroyPlayer();
+
+    const options: any = getBasicOptions(container);
+
+    if (props.format === 'ts') {
+        options.type = 'ts';
+        options.customType = createTsCustomType();
+    }
+    if (props.format === 'flv') {
+        options.type = 'flv';
+        options.customType = createFlvCustomType();
+    } else {
+        options.id = options.url
+        options.autoPlayback = true
+    }
+    if (props.format === 'mp3') {
+        options.fullscreen = false;
+        options.fullscreenWeb = false;
+        options.pip = false;
+        options.setting = false;
+        options.screenshot = false;
+    }
+
+    player = new Artplayer(options);
+    player.contextmenu.show = false;
+    player.on('ready', () => {
+        console.log('Player is ready!')
+    })
+    player.on('error', (error: unknown) => {
+        console.error('Artplayer error:', error);
+    });
 }
 
-function destroyPlayer() {
-    destroyFlvPlayer();
-    if (player) {
-        try {
-            player.destroy();
-        } catch (e) {
-            console.warn('Artplayer destroy error:', e);
-        } finally {
-            player = null;
-        }
-    }
+function createTsCustomType() {
+    return {
+        ts: (video: HTMLMediaElement, url: string, art: Artplayer) => {
+            if (!mpegts.isSupported() || !mpegts.getFeatureList().mseLivePlayback) {
+                art.notice.show = ('当前环境不支持 TS 播放');
+                return;
+            }
+            const mediaDataSource = { type: 'mpegts', url, isLive: props.isLive };
+            const config: mpegts.Config = {
+                isLive: props.isLive,
+                enableStashBuffer: !props.isLive,
+                stashInitialSize: 512,
+                autoCleanupSourceBuffer: !props.isLive,
+                accurateSeek: !props.isLive,
+                seekType: 'range',
+            };
+            tsPlayer = mpegts.createPlayer(mediaDataSource, config);
+            tsPlayer.attachMediaElement(video);
+            tsPlayer.load();
+            if (props.isLive) video.play().catch(() => { });
+            art.on('destroy', () => destroyTsPlayer());
+        },
+    };
 }
 
 function createFlvCustomType() {
@@ -115,22 +161,48 @@ function createFlvCustomType() {
     };
 }
 
-function initializePlayer() {
-    const container = playerContainer.value;
-
-    if (!container) {
-        console.warn('VideoPlayer container is not mounted yet.');
-        return;
+function destroyFlvPlayer() {
+    if (flvPlayer) {
+        try {
+            flvPlayer.unload();
+            flvPlayer.detachMediaElement();
+            flvPlayer.destroy();
+        } catch (e) {
+            console.warn('mpegts destroy error:', e);
+        } finally {
+            flvPlayer = null;
+        }
     }
+}
 
-    if (!props.url) {
-        console.warn('No media url provided to VideoPlayer.');
-        destroyPlayer();
-        return;
+function destroyTsPlayer() {
+    if (tsPlayer) {
+        try {
+            tsPlayer.unload();
+            tsPlayer.detachMediaElement();
+            tsPlayer.destroy();
+        } catch (e) {
+            console.warn('mpegts destroy error:', e);
+        } finally {
+            tsPlayer = null;
+        }
     }
+}
 
-    destroyPlayer();
+function destroyPlayer() {
+    destroyFlvPlayer();
+    if (player) {
+        try {
+            player.destroy();
+        } catch (e) {
+            console.warn('Artplayer destroy error:', e);
+        } finally {
+            player = null;
+        }
+    }
+}
 
+function getBasicOptions(container: HTMLElement | null) {
     const options: any = {
         airplay: true,
         aspectRatio: true,
@@ -155,30 +227,7 @@ function initializePlayer() {
         url: props.url,
         volume: 1,
     };
-
-    if (props.format === 'flv') {
-        options.type = 'flv';
-        options.customType = createFlvCustomType();
-    } else {
-        options.id = options.url
-        options.autoPlayback = true
-    }
-    if (props.format === 'mp3') {
-        options.fullscreen = false;
-        options.fullscreenWeb = false;
-        options.pip = false;
-        options.setting = false;
-        options.screenshot = false;
-    }
-
-    player = new Artplayer(options);
-    player.contextmenu.show = false;
-    player.on('ready', () => {
-        console.log('Player is ready!')
-    })
-    player.on('error', (error: unknown) => {
-        console.error('Artplayer error:', error);
-    });
+    return options;
 }
 
 onMounted(() => {

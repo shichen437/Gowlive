@@ -3,9 +3,23 @@ package utils
 import (
 	"context"
 	"path/filepath"
+	"strings"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 )
+
+var fatalKeywords = []string{
+	"no frame",
+	"invalid data found",
+	"error while decoding",
+	"could not find codec parameters",
+	"moov atom not found",
+	"end of file",
+	"truncated",
+	"failed to read",
+	"malformed",
+}
 
 func FileAbsPath(path, filename string) (string, error) {
 	base, err := filepath.Abs(DATA_PATH)
@@ -32,8 +46,12 @@ func QuickCheckFile(ctx context.Context, absPath string) error {
 	}
 	fb = fb.AddArgs(args...)
 	_, stderr, err := fb.Execute(ctx)
-	if err != nil || stderr != "" {
-		return gerror.New("QuickCheckFile Failed")
+	g.Log().Infof(ctx, "QuickCheckFile ffprobe exit error: %s", stderr)
+	if err != nil {
+		return gerror.Wrap(err, "QuickCheckFile ffprobe exit error")
+	}
+	if isFatalFFprobeLog(stderr) {
+		return gerror.New("QuickCheckFile Failed: fatal probe error")
 	}
 	return nil
 }
@@ -49,4 +67,14 @@ func CompletedCheckFile(ctx context.Context, absPath string) error {
 	fb.Execute(ctx)
 
 	return nil
+}
+
+func isFatalFFprobeLog(stderr string) bool {
+	s := strings.ToLower(stderr)
+	for _, kw := range fatalKeywords {
+		if strings.Contains(s, strings.ToLower(kw)) {
+			return true
+		}
+	}
+	return false
 }

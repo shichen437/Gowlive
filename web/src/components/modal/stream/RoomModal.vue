@@ -39,7 +39,9 @@
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent class="w-[--radix-select-trigger-width]">
+                                        <SelectItem value="mkv">MKV</SelectItem>
                                         <SelectItem value="flv">FLV</SelectItem>
+                                        <SelectItem value="ts">TS</SelectItem>
                                         <SelectItem value="mp4">MP4</SelectItem>
                                         <SelectItem value="mp3">MP3(仅音频)</SelectItem>
                                     </SelectContent>
@@ -252,7 +254,7 @@ const formSchema = toTypedSchema(
     z.object({
         roomUrl: z.string().url({ message: '请输入有效的URL' }),
         interval: z.coerce.number().min(30, { message: '间隔时间最小为30秒' }).max(600, { message: '间隔时间最大为600秒' }),
-        format: z.enum(['flv', 'mp4', 'mp3']),
+        format: z.enum(['flv', 'mp4', 'mkv', 'ts', 'mp3']),
         quality: z.coerce.number(),
         segmentTime: z.coerce.number(),
         monitorType: z.coerce.number(),
@@ -275,7 +277,7 @@ const { handleSubmit, values, setValues, resetForm } = useForm({
     initialValues: {
         roomUrl: '',
         interval: 30,
-        format: 'flv',
+        format: 'mkv',
         monitorType: 0,
         quality: 0,
         segmentTime: 0,

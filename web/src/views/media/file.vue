@@ -115,7 +115,7 @@ function canPlay(file: FileInfo) {
 }
 
 function isVideo(file: FileInfo) {
-    return !file.isFolder && (file.filename.endsWith('.mp4') || file.filename.endsWith('.flv'));
+    return !file.isFolder && (file.filename.endsWith('.mp4') || file.filename.endsWith('.flv') || file.filename.endsWith('.mkv') || file.filename.endsWith('.ts'));
 }
 
 function isAudio(file: FileInfo) {

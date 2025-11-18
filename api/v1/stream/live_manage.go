@@ -34,7 +34,7 @@ type PostLiveManageReq struct {
 	g.Meta         `path:"/live/room/manage" method:"post" tags:"直播管理" summary:"创建直播房间"`
 	RoomUrl        string `json:"roomUrl"  v:"required|url#房间地址不能为空|房间地址必须为有效URL"`
 	Interval       int    `json:"interval" v:"required|min:30#间隔时间不能为空|间隔时间最小为30s"`
-	Format         string `json:"format" v:"required|in:flv,mp4,mp3#录制格式不能为空|录制格式不合法"`
+	Format         string `json:"format" v:"required|in:flv,mp4,mkv,ts,mp3#录制格式不能为空|录制格式不合法"`
 	MonitorType    int    `json:"monitorType" v:"required|in:0,1,2,3#监控类型不能为空|监控类型参数不合法"`
 	MonitorStartAt string `json:"monitorStartAt" v:"required-if:monitorType,2#定时监控开始时间不能为空"`
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#定时监控结束时间不能为空|定时监控结束时间不能与开始时间相同"`
@@ -50,7 +50,7 @@ type PostLiveManageBatchReq struct {
 	g.Meta   `path:"/live/room/manage/batch" method:"post" tags:"直播管理" summary:"批量添加直播间"`
 	RoomUrls []string `json:"roomUrls" v:"required|array|foreach|url#直播间URL不能为空|数据格式必须为数组|foreach|房间地址必须为有效URL"`
 	Interval int      `json:"interval" v:"required|min:30#间隔时间不能为空|间隔时间最小为30s"`
-	Format   string   `json:"format" v:"required|in:flv,mp4,mp3#录制格式不能为空|录制格式不合法"`
+	Format   string   `json:"format" v:"required|in:flv,mp4,mkv,ts,mp3#录制格式不能为空|录制格式不合法"`
 	Remark   string   `json:"remark" v:"max-length:45#备注最大长度为45"`
 }
 type PostLiveManageBatchRes struct {
@@ -61,7 +61,7 @@ type PutLiveManageReq struct {
 	g.Meta         `path:"/live/room/manage" method:"put" tags:"直播管理" summary:"更新直播房间"`
 	Id             int    `json:"id" dc:"直播房间ID" v:"min:1#直播房间ID不能为空"`
 	Interval       int    `json:"interval" v:"required|min:30#间隔时间不能为空|间隔时间最小为30s"`
-	Format         string `json:"format" v:"required|in:flv,mp4,mp3#录制格式不能为空|录制格式不合法"`
+	Format         string `json:"format" v:"required|in:flv,mp4,mkv,ts,mp3#录制格式不能为空|录制格式不合法"`
 	MonitorType    int    `json:"monitorType" v:"required|in:0,1,2,3#监控类型不能为空|监控类型参数不合法"`
 	MonitorStartAt string `json:"monitorStartAt" v:"required-if:monitorType,2#定时监控开始时间不能为空"`
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#定时监控结束时间不能为空|定时监控结束时间不能与开始时间相同"`

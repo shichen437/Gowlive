@@ -190,6 +190,10 @@ func detectContentType(path string) string {
 		return "audio/mpeg"
 	case ".flv":
 		return "video/x-flv"
+	case ".mkv":
+		return "video/x-matroska"
+	case ".ts":
+		return "video/mp2t"
 	default:
 		ctype := mime.TypeByExtension(ext)
 		if ctype == "" {
@@ -204,6 +208,12 @@ func isSupportedMedia(ctype string) bool {
 		return true
 	}
 	if strings.HasPrefix(ctype, "audio/mpeg") {
+		return true
+	}
+	if strings.HasPrefix(ctype, "video/x-matroska") {
+		return true
+	}
+	if strings.HasPrefix(ctype, "video/mp2t") {
 		return true
 	}
 	if ctype == "video/x-flv" || strings.HasPrefix(ctype, "video/flv") {

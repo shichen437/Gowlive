@@ -5,14 +5,14 @@
                 <span v-if="filename">{{ filename }}</span>
                 <span v-else>No file selected</span>
             </h1>
-            <div class="flex-grow flex items-center justify-center rounded-lg">
+            <div class="grow flex items-center justify-center rounded-lg">
                 <VideoPlayer v-if="videoUrl" :url="videoUrl" :format="videoFormat" :isLive="false" />
                 <div v-else class="text-muted-foreground">无法加载视频，缺少地址或参数。</div>
             </div>
         </div>
 
         <div class="w-1/4 border-l p-2 flex flex-col">
-            <div class="border rounded-lg flex-grow">
+            <div class="border rounded-lg grow">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -60,10 +60,12 @@ const filename = ref('');
 const currentPath = ref('');
 const files = ref<FileInfo[]>([]);
 
-const videoFormat = computed<'flv' | 'mp4' | 'mp3'>(() => {
+const videoFormat = computed<'flv' | 'mp4' | 'mp3' | 'mkv' | 'ts'>(() => {
     const ext = (filename.value.split('.').pop() || '').toLowerCase();
     if (ext === 'flv') return 'flv';
     if (ext === 'mp4') return 'mp4';
+    if (ext === 'mkv') return 'mkv';
+    if (ext === 'ts') return 'ts';
     if (ext === 'mp3') return 'mp3';
     return 'mp4';
 });
@@ -89,7 +91,7 @@ function canPlay(file: FileInfo) {
 }
 
 function isVideo(file: FileInfo) {
-    return !file.isFolder && (file.filename.endsWith('.mp4') || file.filename.endsWith('.flv'));
+    return !file.isFolder && (file.filename.endsWith('.mp4') || file.filename.endsWith('.flv') || file.filename.endsWith('.mkv') || file.filename.endsWith('.ts'));
 }
 
 function isAudio(file: FileInfo) {
