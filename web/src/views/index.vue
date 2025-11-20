@@ -8,7 +8,7 @@
                         <h1 class="text-xl font-semibold">Gowlive</h1>
                     </div>
                 </SidebarHeader>
-                <SidebarContent class="flex-grow p-2">
+                <SidebarContent class="grow p-2">
                     <SidebarMenu>
                         <!-- 固定的主页菜单项 -->
                         <SidebarMenuItem>
@@ -38,7 +38,7 @@
 
             <div class="flex flex-1 flex-col">
                 <Topbar />
-                <main class="flex-grow p-4">
+                <main class="grow p-4">
                     <div class="h-full rounded-lg p-4">
                         <router-view />
                     </div>

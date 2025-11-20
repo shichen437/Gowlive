@@ -13,6 +13,7 @@ type LiveSession struct {
 	Config          LiveConfig
 	State           LiveState
 	StartedAt       *gtime.Time
+	Filename        string
 	LiveApi         LiveApi
 	EventDispatcher interfaces.Module
 	ListenerManager interfaces.Module

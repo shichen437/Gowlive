@@ -39,8 +39,8 @@
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent class="w-[--radix-select-trigger-width]">
-                                        <SelectItem value="mkv">MKV</SelectItem>
                                         <SelectItem value="flv">FLV</SelectItem>
+                                        <SelectItem value="mkv">MKV</SelectItem>
                                         <SelectItem value="ts">TS</SelectItem>
                                         <SelectItem value="mp4">MP4</SelectItem>
                                         <SelectItem value="mp3">MP3(仅音频)</SelectItem>
@@ -276,7 +276,7 @@ const { handleSubmit, values, setValues, resetForm } = useForm({
     initialValues: {
         roomUrl: '',
         interval: 30,
-        format: 'mkv',
+        format: 'flv',
         monitorType: 0,
         quality: 0,
         segmentTime: 0,

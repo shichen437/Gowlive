@@ -136,9 +136,8 @@ func (r *recorder) tryRecord(ctx context.Context) error {
 	}
 	r.setAndCloseParser(p)
 	r.startTime = time.Now()
-	err = r.parser.ParseLiveStream(ctx, streamInfo, fileName)
-	removeEmptyFile(fileName)
-	return err
+	r.session.Filename = fileName
+	return r.parser.ParseLiveStream(ctx, streamInfo, fileName)
 }
 
 func (r *recorder) getQuality(streamInfos []*lives.StreamUrlInfo) *lives.StreamUrlInfo {
@@ -202,12 +201,6 @@ func existsAndGetStreamInfo(streamMap map[string]*lives.StreamUrlInfo, qn ...str
 
 func newParser(cfg map[string]string) (parser.Parser, error) {
 	return parser.New(ffmpeg_parser.Name, cfg)
-}
-
-func removeEmptyFile(file string) {
-	if stat, err := os.Stat(file); err == nil && stat.Size() == 0 {
-		os.Remove(file)
-	}
 }
 
 func (r *recorder) run(ctx context.Context) {

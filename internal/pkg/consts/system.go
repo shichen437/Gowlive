@@ -24,8 +24,9 @@ const (
 
 	StorageThreshold = 90
 
-	SKFilenameTemplate = "sk_filename_template"
-	SKArchiveStrategy  = "sk_archive_strategy"
-	SKLiveEndNotify    = "sk_live_end_notify"
-	SKDiskProtection   = "sk_disk_protection"
+	SKFilenameTemplate    = "sk_filename_template"
+	SKArchiveStrategy     = "sk_archive_strategy"
+	SKLiveEndNotify       = "sk_live_end_notify"
+	SKDiskProtection      = "sk_disk_protection"
+	SKAutoCleanLittleFile = "sk_auto_clean_little_file"
 )

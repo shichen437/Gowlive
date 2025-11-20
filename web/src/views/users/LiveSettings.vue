@@ -47,6 +47,12 @@
                             </SelectContent>
                         </Select>
                     </div>
+                </div>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardContent>
+                <div class="grid gap-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-1">
                             <Label for="disk-protection" class="flex flex-col space-y-1">
@@ -70,12 +76,33 @@
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem :value=0>无</SelectItem>
+                                    <SelectItem :value=0>禁用</SelectItem>
                                     <SelectItem :value=5>5GB</SelectItem>
                                     <SelectItem :value=10>10GB</SelectItem>
                                     <SelectItem :value=20>20GB</SelectItem>
-                                    <SelectItem :value=30>30GB</SelectItem>
                                     <SelectItem :value=50>50GB</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1">
+                            <Label for="auto-clean-little-file" class="flex flex-col space-y-1">
+                                <span class="text-md">自动清除小文件</span>
+                            </Label>
+                        </div>
+                        <Select id="auto-clean-little-file" v-model="autoCleanLittleFile"
+                            @update:model-value="updateSetting('sk_auto_clean_little_file', $event)">
+                            <SelectTrigger class="w-[330px]">
+                                <SelectValue placeholder="选择小文件阈值" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem :value=0>禁用</SelectItem>
+                                    <SelectItem :value=20>20MB</SelectItem>
+                                    <SelectItem :value=50>50MB</SelectItem>
+                                    <SelectItem :value=100>100MB</SelectItem>
+                                    <SelectItem :value=200>200MB</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -129,6 +156,7 @@ const liveEndNotify = ref(false);
 const filenameTemplate = ref<number>();
 const archiveStrategy = ref<number>();
 const diskProtection = ref<number>();
+const autoCleanLittleFile = ref<number>();
 
 async function fetchSetting(key: string): Promise<Record<string, number>> {
     const res: any = await getSettings({ key });
@@ -140,11 +168,12 @@ async function fetchSetting(key: string): Promise<Record<string, number>> {
 let loadingSettings = true
 onMounted(async () => {
     try {
-        const result: Record<string, number> = await fetchSetting('sk_live_end_notify,sk_filename_template,sk_archive_strategy,sk_disk_protection');
+        const result: Record<string, number> = await fetchSetting('sk_live_end_notify,sk_filename_template,sk_archive_strategy,sk_disk_protection,sk_auto_clean_little_file');
         liveEndNotify.value = result['sk_live_end_notify'] == 1;
         filenameTemplate.value = result['sk_filename_template'] || 0;
         archiveStrategy.value = result['sk_archive_strategy'] || 0;
         diskProtection.value = result['sk_disk_protection'] || 0;
+        autoCleanLittleFile.value = result['sk_auto_clean_little_file'] || 0;
 
         bindToggleSetting(liveEndNotify, 'sk_live_end_notify');
         loadingSettings = false
