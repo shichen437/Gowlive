@@ -3,7 +3,7 @@
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>修改信息</DialogTitle>
-                <DialogDescription>修改您的个人昵称和性别。</DialogDescription>
+                <DialogDescription>修改你的个人昵称和性别。</DialogDescription>
             </DialogHeader>
             <form class="space-y-4">
                 <FormField v-slot="{ componentField }" name="nickname">

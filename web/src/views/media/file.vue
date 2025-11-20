@@ -78,6 +78,7 @@ import { useRoute, useRouter } from "vue-router";
 import { listFiles, deleteFile } from "@/api/media/file_manage";
 import { postTask } from "@/api/media/file_check";
 import type { FileInfo } from "@/types/media";
+import { canPlay, isVideo, isAudio } from "@/types/media";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -109,18 +110,6 @@ const showConfirmModal = ref(false);
 const fileToDelete = ref<FileInfo | null>(null);
 const showFileCheckConfirmModal = ref(false);
 const fileToCheck = ref<FileInfo | null>(null);
-
-function canPlay(file: FileInfo) {
-    return isVideo(file) || isAudio(file);
-}
-
-function isVideo(file: FileInfo) {
-    return !file.isFolder && (file.filename.endsWith('.mp4') || file.filename.endsWith('.flv') || file.filename.endsWith('.mkv') || file.filename.endsWith('.ts'));
-}
-
-function isAudio(file: FileInfo) {
-    return !file.isFolder && file.filename.endsWith('.mp3');
-}
 
 function getFileIcon(file: FileInfo) {
     if (file.isFolder) {

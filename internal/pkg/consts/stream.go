@@ -20,7 +20,5 @@ const (
 	RequestsFailedWarningCKP = "live:requests:failed:warning:"
 	RequestsFailedWarningTtl = 1 * time.Hour
 
-	DisableListenerDiskFreeThreshold = 90
-
 	MaxTopCount = 3
 )

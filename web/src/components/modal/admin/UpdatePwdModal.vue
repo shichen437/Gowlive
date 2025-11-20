@@ -3,7 +3,7 @@
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>修改密码</DialogTitle>
-                <DialogDescription>请输入您的旧密码和新密码。修改成功后将会退出登录。</DialogDescription>
+                <DialogDescription>请输入你的旧密码和新密码。修改成功后将会退出登录。</DialogDescription>
             </DialogHeader>
             <form @submit="onSubmit" class="space-y-4">
                 <FormField v-slot="{ componentField }" name="oldPwd">

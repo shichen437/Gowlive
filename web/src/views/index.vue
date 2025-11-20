@@ -47,7 +47,7 @@
         </div>
     </SidebarProvider>
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="handleLogout" title="确认退出" description="您确定要退出登录吗？" />
+        :onConfirm="handleLogout" title="确认退出" description="你确定要退出登录吗？" />
 </template>
 
 <script setup lang="ts">

@@ -1,18 +1,28 @@
 <template>
-    <div class="space-y-6">
+    <div class="space-y-4">
+        <h2 class="text-2xl font-bold tracking-tight">直播设置</h2>
+        <p class="text-muted-foreground">在这里调整你的直播相关设置。</p>
         <Card>
-            <CardHeader>
-                <CardTitle>直播设置</CardTitle>
-                <CardDescription>在这里调整您的直播相关设置。</CardDescription>
-            </CardHeader>
             <CardContent>
-                <div class="grid gap-4">
+                <div class="grid gap-2">
                     <div class="flex items-center justify-between">
-                        <Label for="live-end-notify" class="flex flex-col space-y-1">
-                            <span class="text-md">下播通知</span>
+                        <Label for="archive-strategy" class="flex flex-col space-y-1">
+                            <span class="text-md">归档策略</span>
                         </Label>
-                        <Switch id="live-end-notify" :checked="liveEndNotify" v-model="liveEndNotify"
-                            @update:checked="updateSetting('sk_live_end_notify', $event)" />
+                        <Select id="archive-strategy" v-model="archiveStrategy"
+                            @update:model-value="updateSetting('sk_archive_strategy', $event)">
+                            <SelectTrigger class="w-[330px]">
+                                <SelectValue placeholder="选择归档策略" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem :value=0>月</SelectItem>
+                                    <SelectItem :value=1>天</SelectItem>
+                                    <SelectItem :value=2>月+天</SelectItem>
+                                    <SelectItem :value=3>不归档</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div class="flex items-center justify-between">
                         <Label for="filename-template" class="flex flex-col space-y-1">
@@ -38,23 +48,50 @@
                         </Select>
                     </div>
                     <div class="flex items-center justify-between">
-                        <Label for="archive-strategy" class="flex flex-col space-y-1">
-                            <span class="text-md">归档策略</span>
-                        </Label>
-                        <Select id="archive-strategy" v-model="archiveStrategy"
-                            @update:model-value="updateSetting('sk_archive_strategy', $event)">
+                        <div class="flex items-center gap-1">
+                            <Label for="disk-protection" class="flex flex-col space-y-1">
+                                <span class="text-md">磁盘空间保护</span>
+                            </Label>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Info class="w-4 h-4 ml-1" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>在磁盘空间小于指定阈值时停止录制。当磁盘空间恢复时，录制将自动恢复。</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                        <Select id="disk-protection" v-model="diskProtection"
+                            @update:model-value="updateSetting('sk_disk_protection', $event)">
                             <SelectTrigger class="w-[330px]">
-                                <SelectValue placeholder="选择归档策略" />
+                                <SelectValue placeholder="选择最小可用空间阈值" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem :value=0>月</SelectItem>
-                                    <SelectItem :value=1>天</SelectItem>
-                                    <SelectItem :value=2>月+天</SelectItem>
-                                    <SelectItem :value=3>不归档</SelectItem>
+                                    <SelectItem :value=0>无</SelectItem>
+                                    <SelectItem :value=5>5GB</SelectItem>
+                                    <SelectItem :value=10>10GB</SelectItem>
+                                    <SelectItem :value=20>20GB</SelectItem>
+                                    <SelectItem :value=30>30GB</SelectItem>
+                                    <SelectItem :value=50>50GB</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardContent>
+                <div class="grid gap-2">
+                    <div class="flex items-center justify-between">
+                        <Label for="live-end-notify" class="flex flex-col space-y-1">
+                            <span class="text-md">下播通知</span>
+                        </Label>
+                        <Switch id="live-end-notify" :checked="liveEndNotify" v-model="liveEndNotify"
+                            @update:checked="updateSetting('sk_live_end_notify', $event)" />
                     </div>
                 </div>
             </CardContent>
@@ -63,13 +100,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, type Ref } from 'vue';
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -81,12 +115,20 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from '@/components/ui/tooltip';
+import { Info } from 'lucide-vue-next';
 import { getSettings, updateSettings } from '@/api/system/settings';
 import { toast } from "vue-sonner";
 
 const liveEndNotify = ref(false);
 const filenameTemplate = ref<number>();
 const archiveStrategy = ref<number>();
+const diskProtection = ref<number>();
 
 async function fetchSetting(key: string): Promise<Record<string, number>> {
     const res: any = await getSettings({ key });
@@ -95,13 +137,17 @@ async function fetchSetting(key: string): Promise<Record<string, number>> {
     }
     return {};
 };
-
+let loadingSettings = true
 onMounted(async () => {
     try {
-        const result: Record<string, number> = await fetchSetting('sk_live_end_notify,sk_filename_template,sk_archive_strategy');
+        const result: Record<string, number> = await fetchSetting('sk_live_end_notify,sk_filename_template,sk_archive_strategy,sk_disk_protection');
         liveEndNotify.value = result['sk_live_end_notify'] == 1;
         filenameTemplate.value = result['sk_filename_template'] || 0;
         archiveStrategy.value = result['sk_archive_strategy'] || 0;
+        diskProtection.value = result['sk_disk_protection'] || 0;
+
+        bindToggleSetting(liveEndNotify, 'sk_live_end_notify');
+        loadingSettings = false
     } catch (error) {
         console.error('Error fetching settings:', error);
     }
@@ -116,12 +162,16 @@ const updateSetting = async (key: string, value: any) => {
     }
 };
 
-watch(liveEndNotify, async (val) => {
-    try {
-        await updateSettings({ key: 'sk_live_end_notify', value: val ? 1 : 0 });
-    } catch (e) {
-        console.error(e);
-        liveEndNotify.value = !val;
-    }
-});
+function bindToggleSetting(refVar: Ref<boolean>, key: string) {
+    watch(refVar, async (val) => {
+        if (loadingSettings) return
+        const oldVal = !val;
+        try {
+            await updateSettings({ key, value: val ? 1 : 0 });
+        } catch (e) {
+            console.error(e);
+            refVar.value = oldVal;
+        }
+    });
+}
 </script>

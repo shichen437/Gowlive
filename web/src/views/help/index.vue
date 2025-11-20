@@ -9,9 +9,9 @@
                 <AccordionItem v-for="faq in faqs" :key="faq.value" :value="faq.value">
                     <AccordionTrigger class="text-md">{{
                         faq.question
-                        }}</AccordionTrigger>
+                    }}</AccordionTrigger>
                     <AccordionContent>
-                        <p class="leading-relaxed">
+                        <p class="leading-relaxed whitespace-pre-line">
                             {{ faq.answer }}
                         </p>
                     </AccordionContent>
@@ -61,7 +61,12 @@ const faqs = [
     {
         value: "item-5",
         question: "关于视频播放",
-        answer: "Flv 格式由于原生不支持，拖拽进度条功能受限。",
+        answer: "对于 H5 播放器： \r\nMKV格式仅部分浏览器支持音频解码(如 Edge);\r\nFLV/TS格式由于原生不支持，拖拽进度条功能受限。",
+    },
+    {
+        value: "item-6",
+        question: "关于录制格式",
+        answer: "MKV/TS：抗断电，易修复；FLV：低开销，连续写入；MP4：功能全面，不抗断电。",
     }
 ];
 </script>

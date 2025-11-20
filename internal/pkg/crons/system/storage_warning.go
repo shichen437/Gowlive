@@ -17,8 +17,9 @@ var (
 )
 
 func StorageWarning(ctx context.Context) {
-	if utils.GetDiskUsage() > consts.StorageThreshold {
-		content := "存储空间已达到" + gconv.String(consts.StorageThreshold) + "%"
+	usage := utils.GetDiskUsage()
+	if usage > consts.StorageThreshold {
+		content := "存储空间使用率已达到" + gconv.String(usage) + "%"
 		manager.GetNotifyManager().AddWarningNotify(title, content)
 		err := mp.PushMessage(gctx.New(), &mp.MessageModel{
 			Title:   title,

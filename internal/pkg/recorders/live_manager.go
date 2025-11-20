@@ -7,16 +7,28 @@ import (
 
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
-	"github.com/shichen437/gowlive/internal/pkg/consts"
+	"github.com/lthibault/jitterbug"
 	"github.com/shichen437/gowlive/internal/pkg/events"
 	"github.com/shichen437/gowlive/internal/pkg/interfaces"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
-	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
+
+var (
+	newRecorder = NewRecorder
+)
+
+type manager struct {
+	lock     sync.RWMutex
+	recorder Recorder
+	session  *lives.LiveSession
+	stop     chan struct{}
+	stopOnce sync.Once
+}
 
 func NewManager(ctx context.Context, session *lives.LiveSession) Manager {
 	return &manager{
 		session: session,
+		stop:    make(chan struct{}),
 	}
 }
 
@@ -27,16 +39,6 @@ type Manager interface {
 	RestartRecorder(ctx context.Context) error
 	GetRecorder(ctx context.Context) (Recorder, error)
 	HasRecorder(ctx context.Context) bool
-}
-
-var (
-	newRecorder = NewRecorder
-)
-
-type manager struct {
-	lock     sync.RWMutex
-	recorder Recorder
-	session  *lives.LiveSession
 }
 
 func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
@@ -78,7 +80,7 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 		if session.Id != m.session.Id {
 			return
 		}
-g.Log().Warningf(ctx, "Received RecordingStoppedDueToDiskSpace event for session %d. Removing recorder.", m.session.Id)
+		g.Log().Warningf(ctx, "Received RecordingStoppedDueToDiskSpace event for session %d. Removing recorder.", m.session.Id)
 		if err := m.RemoveRecorder(ctx); err == nil {
 			liveEndBiz(ctx, session)
 		} else {
@@ -90,11 +92,15 @@ g.Log().Warningf(ctx, "Received RecordingStoppedDueToDiskSpace event for session
 func (m *manager) Start(ctx context.Context) error {
 	ed := m.session.EventDispatcher.(events.Dispatcher)
 	m.registryListener(ctx, ed)
+	go m.reconciliationLoop(ctx)
 	g.Log().Infof(ctx, "RecorderManager Started for session %d!", m.session.Id)
 	return nil
 }
 
 func (m *manager) Close(ctx context.Context) {
+	m.stopOnce.Do(func() {
+		close(m.stop)
+	})
 	if err := m.RemoveRecorder(ctx); err == nil {
 		liveEndBiz(ctx, m.session)
 	}
@@ -107,9 +113,9 @@ func (m *manager) AddRecorder(ctx context.Context) error {
 	if m.recorder != nil {
 		return gerror.New("this live has a recorder")
 	}
-	if utils.GetDiskUsage() > consts.DisableListenerDiskFreeThreshold {
-		g.Log().Warningf(ctx, "Disk usage > 90%%, cannot start recording for session %d", m.session.Id)
-		return gerror.New("disk usage > 90%")
+	if diskOverLimit() {
+		g.Log().Warningf(ctx, "Disk usage already reached limit, cannot start recording for session %d", m.session.Id)
+		return gerror.New("disk usage reached limit")
 	}
 	recorder, err := newRecorder(m.session)
 	if err != nil {
@@ -157,4 +163,36 @@ func (m *manager) HasRecorder(ctx context.Context) bool {
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 	return m.recorder != nil
+}
+
+// 周期性状态协调
+func (m *manager) reconciliationLoop(ctx context.Context) {
+	ticker := jitterbug.New(
+		2*time.Minute,
+		&jitterbug.Norm{Stdev: 30 * time.Second},
+	)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-m.stop:
+			g.Log().Infof(ctx, "RecorderManager Closed for session %d!", m.session.Id)
+			return
+		case <-ticker.C:
+			m.reconcile(ctx)
+		}
+	}
+}
+
+func (m *manager) reconcile(ctx context.Context) {
+	if !m.session.GetState().IsLive || m.HasRecorder(ctx) {
+		return
+	}
+	if diskOverLimit() {
+		return
+	}
+	err := m.AddRecorder(ctx)
+	if err != nil {
+		g.Log().Errorf(ctx, "Reconciliation failed to add recorder for session %d: %v", m.session.Id, err)
+	}
+	liveStartBiz(ctx, m.session)
 }

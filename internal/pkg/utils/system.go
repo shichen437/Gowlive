@@ -18,6 +18,15 @@ func GetDiskUsage() int {
 	return int(diskInfo.UsedPercent)
 }
 
+func GetDiskFreeGBInt() int {
+	usage, err := disk.Usage("/")
+	if err != nil {
+		return -1
+	}
+	const GB = 1024 * 1024 * 1024
+	return int(usage.Free / GB)
+}
+
 func GetDefaultFFmpegPath() (string, error) {
 	path, err := exec.LookPath("ffmpeg")
 	if errors.Is(err, exec.ErrDot) {

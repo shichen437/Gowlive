@@ -284,7 +284,7 @@ func (r *recorder) getOutPathAndFilename(info *lives.LiveState) (string, string,
 }
 
 func (r *recorder) monitorDiskSpace(ctx context.Context) {
-	ticker := time.NewTicker(3 * time.Minute)
+	ticker := time.NewTicker(90 * time.Second)
 	defer ticker.Stop()
 
 	for {
@@ -293,8 +293,8 @@ func (r *recorder) monitorDiskSpace(ctx context.Context) {
 			if atomic.LoadUint32(&r.state) != running {
 				return
 			}
-			if utils.GetDiskUsage() >= consts.DisableListenerDiskFreeThreshold {
-				g.Log().Warningf(ctx, "Disk usage is over 95%%. Stopping recording for session %d.", r.session.Id)
+			if diskOverLimit() {
+				g.Log().Warningf(ctx, "Disk usage is over threshold. Stopping recording for session %d.", r.session.Id)
 				r.ed.DispatchEvent(events.NewEvent("RecordingStoppedDueToDiskSpace", r.session))
 				return
 			}
@@ -302,4 +302,8 @@ func (r *recorder) monitorDiskSpace(ctx context.Context) {
 			return
 		}
 	}
+}
+
+func diskOverLimit() bool {
+	return utils.GetDiskFreeGBInt() <= mr.GetSettingsManager().GetSetting(consts.SKDiskProtection)
 }

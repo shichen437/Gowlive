@@ -27,4 +27,5 @@ const (
 	SKFilenameTemplate = "sk_filename_template"
 	SKArchiveStrategy  = "sk_archive_strategy"
 	SKLiveEndNotify    = "sk_live_end_notify"
+	SKDiskProtection   = "sk_disk_protection"
 )
