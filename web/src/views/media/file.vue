@@ -74,11 +74,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
 import { listFiles, deleteFile } from "@/api/media/file_manage";
 import { postTask } from "@/api/media/file_check";
 import type { FileInfo } from "@/types/media";
 import { canPlay, isVideo, isAudio } from "@/types/media";
+import { setLastFilePath, getLastFilePath } from "@/store/cache";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -140,8 +141,21 @@ const fetchFiles = async (path: string) => {
 };
 
 onMounted(() => {
-    const path = route.query.path as string || ".";
+    let path = route.query.path as string;
+    if (!path) {
+        const lastPath = getLastFilePath();
+        if (lastPath) {
+            path = lastPath;
+            router.replace({ query: { path: lastPath } });
+        } else {
+            path = ".";
+        }
+    }
     fetchFiles(path);
+});
+
+onBeforeRouteLeave(() => {
+    setLastFilePath(currentPath.value);
 });
 
 watch(
