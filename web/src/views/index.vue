@@ -4,8 +4,10 @@
             <Sidebar>
                 <SidebarHeader class="h-18 p-1 border-b items-center">
                     <div class="flex items-center p-4">
-                        <img src="/logo.png" alt="logo" class="h-6 w-12" />
-                        <h1 class="text-xl font-semibold">Gowlive</h1>
+                        <img src="/logo.png" alt="logo" class="h-6 w-6 mr-1" />
+                        <h1
+                            class="text-xl font-semibold bg-clip-text text-transparent bg-linear-to-br from-[#8E2DE2] from-10% via-45% to-[#FF6A00] to-90%">
+                            Gowlive</h1>
                     </div>
                 </SidebarHeader>
                 <SidebarContent class="grow p-2">

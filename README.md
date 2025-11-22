@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="resources/assets/logo.png" alt="Gowlive Logo" width="120"/>
+  <img src="resources/assets/logo.png" alt="Gowlive Logo" width="80"/>
   <h1>Gowlive</h1>
   <p>
     <strong>一个基于 GoFrame 和 Vue3 构建的直播录制平台</strong>
