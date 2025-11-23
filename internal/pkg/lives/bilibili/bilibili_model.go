@@ -1,5 +1,7 @@
 package bilibili
 
+import "net/url"
+
 const (
 	domain       = "live.bilibili.com"
 	platform     = "bilibili"
@@ -10,3 +12,10 @@ const (
 	liveApiUrlv2 = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo"
 	parseAddr    = "data.playurl_info.playurl.stream.0.format.0.codec.0"
 )
+
+type Bilibili struct {
+	Url         *url.URL
+	Platform    string
+	RoomID      string
+	RespCookies map[string]string
+}

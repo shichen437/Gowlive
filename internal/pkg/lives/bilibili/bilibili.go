@@ -2,6 +2,7 @@ package bilibili
 
 import (
 	"fmt"
+	"maps"
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
@@ -28,13 +29,6 @@ func (b *builder) Build(url *url.URL) (lives.LiveApi, error) {
 		Platform:    platform,
 		RespCookies: make(map[string]string),
 	}, nil
-}
-
-type Bilibili struct {
-	Url         *url.URL
-	Platform    string
-	RoomID      string
-	RespCookies map[string]string
 }
 
 func (l *Bilibili) GetInfo() (info *lives.LiveState, err error) {
@@ -175,9 +169,7 @@ func (l *Bilibili) assembleCookieMap() map[string]string {
 	jar.SetCookies(l.Url, utils.GetCookieList(cacheCookie))
 	cookies := jar.Cookies(l.Url)
 	cookieMap := make(map[string]string)
-	for k, v := range l.RespCookies {
-		cookieMap[k] = v
-	}
+	maps.Copy(cookieMap, l.RespCookies)
 	for _, c := range cookies {
 		cookieMap[c.Name] = c.Value
 	}
