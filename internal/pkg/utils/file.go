@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -67,6 +68,24 @@ func CompletedCheckFile(ctx context.Context, absPath string) error {
 	fb.Execute(ctx)
 
 	return nil
+}
+
+func HasAnyFile(path string) bool {
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return false
+	}
+	for _, e := range entries {
+		if strings.HasPrefix(e.Name(), ".") {
+			continue
+		}
+		if !e.IsDir() {
+			return true
+		} else {
+			return HasAnyFile(path + "/" + e.Name())
+		}
+	}
+	return false
 }
 
 func isFatalFFprobeLog(stderr string) bool {

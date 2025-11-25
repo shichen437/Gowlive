@@ -23,3 +23,11 @@ export async function deleteFile(data: any) {
     data: data,
   });
 }
+
+export async function getEmptyDir(params: any) {
+  return request({
+    url: "/media/file/empty",
+    method: "get",
+    params,
+  });
+}

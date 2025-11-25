@@ -20,6 +20,10 @@ func (f *fileManageController) Delete(ctx context.Context, req *v1.DeleteFileReq
 	return service.FileManage().Delete(ctx, req)
 }
 
+func (f *fileManageController) Empty(ctx context.Context, req *v1.GetEmptyFolderReq) (res *v1.GetEmptyFolderRes, err error) {
+	return service.FileManage().Empty(ctx, req)
+}
+
 func (f *fileManageController) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1.GetFilePlayRes, err error) {
 	return service.FileManage().Play(ctx, req)
 }

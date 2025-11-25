@@ -65,7 +65,7 @@ func (s *sFileManage) List(ctx context.Context, req *v1.GetFileListReq) (res *v1
 
 func (s *sFileManage) Delete(ctx context.Context, req *v1.DeleteFileReq) (res *v1.DeleteFileRes, err error) {
 	res = &v1.DeleteFileRes{}
-	if req.Filename == "" || strings.Contains(req.Filename, "gowlive.db") {
+	if req.Path == "" && strings.Contains(req.Filename, "gowlive.db") {
 		return
 	}
 	absPath, err := utils.FileAbsPath(req.Path, "")
@@ -76,6 +76,16 @@ func (s *sFileManage) Delete(ctx context.Context, req *v1.DeleteFileReq) (res *v
 	if err != nil {
 		return nil, gerror.New("删除文件失败")
 	}
+	return
+}
+
+func (s *sFileManage) Empty(ctx context.Context, req *v1.GetEmptyFolderReq) (res *v1.GetEmptyFolderRes, err error) {
+	res = &v1.GetEmptyFolderRes{}
+	absPath, err := utils.FileAbsPath(req.Path, "")
+	if err != nil {
+		return nil, gerror.New("获取系统目录路径失败")
+	}
+	res.IsEmpty = !utils.HasAnyFile(absPath)
 	return
 }
 
