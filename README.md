@@ -59,7 +59,11 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 
 <div align="center">
   <img src="resources/assets/screenshots/home.jpg" alt="主页" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/live.jpg" alt="直播" width="45%">
+  <img src="resources/assets/screenshots/settings.jpg" alt="设置" width="45%">
+</div>
+<div align="center">
+  <img src="resources/assets/screenshots/room-card.jpg" alt="房间卡片" width="45%">&nbsp;&nbsp;
+  <img src="resources/assets/screenshots/room-list.jpg" alt="房间列表" width="45%">
 </div>
 <div align="center">
   <img src="resources/assets/screenshots/anchor.jpg" alt="主播" width="45%">&nbsp;&nbsp;
