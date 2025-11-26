@@ -12,13 +12,21 @@
                 </Button>
             </div>
             <div class="flex items-center space-x-2">
+                <div class="flex items-center">
+                    <Button variant="outline" size="icon"
+                        @click="setDisplayMode(displayMode === 'list' ? 'card' : 'list')"
+                        :aria-label="displayMode === 'list' ? '切换到卡片视图' : '切换到列表视图'">
+                        <LayoutGrid v-if="displayMode === 'card'" class="w-4 h-4" />
+                        <List v-else class="w-4 h-4" />
+                    </Button>
+                </div>
                 <ExportRoomDropDownMenu @export="handleExport" />
                 <SortRoomDropDownMenu v-model:sort="sort" @update:sort="handleSortChange" />
                 <FilterRoomDropDownMenu v-model:filter="filter" @update:filter="handleFilterChange" />
             </div>
         </div>
 
-        <div class="border rounded-md">
+        <div v-if="displayMode === 'list'" class="border rounded-md">
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -31,17 +39,17 @@
                 </TableHeader>
                 <TableBody>
                     <template v-if="rooms.length > 0">
-                        <TableRow v-for="room in rooms" :key="room.id" :class="{ 'bg-muted/80': room.isTop }">
-                            <TableCell class="text-center">{{
-                                room.anchor
-                                }}</TableCell>
-                            <TableCell class="text-center">{{
-                                room.roomName
-                                }}</TableCell>
+                        <TableRow v-for="room in rooms" :key="room.id" :class="{ 'bg-top/80': room.isTop }">
                             <TableCell class="text-center">
-                                <Badge variant="outline">{{
-                                    getPlatformLabel(room.platform)
-                                    }}</Badge>
+                                {{ room.anchor }}
+                            </TableCell>
+                            <TableCell class="text-center">
+                                {{ room.roomName }}
+                            </TableCell>
+                            <TableCell class="text-center">
+                                <Badge variant="outline">
+                                    {{ getPlatformLabel(room.platform) }}
+                                </Badge>
                             </TableCell>
                             <TableCell class="text-center" :class="getStatusColor(
                                 room.status,
@@ -103,6 +111,80 @@
                 </TableBody>
             </Table>
         </div>
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <template v-if="rooms.length > 0">
+                <Card v-for="room in rooms" :key="room.id" :class="{ 'bg-top/80': room.isTop }">
+                    <CardHeader class="flex flex-row items-center justify-between space-y-0">
+                        <CardTitle class="text-lg truncate" :title="room.anchor">{{ room.anchor }}</CardTitle>
+                        <div class="flex items-center space-x-2">
+                            <Badge variant="outline">{{ getPlatformLabel(room.platform) }}</Badge>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <CardDescription class="line-clamp-1" :title="room.roomName">
+                            {{ room.roomName }}
+                        </CardDescription>
+                    </CardContent>
+                    <CardFooter class="flex justify-between items-center pt-0">
+                        <Badge variant="secondary" class="text-sm" :class="getStatusColor(
+                            room.status,
+                            room.isRecording,
+                        )
+                            ">{{
+                                getStatusText(room.status, room.isRecording)
+                            }}</Badge>
+                        <div class="flex space-x-1">
+                            <Button v-if="room.status === 0" variant="ghost" size="icon"
+                                @click="openStartConfirmModal(room.liveId)">
+                                <Play class="w-4 h-4" />
+                            </Button>
+                            <Button v-else variant="ghost" size="icon" class="text-destructive hover:text-destructive"
+                                @click="openStopConfirmModal(room.liveId)">
+                                <Square class="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" @click="openEditRoomModal(room.liveId)">
+                                <Pencil class="w-4 h-4" />
+                            </Button>
+
+                            <DropdownMenu>
+                                <DropdownMenuTrigger as-child>
+                                    <Button variant="ghost" size="icon">
+                                        <MoreHorizontal class="w-4 h-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem v-if="!room.isTop" @click="handleTopRoom(room.liveId)">
+                                        <Pin class="w-4 h-4 mr-2" />
+                                        <span>置顶</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem v-else @click="handleUnTopRoom(room.liveId)">
+                                        <PinOff class="w-4 h-4 mr-2" />
+                                        <span>取消置顶</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem @click="handleGoToRoomFolder(room)">
+                                        <Folder class="w-4 h-4 mr-2" />
+                                        <span>打开文件夹</span>
+                                    </DropdownMenuItem>
+                                    <Separator class="my-1" />
+                                    <DropdownMenuItem @click="openConfirmModal(room.liveId)" variant="destructive">
+                                        <Trash2 class="w-4 h-4 mr-2" />
+                                        <span>删除</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    </CardFooter>
+                </Card>
+            </template>
+            <template v-else>
+                <div class="col-span-full">
+                    <div class="border rounded-md h-32 flex justify-center items-center">
+                        暂无数据
+                    </div>
+                </div>
+            </template>
+        </div>
+
 
         <Pagination v-if="total > 0" v-slot="{ page: currentPage }" :total="total" :items-per-page="pageSize"
             :sibling-count="1" show-edges :page="pageNum" @update:page="handlePageChange">
@@ -148,6 +230,7 @@ import {
     exportRoomInfo,
 } from "@/api/stream/live_manage";
 import { getRoomFilePath } from "@/api/media/file_manage";
+import { getStreamDisplayMode, setStreamDisplayMode } from "@/store/cache";
 import type { RoomInfo } from "@/types/stream";
 import RoomModal from "@/components/modal/stream/RoomModal.vue";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
@@ -164,6 +247,14 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -179,7 +270,7 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Pencil, Trash2, Play, Square, CopyPlus, Folder, Pin, PinOff, MoreHorizontal } from "lucide-vue-next";
+import { Plus, Pencil, Trash2, Play, Square, CopyPlus, Folder, Pin, PinOff, MoreHorizontal, List, LayoutGrid } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
@@ -189,7 +280,7 @@ const router = useRouter();
 const showConfirmModal = ref(false);
 const rooms = ref<RoomInfo[]>([]);
 const pageNum = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(12);
 const total = ref(0);
 const roomModal = ref<InstanceType<typeof RoomModal> | null>(null);
 const batchAddRoomModal = ref<InstanceType<typeof BatchAddRoomModal> | null>(
@@ -202,6 +293,13 @@ const filter = ref({
     roomName: "",
     platform: "",
 });
+
+const displayMode = ref(getStreamDisplayMode() || "list");
+
+const setDisplayMode = (mode: "list" | "card") => {
+    displayMode.value = mode;
+    setStreamDisplayMode(mode);
+};
 
 const showStartConfirmModal = ref(false);
 const roomToStart = ref<number | null>(null);

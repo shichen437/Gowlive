@@ -9,7 +9,7 @@ type YY struct {
 
 const (
 	domain         = "www.yy.com"
-	platform       = "douyin"
+	platform       = "yy"
 	video_data_url = "https://webuser.yy.com/u/videos/data/"
 	regexpProps    = `window\.pageProps\s*=\s*([\s\S]*?)</script>`
 )

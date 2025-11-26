@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 space-y-4">
+    <div class="space-y-4">
         <Card>
             <CardHeader>
                 <CardTitle>项目介绍</CardTitle>
@@ -73,7 +73,7 @@ const hasNewVersion = ref(false)
 
 onMounted(async () => {
     try {
-        const res:any = await apiLatestVersion()
+        const res: any = await apiLatestVersion()
         if (res.code !== 0) {
             return
         }
