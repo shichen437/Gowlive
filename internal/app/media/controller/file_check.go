@@ -23,3 +23,7 @@ func (f *fileCheckController) Post(ctx context.Context, req *v1.PostFileCheckReq
 func (f *fileCheckController) Delete(ctx context.Context, req *v1.DeleteFileCheckReq) (res *v1.DeleteFileCheckRes, err error) {
 	return service.FileCheck().Delete(ctx, req)
 }
+
+func (f *fileCheckController) DeleteAll(ctx context.Context, req *v1.DeleteAllCheckReq) (res *v1.DeleteAllCheckRes, err error) {
+	return service.FileCheck().DeleteAll(ctx, req)
+}

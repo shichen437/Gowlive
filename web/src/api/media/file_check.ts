@@ -22,3 +22,10 @@ export async function deleteTask(id: number) {
     method: "delete",
   });
 }
+
+export async function deleteAllTask() {
+  return request({
+    url: "/media/check/all",
+    method: "delete",
+  });
+}

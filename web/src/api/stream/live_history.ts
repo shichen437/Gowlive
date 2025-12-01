@@ -15,3 +15,10 @@ export async function deleteHistory(id: number) {
     method: "delete",
   });
 }
+
+export async function deleteAllHistory() {
+  return request({
+    url: "/live/history/all",
+    method: "delete",
+  });
+}

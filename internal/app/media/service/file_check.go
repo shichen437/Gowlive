@@ -16,6 +16,7 @@ type (
 		List(ctx context.Context, req *v1.GetFileCheckListReq) (res *v1.GetFileCheckListRes, err error)
 		Post(ctx context.Context, req *v1.PostFileCheckReq) (res *v1.PostFileCheckRes, err error)
 		Delete(ctx context.Context, req *v1.DeleteFileCheckReq) (res *v1.DeleteFileCheckRes, err error)
+		DeleteAll(ctx context.Context, req *v1.DeleteAllCheckReq) (res *v1.DeleteAllCheckRes, err error)
 	}
 )
 

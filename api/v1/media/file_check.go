@@ -38,3 +38,11 @@ type DeleteFileCheckReq struct {
 type DeleteFileCheckRes struct {
 	g.Meta `mime:"application/json"`
 }
+
+type DeleteAllCheckReq struct {
+	g.Meta `path:"/media/check/all" method:"delete" tags:"文件检测" summary:"清空记录"`
+}
+
+type DeleteAllCheckRes struct {
+	g.Meta `mime:"application/json"`
+}

@@ -19,3 +19,7 @@ func (c *liveHistoryController) List(ctx context.Context, req *v1.GetLiveHistory
 func (c *liveHistoryController) Delete(ctx context.Context, req *v1.DeleteLiveHistoryReq) (res *v1.DeleteLiveHistoryRes, err error) {
 	return service.LiveHistory().Delete(ctx, req)
 }
+
+func (c *liveHistoryController) DeleteAll(ctx context.Context, req *v1.DeleteAllHistoryReq) (res *v1.DeleteAllHistoryRes, err error) {
+	return service.LiveHistory().DeleteAll(ctx, req)
+}

@@ -15,6 +15,7 @@ type (
 	ILiveHistory interface {
 		List(ctx context.Context, req *v1.GetLiveHistoryListReq) (res *v1.GetLiveHistoryListRes, err error)
 		Delete(ctx context.Context, req *v1.DeleteLiveHistoryReq) (res *v1.DeleteLiveHistoryRes, err error)
+		DeleteAll(ctx context.Context, req *v1.DeleteAllHistoryReq) (res *v1.DeleteAllHistoryRes, err error)
 	}
 )
 

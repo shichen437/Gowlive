@@ -72,3 +72,11 @@ func (s *sFileCheck) Delete(ctx context.Context, req *v1.DeleteFileCheckReq) (re
 	}
 	return
 }
+
+func (s *sFileCheck) DeleteAll(ctx context.Context, req *v1.DeleteAllCheckReq) (res *v1.DeleteAllCheckRes, err error) {
+	_, err = dao.FileCheckTask.Ctx(ctx).WhereGT(dao.FileCheckTask.Columns().FileStatus, 0).Delete()
+	if err != nil {
+		return
+	}
+	return
+}

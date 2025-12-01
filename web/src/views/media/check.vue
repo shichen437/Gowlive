@@ -1,5 +1,11 @@
 <template>
     <div class="space-y-4">
+        <div class="flex justify-between items-center">
+            <Button variant="destructive" @click="openConfirmDeleteAllModal">
+                <Trash2 class="w-4 h-4 mr-2" />
+                清空记录
+            </Button>
+        </div>
         <div class="border rounded-md">
             <Table>
                 <TableHeader>
@@ -62,11 +68,13 @@
 
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
         :onConfirm="performDelete" title="确认删除" description="你确定要删除这个任务吗？此操作无法撤销。" />
+    <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
+        :onConfirm="handleDeleteAllTasks" title="确认清空" description="你确定要清空所有记录吗？此操作无法撤销。" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { listTasks, deleteTask } from '@/api/media/file_check';
+import { listTasks, deleteTask, deleteAllTask } from '@/api/media/file_check';
 import type { FileCheckTask } from '@/types/media';
 import {
     Table,
@@ -96,6 +104,7 @@ const total = ref(0);
 const pageNum = ref(1);
 const pageSize = ref(10);
 const executing = ref(false);
+const showConfirmDeleteAllModal = ref(false);
 let timer: any = null;
 
 const getList = async () => {
@@ -138,6 +147,10 @@ const openConfirmModal = (id: number) => {
     showConfirmModal.value = true;
 };
 
+const openConfirmDeleteAllModal = () => {
+    showConfirmDeleteAllModal.value = true;
+};
+
 async function performDelete() {
     if (!itemToDelete.value) return;
     try {
@@ -155,6 +168,22 @@ async function performDelete() {
         itemToDelete.value = null;
     }
 };
+
+async function handleDeleteAllTasks() {
+    try {
+        const res: any = await deleteAllTask();
+        if (res.code !== 0) {
+            toast.error(res.msg || "清空失败");
+            return;
+        }
+        getList();
+        toast.success("清空成功");
+    } catch (error) {
+        console.error("Failed to delete all tasks:", error);
+    } finally {
+        showConfirmDeleteAllModal.value = false;
+    }
+}
 
 const handlePageChange = (page: number) => {
     pageNum.value = page;

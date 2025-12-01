@@ -18,9 +18,16 @@ type GetLiveHistoryListRes struct {
 }
 
 type DeleteLiveHistoryReq struct {
-	g.Meta `path:"/live/history/{id}" method:"delete" tags:"直播管理" summary:"直播历史管理"`
+	g.Meta `path:"/live/history/{id}" method:"delete" tags:"直播管理" summary:"删除直播历史"`
 	Id     int `json:"id" dc:"直播历史id"`
 }
 type DeleteLiveHistoryRes struct {
+	g.Meta `mime:"application/json"`
+}
+
+type DeleteAllHistoryReq struct {
+	g.Meta `path:"/live/history/all" method:"delete" tags:"直播管理" summary:"清空直播历史"`
+}
+type DeleteAllHistoryRes struct {
 	g.Meta `mime:"application/json"`
 }

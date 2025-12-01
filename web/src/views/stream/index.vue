@@ -218,7 +218,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import {
     roomList,
@@ -321,6 +321,8 @@ const getRooms = async () => {
         total.value = response.data.total || 0;
     } catch (error) {
         console.error("Failed to fetch rooms:", error);
+    } finally {
+        scheduleRefresh();
     }
 };
 
@@ -563,4 +565,24 @@ const handleExport = async (exportType: number) => {
         console.error("Failed to export rooms:", error);
     }
 };
+
+const refreshInterval = ref<number | null>(null);
+
+const clearRefreshTimers = () => {
+    if (refreshInterval.value !== null) {
+        clearInterval(refreshInterval.value);
+        refreshInterval.value = null;
+    }
+};
+
+const scheduleRefresh = () => {
+    clearRefreshTimers();
+    refreshInterval.value = window.setInterval(() => {
+        getRooms();
+    }, 20000);
+};
+
+onUnmounted(() => {
+    clearRefreshTimers();
+});
 </script>

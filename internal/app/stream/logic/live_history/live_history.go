@@ -50,3 +50,11 @@ func (s *sLiveHistory) Delete(ctx context.Context, req *v1.DeleteLiveHistoryReq)
 	})
 	return
 }
+
+func (s *sLiveHistory) DeleteAll(ctx context.Context, req *v1.DeleteAllHistoryReq) (res *v1.DeleteAllHistoryRes, err error) {
+	_, err = dao.LiveHistory.Ctx(ctx).Where(dao.LiveHistory.Columns().IsDelete, 0).Update(do.LiveHistory{
+		IsDelete:  1,
+		UpdatedAt: utils.Now(),
+	})
+	return
+}
