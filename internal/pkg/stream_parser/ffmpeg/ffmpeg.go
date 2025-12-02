@@ -39,16 +39,20 @@ type Parser struct {
 	timeoutInUs string
 	referer     string
 	format      string
-	st          string
+	st          string // 切片时间
+	fr          bool   // 固定分辨率
 	statusReq   chan struct{}
 	statusResp  chan map[string]string
 	cmdLock     sync.Mutex
 }
 
 func (b *builder) Build(cfg map[string]string) (parser.Parser, error) {
-	debug := false
+	debug, fr := false, false
 	if debugFlag, ok := cfg["debug"]; ok && debugFlag != "" {
 		debug = true
+	}
+	if frFlag, ok := cfg["fr"]; ok && frFlag == "true" {
+		fr = true
 	}
 	return &Parser{
 		debug:       debug,
@@ -59,6 +63,7 @@ func (b *builder) Build(cfg map[string]string) (parser.Parser, error) {
 		referer:     cfg["referer"],
 		format:      cfg["format"],
 		st:          cfg["st"],
+		fr:          fr,
 	}, nil
 }
 
@@ -220,6 +225,8 @@ func (p *Parser) basicArgs(ffUserAgent, referer string, sUrl *url.URL) []string 
 		"-nostats",
 		"-progress", "-",
 		"-y", "-re",
+		"-fflags", "+genpts+igndts+discardcorrupt",
+		"-err_detect", "ignore_err",
 		"-reconnect", "1",
 		"-reconnect_streamed", "1",
 		"-reconnect_delay_max", "5",
@@ -264,7 +271,13 @@ func (p *Parser) mp4Args(file string, args []string) []string {
 }
 
 func (p *Parser) mkvArgs(file string, args []string) []string {
-	args = append(args, "-c", "copy")
+	if p.fr {
+		args = append(args, "-vf", "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:black")
+		args = append(args, "-c:v", "libx264", "-preset", "fast", "-crf", "23")
+		args = append(args, "-c:a", "aac", "-b:a", "128k")
+	} else {
+		args = append(args, "-c", "copy")
+	}
 
 	if gconv.Int(p.st) > 0 {
 		template := utils.BuildSegmentTemplate(file, ".mkv")

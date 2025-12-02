@@ -122,7 +122,7 @@
                     </CardHeader>
                     <CardContent>
                         <CardDescription class="line-clamp-1" :title="room.roomName">
-                            {{ room.roomName }}
+                            {{ room.roomName == "" ? "-" : room.roomName }}
                         </CardDescription>
                     </CardContent>
                     <CardFooter class="flex justify-between items-center pt-0">

@@ -124,11 +124,16 @@ func (r *recorder) tryRecord(ctx context.Context) error {
 	if err = os.MkdirAll(outputPath, os.ModePerm); err != nil {
 		return gerror.Wrap(err, "failed to create output path")
 	}
+	fr := "false"
+	if r.session.State.Platform == "yy" && mr.GetSettingsManager().GetSetting(consts.SKFixedResolution) == 1 {
+		fr = "true"
+	}
 	parserCfg := map[string]string{
 		"timeout_in_us": strconv.Itoa(100000000),
 		"referer":       r.session.Config.RoomUrl,
 		"format":        r.session.Config.Format,
 		"st":            strconv.Itoa(r.session.Config.SegmentTime),
+		"fr":            fr,
 	}
 	p, err := newParser(parserCfg)
 	if err != nil {

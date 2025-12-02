@@ -114,6 +114,31 @@
             <CardContent>
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1">
+                            <Label for="fixed-resolution" class="flex flex-col space-y-1">
+                                <span class="text-md">固定分辨率</span>
+                            </Label>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Badge variant="secondary">BETA</Badge>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>仅针对 YY 直播录制 MKV 格式时遇到分辨率变更时花屏问题。</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                        <Switch id="fixed-resolution" :checked="fixedResolution" v-model="fixedResolution"
+                            @update:checked="updateSetting('sk_fixed_resolution', $event)" />
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardContent>
+                <div class="grid gap-2">
+                    <div class="flex items-center justify-between">
                         <Label for="live-end-notify" class="flex flex-col space-y-1">
                             <span class="text-md">下播通知</span>
                         </Label>
@@ -132,6 +157,7 @@ import {
     Card,
     CardContent,
 } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -153,6 +179,7 @@ import { getSettings, updateSettings } from '@/api/system/settings';
 import { toast } from "vue-sonner";
 
 const liveEndNotify = ref(false);
+const fixedResolution = ref(false);
 const filenameTemplate = ref<number>();
 const archiveStrategy = ref<number>();
 const diskProtection = ref<number>();
@@ -168,14 +195,16 @@ async function fetchSetting(key: string): Promise<Record<string, number>> {
 let loadingSettings = true
 onMounted(async () => {
     try {
-        const result: Record<string, number> = await fetchSetting('sk_live_end_notify,sk_filename_template,sk_archive_strategy,sk_disk_protection,sk_auto_clean_little_file');
+        const result: Record<string, number> = await fetchSetting('sk_live_end_notify,sk_filename_template,sk_archive_strategy,sk_disk_protection,sk_auto_clean_little_file,sk_fixed_resolution');
         liveEndNotify.value = result['sk_live_end_notify'] == 1;
+        fixedResolution.value = result['sk_fixed_resolution'] == 1;
         filenameTemplate.value = result['sk_filename_template'] || 0;
         archiveStrategy.value = result['sk_archive_strategy'] || 0;
         diskProtection.value = result['sk_disk_protection'] || 0;
         autoCleanLittleFile.value = result['sk_auto_clean_little_file'] || 0;
 
         bindToggleSetting(liveEndNotify, 'sk_live_end_notify');
+        bindToggleSetting(fixedResolution, 'sk_fixed_resolution');
         loadingSettings = false
     } catch (error) {
         console.error('Error fetching settings:', error);

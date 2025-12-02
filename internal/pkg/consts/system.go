@@ -29,4 +29,5 @@ const (
 	SKLiveEndNotify       = "sk_live_end_notify"
 	SKDiskProtection      = "sk_disk_protection"
 	SKAutoCleanLittleFile = "sk_auto_clean_little_file"
+	SKFixedResolution     = "sk_fixed_resolution"
 )
