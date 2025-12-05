@@ -1,6 +1,7 @@
 <div align="center">
   <img src="resources/assets/logo.png" alt="Gowlive Logo" width="80"/>
   <h1>Gowlive</h1>
+  <p><a href="./CHANGELOG.md">更新日志</a></p>
   <p>
     <strong>一个基于 GoFrame 和 Vue3 构建的直播录制平台</strong>
   </p>
@@ -34,6 +35,7 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 
 - 🔴 **直播录制**: 支持实时录制/定时录制/智能录制任务。
 - 🕒 **直播历史**: 录制直播时记录直播历史。
+- 📽️ **视频剪辑**: 支持对录制视频进行快速剪辑。
 - 🫥 **主播数据**: 记录主播基本信息并自动更新，展示统计图表。
 - 🍪 **Cookie管理**: 方便地管理不同平台的登录Cookie。
 - 📁 **文件管理**: 管理录制下来的视频文件。
@@ -48,6 +50,7 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 
 - 抖音
 - Bilibili
+- YY直播
 
 ## 📸 预览
 
@@ -174,9 +177,13 @@ npm install
 npm run dev # 或 yarn dev
 ```
 
-## 🤝 贡献
+## 🤝 感谢贡献
 
-欢迎提交 Issue 或 Pull Request，参与项目共建！
+衷心感谢每位贡献者对 Gowlive 的支持与付出，致以诚挚的敬意。
+
+<a href="https://github.com/shichen437/Gowlive/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=shichen437/Gowlive" />
+</a>
 
 ## 📄 开源协议
 
