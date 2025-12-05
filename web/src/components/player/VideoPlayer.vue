@@ -250,4 +250,27 @@ watch(
         }
     }
 );
+
+function getCurrentTime() {
+    return player ? player.currentTime : 0;
+}
+
+function getDuration() {
+    return player ? player.duration : 0;
+}
+
+function play() {
+    player?.play();
+}
+
+function pause() {
+    player?.pause();
+}
+
+defineExpose({
+    getCurrentTime,
+    getDuration,
+    play,
+    pause
+});
 </script>
