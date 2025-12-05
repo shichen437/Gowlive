@@ -1,12 +1,21 @@
 <template>
     <div class="flex h-screen">
         <div class="w-3/4 flex flex-col p-4">
-            <h1 class="text-lg font-semibold mb-4 truncate">
-                <span v-if="filename">{{ filename }}</span>
-                <span v-else>No file selected</span>
-            </h1>
-            <div class="grow flex items-center justify-center rounded-lg">
-                <VideoPlayer v-if="videoUrl" :url="videoUrl" :format="videoFormat" :isLive="false" />
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-lg font-semibold truncate max-w-2xl">
+                    <span v-if="filename">{{ filename }}</span>
+                    <span v-else>No file selected</span>
+                </h1>
+                <div class="space-x-2" v-if="filename">
+                    <Button variant="outline" size="sm" @click="openClipModal">
+                        <Scissors class="w-4 h-4 mr-2" />
+                        视频剪辑
+                    </Button>
+                </div>
+            </div>
+            
+            <div class="grow flex items-center justify-center rounded-lg bg-black/5 overflow-hidden">
+                <VideoPlayer ref="playerRef" v-if="videoUrl" :url="videoUrl" :format="videoFormat" :isLive="false" />
                 <div v-else class="text-muted-foreground">无法加载视频，缺少地址或参数。</div>
             </div>
         </div>
@@ -33,13 +42,55 @@
             </div>
         </div>
     </div>
+
+    <Dialog :open="isClipModalOpen" @update:open="isClipModalOpen = $event">
+        <DialogContent class="sm:max-w-[500px]">
+            <DialogHeader>
+                <DialogTitle>视频剪辑</DialogTitle>
+                <DialogDescription>
+                    选择开始和结束时间，生成精彩片段。原文件将保留。
+                </DialogDescription>
+            </DialogHeader>
+            <div class="grid gap-6 py-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <Label>开始时间</Label>
+                        <div class="flex gap-2">
+                            <Input v-model="clipStart" placeholder="00:00:00" />
+                            <Button variant="secondary" size="icon" @click="setStartToCurrent" title="设为当前播放时间">
+                                <MapPin class="w-4 h-4" />
+                            </Button>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <Label>结束时间</Label>
+                        <div class="flex gap-2">
+                            <Input v-model="clipEnd" placeholder="00:00:00" />
+                            <Button variant="secondary" size="icon" @click="setEndToCurrent" title="设为当前播放时间">
+                                <MapPin class="w-4 h-4" />
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-sm text-muted-foreground bg-muted p-2 rounded">
+                   提示：为了快速处理，剪辑采用无损模式（Copy），时间定位可能存在关键帧级别的轻微误差。
+                </div>
+            </div>
+            <DialogFooter>
+                <Button variant="outline" @click="isClipModalOpen = false">取消</Button>
+                <Button @click="handleClipSubmit" :disabled="isClipping">
+                    {{ isClipping ? '剪辑中...' : '开始剪辑' }}
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import VideoPlayer from '@/components/player/VideoPlayer.vue';
-import { listFiles } from "@/api/media/file_manage";
+import { listFiles, clipFile } from "@/api/media/file_manage";
 import type { FileInfo } from "@/types/media";
 import { canPlay } from "@/types/media";
 import { toast } from "vue-sonner";
@@ -51,6 +102,13 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { 
+    Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter 
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from "@/components/ui/button";
+import { Scissors, MapPin } from "lucide-vue-next"; 
 import { useTheme } from "@/composables/useTheme";
 
 useTheme();
@@ -60,6 +118,13 @@ const router = useRouter();
 const filename = ref('');
 const currentPath = ref('');
 const files = ref<FileInfo[]>([]);
+const playerRef = ref<InstanceType<typeof VideoPlayer> | null>(null);
+
+// 剪辑相关状态
+const isClipModalOpen = ref(false);
+const clipStart = ref("00:00:00");
+const clipEnd = ref("00:00:00");
+const isClipping = ref(false);
 
 const videoFormat = computed<'flv' | 'mp4' | 'mp3' | 'mkv' | 'ts'>(() => {
     const ext = (filename.value.split('.').pop() || '').toLowerCase();
@@ -81,7 +146,6 @@ function buildApiUrl(path: string, filename: string): string {
 const videoUrl = computed(() => {
     if (currentPath.value && filename.value) {
         const url = buildApiUrl(currentPath.value, filename.value);
-        console.log('Playback URL:', url);
         return url;
     }
     return '';
@@ -129,4 +193,62 @@ watch(() => route.query.path, (newPath) => {
 watch(() => route.query.filename, (newFilename) => {
     filename.value = (newFilename as string) || '';
 });
+
+// 格式化时间 helper
+const formatSeconds = (seconds: number) => {
+    const date = new Date(0);
+    date.setSeconds(seconds);
+    return date.toISOString().substr(11, 8);
+};
+
+const openClipModal = () => {
+    isClipModalOpen.value = true;
+    const duration = playerRef.value?.getDuration() || 0;
+    if (duration > 0 && clipEnd.value === "00:00:00") {
+        clipEnd.value = formatSeconds(duration);
+    }
+};
+
+const setStartToCurrent = () => {
+    const time = playerRef.value?.getCurrentTime() || 0;
+    clipStart.value = formatSeconds(time);
+};
+
+const setEndToCurrent = () => {
+    const time = playerRef.value?.getCurrentTime() || 0;
+    clipEnd.value = formatSeconds(time);
+};
+
+const handleClipSubmit = async () => {
+    if (!filename.value) return;
+    
+    if (clipStart.value >= clipEnd.value) {
+        toast.error("结束时间必须大于开始时间");
+        return;
+    }
+
+    isClipping.value = true;
+    try {
+        const res: any = await clipFile({
+            path: currentPath.value,
+            filename: filename.value,
+            startTime: clipStart.value,
+            endTime: clipEnd.value
+        });
+
+        if (res.code === 0) {
+            toast.success("剪辑成功，文件已保存");
+            isClipModalOpen.value = false;
+            // 刷新文件列表以显示新文件
+            fetchFiles(currentPath.value);
+        } else {
+            toast.error(res.msg || "剪辑失败");
+        }
+    } catch (error) {
+        console.error("Clip failed:", error);
+        toast.error("请求失败");
+    } finally {
+        isClipping.value = false;
+    }
+};
 </script>
