@@ -54,3 +54,15 @@ type GetFilePlayReq struct {
 type GetFilePlayRes struct {
 	g.Meta `mime:"application/octet-stream"`
 }
+
+type PostFileClipReq struct {
+	g.Meta    `path:"/media/file/clip" method:"post" tags:"文件管理" summary:"视频切片"`
+	Path      string `json:"path" v:"required#文件路径不能为空"`
+	Filename  string `json:"filename" v:"required#文件名不能为空"`
+	StartTime string `json:"startTime" v:"required#开始时间不能为空"`
+	EndTime   string `json:"endTime" v:"required#结束时间不能为空"`
+}
+
+type PostFileClipRes struct {
+	g.Meta `mime:"application/json"`
+}
