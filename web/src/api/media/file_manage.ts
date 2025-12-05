@@ -31,3 +31,11 @@ export async function getEmptyDir(params: any) {
     params,
   });
 }
+
+export async function clipFile(data: any) {
+  return request({
+    url: "/media/file/clip",
+    method: "post",
+    data: data,
+  });
+}
