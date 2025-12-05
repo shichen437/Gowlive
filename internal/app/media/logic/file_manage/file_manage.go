@@ -11,7 +11,9 @@ import (
 	"strings"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/os/gtime"
 	v1 "github.com/shichen437/gowlive/api/v1/media"
 	"github.com/shichen437/gowlive/internal/app/media/model"
 	"github.com/shichen437/gowlive/internal/app/media/service"
@@ -176,6 +178,41 @@ func (s *sFileManage) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1
 	}
 
 	http.ServeContent(r.Response.Writer, r.Request, fi.Name(), modTime, f)
+
+	return res, nil
+}
+
+func (s *sFileManage) Clip(ctx context.Context, req *v1.PostFileClipReq) (res *v1.PostFileClipRes, err error) {
+	res = &v1.PostFileClipRes{}
+
+	// 1. 获取原文件绝对路径
+	absPath, err := utils.FileAbsPath(req.Path, req.Filename)
+	if err != nil {
+		return nil, gerror.New("获取文件路径失败")
+	}
+
+	// 2. 生成输出文件名 (例如: original_clip_123456.mp4)
+	ext := filepath.Ext(req.Filename)
+	name := strings.TrimSuffix(req.Filename, ext)
+	outputFilename := fmt.Sprintf("%s_clip_%d%s", name, gtime.Now().Unix(), ext)
+	outputPath := filepath.Join(filepath.Dir(absPath), outputFilename)
+
+	// 3. 构建 FFmpeg 命令
+	fb := utils.NewFFmpegBuilder()
+	fb.AddArgs("-ss", req.StartTime)
+	fb.AddArgs("-to", req.EndTime)
+	fb.Input(absPath)
+	fb.AddArgs("-c", "copy")
+	fb.AddArgs("-avoid_negative_ts", "1")
+	fb.AddArgs("-map_metadata", "-1") // 清除元数据，避免时长显示错误
+	fb.Output(outputPath)
+
+	// 4. 执行命令
+	_, err = fb.Execute(ctx)
+	if err != nil {
+		g.Log().Error(ctx, "视频剪辑失败:", err)
+		return nil, gerror.New("视频剪辑失败")
+	}
 
 	return res, nil
 }
