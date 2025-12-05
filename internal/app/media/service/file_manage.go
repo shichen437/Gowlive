@@ -18,6 +18,7 @@ type (
 		Empty(ctx context.Context, req *v1.GetEmptyFolderReq) (res *v1.GetEmptyFolderRes, err error)
 		AnchorFilePath(ctx context.Context, req *v1.GetAnchorFilePathReq) (res *v1.GetAnchorFilePathRes, err error)
 		Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1.GetFilePlayRes, err error)
+		Clip(ctx context.Context, req *v1.PostFileClipReq) (res *v1.PostFileClipRes, err error)
 	}
 )
 
