@@ -31,3 +31,7 @@ func (f *fileManageController) Play(ctx context.Context, req *v1.GetFilePlayReq)
 func (f *fileManageController) AnchorFilePath(ctx context.Context, req *v1.GetAnchorFilePathReq) (res *v1.GetAnchorFilePathRes, err error) {
 	return service.FileManage().AnchorFilePath(ctx, req)
 }
+
+func (f *fileManageController) Clip(ctx context.Context, req *v1.PostFileClipReq) (res *v1.PostFileClipRes, err error) {
+	return service.FileManage().Clip(ctx, req)
+}
