@@ -1,18 +1,18 @@
 {
-  "version": "0.1.2",
-  "date": "2025-12-05",
+  "version": "0.1.3",
+  "date": "2025-12-12",
   "info": {
     "feature": {
       "name": "功能",
-      "items": [
-        {
-          "desc": "新增支持视频剪辑"
-        }
-      ]
+      "items": []
     },
     "enhance": {
       "name": "优化",
-      "items": []
+      "items": [
+        {
+          "desc": "优化ffmpeg退出逻辑"
+        }
+      ]
     },
     "fix": {
       "name": "修复",

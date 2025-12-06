@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
@@ -206,20 +208,56 @@ func (b *FFmpegBuilder) String() string {
 
 // Execute 执行 FFmpeg 命令
 func (b *FFmpegBuilder) Execute(ctx context.Context) ([]byte, error) {
-	cmd := b.Build()
+	cmd := b.BuildWithContext(ctx)
 	g.Log().Debug(ctx, "执行FFmpeg命令:", b.String())
-	output, err := cmd.CombinedOutput()
-
+	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		lastOutput := output
-		if len(output) > 500 {
-			lastOutput = output[len(output)-500:]
-		}
-		g.Log().Errorf(ctx, "FFmpeg命令执行失败: %v, 输出: %s", err, string(lastOutput))
-		return output, fmt.Errorf("FFmpeg执行失败: %w, 输出: %s", err, string(lastOutput))
+		return nil, err
+	}
+	stderrPipe, err := cmd.StderrPipe()
+	if err != nil {
+		return nil, err
 	}
 
-	return output, nil
+	if err := cmd.Start(); err != nil {
+		return nil, err
+	}
+
+	outCh := make(chan []byte, 1)
+	errCh := make(chan []byte, 1)
+
+	go func() {
+		defer close(outCh)
+		b, _ := io.ReadAll(stdoutPipe)
+		outCh <- b
+	}()
+	go func() {
+		defer close(errCh)
+		_, _ = io.Copy(io.Discard, stderrPipe)
+	}()
+
+	done := make(chan error, 1)
+	go func() { done <- cmd.Wait() }()
+
+	select {
+	case err = <-done:
+	case <-ctx.Done():
+		if cmd.Process != nil {
+			_ = syscall.Kill(-cmd.Process.Pid, syscall.SIGTERM)
+		}
+		select {
+		case <-time.After(3 * time.Second):
+			if cmd.Process != nil {
+				_ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
+			}
+			<-done
+			err = ctx.Err()
+		case err = <-done:
+		}
+	}
+
+	out := <-outCh
+	return out, err
 }
 
 // ExecuteWithProgress 执行 FFmpeg 命令并返回进度读取器
