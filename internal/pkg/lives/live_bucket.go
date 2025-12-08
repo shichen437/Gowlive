@@ -6,38 +6,24 @@ import (
 	"time"
 )
 
-type Level struct {
-	LimitPerSec int
-}
-
 type PlatformBucket struct {
-	mu sync.Mutex
-
+	mu       sync.Mutex
 	platform string
 
-	levels       []Level
-	currentIdx   int
 	capacity     int
 	tokens       int
+	currentUsed  int
 	lastRefillAt time.Time
-
-	consecutiveAtLimit int
-
-	lastSecUsed int
 }
 
-func NewPlatformBucket(platform string, levels []Level) *PlatformBucket {
-	if len(levels) == 0 {
-		levels = defaultLevels
-	}
+func NewPlatformBucket(platform string, capacity int) *PlatformBucket {
 	now := time.Now()
 	return &PlatformBucket{
 		platform:     platform,
-		levels:       levels,
-		currentIdx:   0,
-		capacity:     levels[0].LimitPerSec,
-		tokens:       levels[0].LimitPerSec,
+		capacity:     capacity,
+		tokens:       capacity,
 		lastRefillAt: now,
+		currentUsed:  0,
 	}
 }
 
@@ -49,7 +35,7 @@ func (b *PlatformBucket) TryAcquire(n int) bool {
 	}
 	if b.tokens >= n {
 		b.tokens -= n
-		b.lastSecUsed += n
+		b.currentUsed += n
 		return true
 	}
 	return false
@@ -60,10 +46,10 @@ func (b *PlatformBucket) Acquire(ctx context.Context, n int) error {
 		return nil
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 7*time.Second)
 	defer cancel()
 
-	ticker := time.NewTicker(203 * time.Millisecond)
+	ticker := time.NewTicker(321 * time.Millisecond)
 	defer ticker.Stop()
 
 	for {
@@ -83,50 +69,26 @@ func (b *PlatformBucket) refill(now time.Time) {
 	defer b.mu.Unlock()
 
 	b.tokens = b.capacity
-
-	atLimit := b.lastSecUsed >= b.capacity
-	if atLimit {
-		b.consecutiveAtLimit++
-	} else {
-		b.consecutiveAtLimit = 0
-	}
-	for b.consecutiveAtLimit >= 5 && b.currentIdx < len(b.levels)-1 {
-		b.currentIdx++
-		b.capacity = b.levels[b.currentIdx].LimitPerSec
-		b.consecutiveAtLimit = 0
-		b.tokens = b.capacity
-	}
-
-	b.lastSecUsed = 0
+	b.currentUsed = 0
 	b.lastRefillAt = now
 }
 
 type BucketSnapshot struct {
-	Platform           string    `json:"platform"`
-	CapacityPerSec     int       `json:"capacityPerSec"`
-	TokensAvailable    int       `json:"tokensAvailable"`
-	CurrentLevelIndex  int       `json:"currentLevelIndex"`
-	ConsecutiveAtLimit int       `json:"consecutiveAtLimit"`
-	LastRefillAt       time.Time `json:"lastRefillAt"`
-	LastSecondUsed     int       `json:"lastSecondUsed"`
-	Levels             []int     `json:"levels"`
+	Platform        string    `json:"platform"`
+	Capacity        int       `json:"capacity"`
+	TokensAvailable int       `json:"tokensAvailable"`
+	LastRefillAt    time.Time `json:"lastRefillAt"`
+	CurrentUsed     int       `json:"currentUsed"`
 }
 
 func (b *PlatformBucket) snapshot() BucketSnapshot {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	levels := make([]int, len(b.levels))
-	for i, lv := range b.levels {
-		levels[i] = lv.LimitPerSec
-	}
 	return BucketSnapshot{
-		Platform:           b.platform,
-		CapacityPerSec:     b.capacity,
-		TokensAvailable:    b.tokens,
-		CurrentLevelIndex:  b.currentIdx,
-		ConsecutiveAtLimit: b.consecutiveAtLimit,
-		LastRefillAt:       b.lastRefillAt,
-		LastSecondUsed:     b.lastSecUsed,
-		Levels:             levels,
+		Capacity:        b.capacity,
+		CurrentUsed:     b.currentUsed,
+		LastRefillAt:    b.lastRefillAt,
+		Platform:        b.platform,
+		TokensAvailable: b.tokens,
 	}
 }

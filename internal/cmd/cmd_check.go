@@ -21,7 +21,7 @@ func CheckFile() {
 		ids = append(ids, task.Id)
 	}
 
-	manager.GetFileCheckManager().BatchAdd(ids)
+	go manager.GetFileCheckManager().BatchAdd(ids)
 }
 
 func getTaskIds4Check(ctx context.Context) []*entity.FileCheckTask {

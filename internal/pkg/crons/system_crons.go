@@ -34,5 +34,5 @@ func SystemCron(ctx context.Context) {
 	}, anchorInfo)
 
 	// 启动时执行一次
-	AnchorInfoCron(ctx)
+	go AnchorInfoCron(ctx)
 }

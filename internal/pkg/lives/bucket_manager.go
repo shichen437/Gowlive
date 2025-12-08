@@ -7,17 +7,14 @@ import (
 )
 
 var (
-	instance      *TokenBucketManager
-	once          sync.Once
-	defaultLevels = []Level{
-		{LimitPerSec: 3},
-		{LimitPerSec: 5},
-	}
+	instance        *TokenBucketManager
+	once            sync.Once
+	defaultCapacity = 1
 )
 
 func GetBucketManager() *TokenBucketManager {
 	once.Do(func() {
-		instance = NewTokenBucketManager(defaultLevels)
+		instance = NewTokenBucketManager()
 		instance.Start()
 	})
 	return instance
@@ -26,27 +23,24 @@ func GetBucketManager() *TokenBucketManager {
 type TokenBucketManager struct {
 	mu        sync.RWMutex
 	buckets   map[string]*PlatformBucket
-	levels    []Level
+	capacity  int
 	ticker    *time.Ticker
 	stopChan  chan struct{}
 	startOnce sync.Once
 	stopOnce  sync.Once
 }
 
-func NewTokenBucketManager(levels []Level) *TokenBucketManager {
-	if len(levels) == 0 {
-		levels = defaultLevels
-	}
+func NewTokenBucketManager() *TokenBucketManager {
 	return &TokenBucketManager{
 		buckets:  make(map[string]*PlatformBucket),
-		levels:   levels,
+		capacity: defaultCapacity,
 		stopChan: make(chan struct{}),
 	}
 }
 
 func (m *TokenBucketManager) Start() {
 	m.startOnce.Do(func() {
-		m.ticker = time.NewTicker(2 * time.Second)
+		m.ticker = time.NewTicker(1500 * time.Millisecond)
 		go func() {
 			for {
 				select {
@@ -81,7 +75,7 @@ func (m *TokenBucketManager) EnsureBucket(platform string) *PlatformBucket {
 	if bb, ok := m.buckets[platform]; ok {
 		return bb
 	}
-	nb := NewPlatformBucket(platform, m.levels)
+	nb := NewPlatformBucket(platform, m.capacity)
 	m.buckets[platform] = nb
 	return nb
 }
