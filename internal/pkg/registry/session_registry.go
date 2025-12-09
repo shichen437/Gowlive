@@ -45,16 +45,29 @@ func (r *SessionRegistry) Add(ctx context.Context, liveId int) error {
 
 func (r *SessionRegistry) AddAll(ctx context.Context, liveIds []int) {
 	sessions := service.GenLiveSessionsByIds(ctx, liveIds)
-	var wg sync.WaitGroup
-	for _, session := range sessions {
-		wg.Add(1)
-		go func(s *lives.LiveSession) {
-			defer wg.Done()
-			if err := r.add(ctx, s); err != nil {
-				g.Log().Errorf(ctx, "添加直播会话失败, liveId: %d, err: %v", s.Id, err)
 
+	sessionsByPlatform := make(map[string][]*lives.LiveSession)
+	for _, session := range sessions {
+		if session == nil || session.State.Platform == "" {
+			g.Log().Warningf(ctx, "Skipping session %d due to nil or missing platform", session.Id)
+			continue
+		}
+		sessionsByPlatform[session.State.Platform] = append(sessionsByPlatform[session.State.Platform], session)
+	}
+
+	var wg sync.WaitGroup
+	for platform, platformSessions := range sessionsByPlatform {
+		wg.Add(1)
+		go func(p string, ss []*lives.LiveSession) {
+			defer wg.Done()
+			g.Log().Infof(ctx, "Starting to add sessions for platform: %s, count: %d", p, len(ss))
+			for _, session := range ss {
+				if err := r.add(ctx, session); err != nil {
+					g.Log().Errorf(ctx, "添加直播会话失败, liveId: %d, platform: %s, err: %v", session.Id, p, err)
+				}
 			}
-		}(session)
+			g.Log().Infof(ctx, "Finished adding sessions for platform: %s", p)
+		}(platform, platformSessions)
 	}
 	wg.Wait()
 }
