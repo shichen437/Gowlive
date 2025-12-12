@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/gogf/gf/v2/database/gdb"
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
 	v1 "github.com/shichen437/gowlive/api/v1/stream"
@@ -67,20 +66,20 @@ func (c *sAnchorInfo) Add(ctx context.Context, req *v1.PostAnchorReq) (res *v1.P
 		return
 	}
 	if anchorInfo == nil || anchorInfo.AnchorName == "" {
-		err = gerror.New("解析主播数据失败")
+		err = utils.TError(ctx, "stream.anchor.error.Parse")
 		return
 	}
 	count, _ := dao.AnchorInfo.Ctx(ctx).
 		Where(dao.AnchorInfo.Columns().Platform, anchorInfo.Platform).
 		Where(dao.AnchorInfo.Columns().UniqueId, anchorInfo.UniqueId).Count()
 	if count > 0 {
-		err = gerror.New("重复添加")
+		err = utils.TError(ctx, "stream.anchor.error.Repeated")
 		return
 	}
 	err = saveAnchorInfo(ctx, req, anchorInfo)
 	if err != nil {
 		g.Log().Errorf(ctx, "添加主播数据失败,错误信息：%v", err)
-		err = gerror.New("添加主播数据失败")
+		err = utils.TError(ctx, "stream.anchor.error.Add")
 		return
 	}
 	return
@@ -89,12 +88,12 @@ func (c *sAnchorInfo) Add(ctx context.Context, req *v1.PostAnchorReq) (res *v1.P
 func (c *sAnchorInfo) Delete(ctx context.Context, req *v1.DeleteAnchorReq) (res *v1.DeleteAnchorRes, err error) {
 	_, err = dao.AnchorInfo.Ctx(ctx).Where(dao.AnchorInfo.Columns().Id, req.Id).Delete()
 	if err != nil {
-		err = gerror.New("删除主播数据失败")
+		err = utils.TError(ctx, "stream.anchor.error.Delete")
 		return
 	}
 	_, err = dao.AnchorInfoHistory.Ctx(ctx).Where(dao.AnchorInfoHistory.Columns().AnchorId, req.Id).Delete()
 	if err != nil {
-		err = gerror.New("删除主播历史数据失败")
+		err = utils.TError(ctx, "stream.anchor.error.DeleteHistory")
 		return
 	}
 	return

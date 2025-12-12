@@ -8,7 +8,7 @@
         <Card>
           <router-link to="/stream/index">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle class="text-sm font-medium">房间总数</CardTitle>
+              <CardTitle class="text-sm font-medium">{{ t('project.dashboard.cardTitle.total') }}</CardTitle>
               <Home class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -21,7 +21,7 @@
         <Card>
           <router-link to="/stream/index">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle class="text-sm font-medium">正在录制</CardTitle>
+              <CardTitle class="text-sm font-medium">{{ t('project.dashboard.cardTitle.recording') }}</CardTitle>
               <MonitorDot class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -34,7 +34,7 @@
         <Card>
           <router-link to="/stream/history">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle class="text-sm font-medium">录制时长</CardTitle>
+              <CardTitle class="text-sm font-medium">{{ t('project.dashboard.cardTitle.duration') }}</CardTitle>
               <Clock class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -47,7 +47,7 @@
         <Card>
           <router-link to="/system/notify">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle class="text-sm font-medium">未读通知</CardTitle>
+              <CardTitle class="text-sm font-medium">{{ t('project.dashboard.cardTitle.unread') }}</CardTitle>
               <Bell class="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -67,60 +67,60 @@
                 <span class="font-semibold">CPU</span>
               </div>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>型号:</span> <span>{{ monitorInfo.cpu.modelName }}</span>
+                <span>{{ t('project.dashboard.cpu.model') }}:</span> <span>{{ monitorInfo.cpu.modelName }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>核心:</span> <span>{{ monitorInfo.cpu.cores }}</span>
+                <span>{{ t('project.dashboard.cpu.cores') }}:</span> <span>{{ monitorInfo.cpu.cores }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>频率:</span> <span>{{ monitorInfo.cpu.mhz }} MHz</span>
+                <span>{{ t('project.dashboard.cpu.frequency') }}:</span> <span>{{ monitorInfo.cpu.mhz }} MHz</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>使用率:</span>
+                <span>{{ t('project.dashboard.cpu.usage') }}:</span>
                 <span>{{ monitorInfo.cpu.percent.toFixed(2) }}%</span>
               </p>
             </div>
             <div>
               <div class="flex items-center space-x-2 mb-2">
                 <MemoryStick class="h-4 w-4 text-muted-foreground" />
-                <span class="font-semibold">内存</span>
+                <span class="font-semibold">{{ t('project.dashboard.memory') }}</span>
               </div>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>总计:</span>
+                <span>{{ t('project.dashboard.common.total') }}:</span>
                 <span>{{ formatBytes(monitorInfo.mem.total) }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>已用:</span>
+                <span>{{ t('project.dashboard.common.used') }}:</span>
                 <span>{{ formatBytes(monitorInfo.mem.used) }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>可用:</span>
+                <span>{{ t('project.dashboard.common.available') }}:</span>
                 <span>{{ formatBytes(monitorInfo.mem.available) }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>使用率:</span>
+                <span>{{ t('project.dashboard.common.usage') }}:</span>
                 <span>{{ monitorInfo.mem.usedPercent.toFixed(2) }}%</span>
               </p>
             </div>
             <div>
               <div class="flex items-center space-x-2 mb-2">
                 <HardDrive class="h-4 w-4 text-muted-foreground" />
-                <span class="font-semibold">磁盘 ({{ monitorInfo.disk.fstype != "" ? monitorInfo.disk.fstype : "N/A" }})</span>
+                <span class="font-semibold">{{ t('project.dashboard.disk') }} ({{ monitorInfo.disk.fstype != "" ? monitorInfo.disk.fstype : "N/A" }})</span>
               </div>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>总计:</span>
+                <span>{{ t('project.dashboard.common.total') }}:</span>
                 <span>{{ formatBytes(monitorInfo.disk.total) }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>已用:</span>
+                <span>{{ t('project.dashboard.common.used') }}:</span>
                 <span>{{ formatBytes(monitorInfo.disk.used) }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>可用:</span>
+                <span>{{ t('project.dashboard.common.available') }}:</span>
                 <span>{{ formatBytes(monitorInfo.disk.free) }}</span>
               </p>
               <p class="text-sm text-muted-foreground flex justify-between">
-                <span>使用率:</span>
+                <span>{{ t('project.dashboard.common.usage') }}:</span>
                 <span :class="monitorInfo.disk.usedPercent > 90
                   ? 'text-rose-600'
                   : monitorInfo.disk.usedPercent >= 70
@@ -151,9 +151,12 @@ import { onMounted, onUnmounted, ref, computed } from "vue";
 import { overview as getOverview } from "@/api/system/overview";
 import type { Overview, MonitorInfo } from "@/types/overview";
 import { useUserStore } from "@/store/user";
-import { getGreeting } from "@/utils/greeting";
+import { getGreetingTime } from "@/utils/greeting";
 import { formatBytes } from "@/utils/convert";
 import { createSSEConnection } from "@/lib/sse";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const overviewData = ref<Overview>();
 const monitorInfo = ref<MonitorInfo>({
@@ -167,7 +170,13 @@ const userStore = useUserStore();
 let sseClient: any = null;
 
 const greeting = computed(() => {
-  return getGreeting(userStore.userInfo?.nickname ?? "");
+  const time = getGreetingTime();
+  const greetingKey = `project.dashboard.greeting.${time}`;
+
+  if (time === 'night') {
+    return t(greetingKey);
+  }
+  return t(greetingKey, { nickname: userStore.userInfo?.nickname ?? "" });
 });
 
 onMounted(async () => {

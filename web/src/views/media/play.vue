@@ -4,19 +4,19 @@
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-lg font-semibold truncate max-w-2xl">
                     <span v-if="filename">{{ filename }}</span>
-                    <span v-else>No file selected</span>
+                    <span v-else>{{ t('media.play.toast.loadVideoErr') }}</span>
                 </h1>
                 <div class="space-x-2" v-if="filename">
                     <Button variant="outline" size="sm" @click="openClipModal">
                         <Scissors class="w-4 h-4 mr-2" />
-                        视频剪辑
+                        {{ t('media.play.clip.button') }}
                     </Button>
                 </div>
             </div>
             
             <div class="grow flex items-center justify-center rounded-lg bg-black/5 overflow-hidden">
                 <VideoPlayer ref="playerRef" v-if="videoUrl" :url="videoUrl" :format="videoFormat" :isLive="false" />
-                <div v-else class="text-muted-foreground">无法加载视频，缺少地址或参数。</div>
+                <div v-else class="text-muted-foreground">{{ t('media.play.toast.loadVideoErr') }}</div>
             </div>
         </div>
 
@@ -25,7 +25,7 @@
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>播放列表</TableHead>
+                            <TableHead>{{ t('media.play.playlist') }}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -46,40 +46,40 @@
     <Dialog :open="isClipModalOpen" @update:open="isClipModalOpen = $event">
         <DialogContent class="sm:max-w-[500px]">
             <DialogHeader>
-                <DialogTitle>视频剪辑</DialogTitle>
+                <DialogTitle>{{ t('media.play.clip.button') }}</DialogTitle>
                 <DialogDescription>
-                    选择开始和结束时间，生成精彩片段。原文件将保留。
+                    {{ t('media.play.clip.desc') }}
                 </DialogDescription>
             </DialogHeader>
             <div class="grid gap-6 py-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
-                        <Label>开始时间</Label>
+                        <Label>{{ t('media.play.clip.fields.startTime') }}</Label>
                         <div class="flex gap-2">
                             <Input v-model="clipStart" placeholder="00:00:00" />
-                            <Button variant="secondary" size="icon" @click="setStartToCurrent" title="设为当前播放时间">
+                            <Button variant="secondary" size="icon" @click="setStartToCurrent" :title="t('media.play.clip.fields.setStartTime')">
                                 <MapPin class="w-4 h-4" />
                             </Button>
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <Label>结束时间</Label>
+                        <Label>{{ t('media.play.clip.fields.endTime') }}</Label>
                         <div class="flex gap-2">
                             <Input v-model="clipEnd" placeholder="00:00:00" />
-                            <Button variant="secondary" size="icon" @click="setEndToCurrent" title="设为当前播放时间">
+                            <Button variant="secondary" size="icon" @click="setEndToCurrent" :title="t('media.play.clip.fields.setEndTime')">
                                 <MapPin class="w-4 h-4" />
                             </Button>
                         </div>
                     </div>
                 </div>
                 <div class="text-sm text-muted-foreground bg-muted p-2 rounded">
-                   提示：为了快速处理，剪辑采用无损模式（Copy），时间定位可能存在关键帧级别的轻微误差。
+                   {{ t('media.play.clip.tooltip') }}
                 </div>
             </div>
             <DialogFooter>
-                <Button variant="outline" @click="isClipModalOpen = false">取消</Button>
+                <Button variant="outline" @click="isClipModalOpen = false">{{ t('common.operation.cancel') }}</Button>
                 <Button @click="handleClipSubmit" :disabled="isClipping">
-                    {{ isClipping ? '剪辑中...' : '开始剪辑' }}
+                    {{ isClipping ? t('media.play.clip.clipping') : t('media.play.clip.startClip') }}
                 </Button>
             </DialogFooter>
         </DialogContent>
@@ -110,8 +110,10 @@ import { Label } from '@/components/ui/label';
 import { Button } from "@/components/ui/button";
 import { Scissors, MapPin } from "lucide-vue-next"; 
 import { useTheme } from "@/composables/useTheme";
+import { useI18n } from 'vue-i18n';
 
 useTheme();
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -155,13 +157,13 @@ const fetchFiles = async (path: string) => {
     try {
         const res: any = await listFiles({ path: path });
         if (res.code !== 0) {
-            toast.error(res.msg || "获取文件列表失败")
+            toast.error(res.msg || t('media.play.toast.listErr'))
             return
         }
         files.value = (res.data.rows || []).filter(Boolean);
     } catch (error) {
         console.error("Failed to fetch files:", error);
-        toast.error("获取文件列表失败");
+        toast.error(t('media.play.toast.listErr'));
     }
 };
 
@@ -223,7 +225,7 @@ const handleClipSubmit = async () => {
     if (!filename.value) return;
     
     if (clipStart.value >= clipEnd.value) {
-        toast.error("结束时间必须大于开始时间");
+        toast.error(t('media.play.toast.endBeforeStart'));
         return;
     }
 
@@ -237,16 +239,16 @@ const handleClipSubmit = async () => {
         });
 
         if (res.code === 0) {
-            toast.success("剪辑成功，文件已保存");
+            toast.success(t('media.play.clip.success'));
             isClipModalOpen.value = false;
             // 刷新文件列表以显示新文件
             fetchFiles(currentPath.value);
         } else {
-            toast.error(res.msg || "剪辑失败");
+            toast.error(res.msg || t('media.play.toast.clipErr'));
         }
     } catch (error) {
         console.error("Clip failed:", error);
-        toast.error("请求失败");
+        toast.error(t('media.play.toast.requestFailed'));
     } finally {
         isClipping.value = false;
     }

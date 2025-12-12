@@ -1,0 +1,99 @@
+{
+  "logs": {
+    "fields": {
+      "type": "Log Type",
+      "createTime": "Create Time",
+      "status": "Log Status"
+    },
+    "placeholders": {
+      "type": "Please select log type",
+      "status": "Please select log status"
+    },
+    "clear": {
+      "button": "Clear Logs",
+      "title": "Confirm Clear",
+      "desc": "Are you sure you want to clear all logs? This action cannot be undone."
+    },
+    "delete": {
+      "desc": "Are you sure you want to delete this log? This action cannot be undone."
+    },
+    "toast": {
+      "clearSuccess": "Cleared successfully",
+      "clearFailed": "Clear failed"
+    }
+  },
+  "notify": {
+    "allRead": {
+      "button": "Mark All as Read",
+      "title": "Confirm Mark All as Read",
+      "desc": "Are you sure you want to mark all notifications as read?"
+    },
+    "fields": {
+      "level": "Notification Level",
+      "time": "Notification Time"
+    },
+    "delete": {
+      "desc": "Are you sure you want to delete this notification? This action cannot be undone."
+    },
+    "allDelete": {
+      "button": "Delete All",
+      "title": "Confirm Delete All",
+      "desc": "Are you sure you want to delete all notifications? This action cannot be undone."
+    },
+    "toast": {
+      "markSuccess": "Marked successfully",
+      "markFailed": "Mark failed",
+      "markAllSuccess": "Marked all successfully",
+      "markAllFailed": "Mark all failed",
+      "deleteAllSuccess": "Deleted all successfully",
+      "deleteAllFailed": "Delete all failed"
+    }
+  },
+  "channel": {
+    "add": {
+      "button": "Add Channel"
+    },
+    "fields": {
+      "channel": {
+        "title": "Channel",
+        "email": "Email",
+        "lark": "Lark",
+        "dingTalk": "DingTalk",
+        "weCom": "WeCom"
+      },
+      "name": "Channel Name",
+      "type": "Channel Type",
+      "messageType": "Message Type",
+      "sign": "Signature",
+      "status": "Activation Status",
+      "statusActive": "Active",
+      "statusDisabled": "Disabled",
+      "smtpServer": "SMTP Server",
+      "port": "Port",
+      "sender": "Sender",
+      "authCode": "Authorization Code",
+      "receiver": "Receiver",
+      "text": "Text",
+      "richtext": "Rich Text",
+      "card": "Card"
+    },
+    "deleteDesc": "This action cannot be undone. This will permanently delete the push channel.",
+    "placeholder": {
+      "name": "Please enter channel name",
+      "authCode": "Please enter authorization code",
+      "remark": "Please enter a remark (optional)",
+      "larkMsgType": "Select Lark message type",
+      "dingMsgType": "Select DingTalk message type",
+      "weComMsgType": "Select WeCom message type",
+      "msgType": "Select message type"
+    },
+    "toast": {
+      "listErr": "Failed to fetch list",
+      "detailErr": "Failed to fetch details"
+    },
+    "valid": {
+      "nameNotEmpty": "Channel name cannot be empty",
+      "typeNotEmpty": "Channel type cannot be empty"
+    }
+  }
+}

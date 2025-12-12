@@ -1,0 +1,25 @@
+"user.login.banned" = "使用者已被禁用"
+"user.login.blank" = "使用者名稱或密碼不能為空"
+"user.login.error" = "使用者名稱或密碼錯誤"
+"user.login.exit" = "使用者登出"
+"user.login.success" = "使用者登入成功"
+"user.login.unauthorized" = "未授權"
+
+"user.profile.valid.NewPwdRequired" = "請輸入新密碼"
+"user.profile.valid.NewPwdLength" = "新密碼長度為 6-20 位"
+"user.profile.valid.NewPwdSame" = "新密碼不能與舊密碼相同"
+"user.profile.valid.NicknameLength" = "暱稱長度為 2-12 位"
+"user.profile.valid.NicknameRequired" = "請輸入暱稱"
+"user.profile.valid.OldPwdLength" = "舊密碼長度為 6-20 位"
+"user.profile.valid.OldPwdRequired" = "請輸入舊密碼"
+"user.profile.valid.SexRequired" = "請選擇性別"
+
+"user.profile.error.Update" = "修改使用者資訊失敗"
+
+"user.profile.success.Update" = "修改使用者資訊成功"
+
+"user.password.error.Encrypt" = "密碼加密失敗"
+"user.password.error.OldPwd" = "舊密碼錯誤"
+
+"user.password.error.Update" = "修改使用者密碼失敗"
+"user.password.success.Update" = "修改使用者密碼成功"

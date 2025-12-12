@@ -4,11 +4,11 @@
             <div>
                 <Button variant="secondary" @click="openConfirmMarkAllModal" class="mr-2">
                     <CheckCheck class="w-4 h-4 mr-2" />
-                    全部已读
+                    {{ t('system.notify.allRead.button') }}
                 </Button>
                 <Button variant="destructive" @click="openConfirmDeleteAllModal">
                     <Trash2 class="w-4 h-4 mr-2" />
-                    全部删除
+                    {{ t('system.notify.allDelete.button') }}
                 </Button>
             </div>
         </div>
@@ -17,11 +17,11 @@
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="text-center">通知级别</TableHead>
-                        <TableHead class="text-center">标题</TableHead>
-                        <TableHead class="text-center">内容</TableHead>
-                        <TableHead class="text-center">通知时间</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead class="text-center">{{ t('system.notify.fields.level') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.title') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.content') }}</TableHead>
+                        <TableHead class="text-center">{{ t('system.notify.fields.time') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -31,15 +31,15 @@
                             <TableCell class="text-center">
                                 <Badge :variant="getLevelVariant(notify.level)">{{
                                     notify.level === "info"
-                                        ? "信息"
+                                        ? t('common.fields.info')
                                         : notify.level === "warning"
-                                            ? "警告"
+                                            ? t('common.fields.warning')
                                             : notify.level
                                 }}</Badge>
                             </TableCell>
                             <TableCell class="text-center">{{
                                 notify.title
-                                }}</TableCell>
+                            }}</TableCell>
                             <TableCell class="text-center">
                                 <TooltipProvider>
                                     <Tooltip>
@@ -56,7 +56,7 @@
                             </TableCell>
                             <TableCell class="text-center">{{
                                 notify.createdAt
-                                }}</TableCell>
+                            }}</TableCell>
                             <TableCell class="text-center">
                                 <Button v-if="notify.status === 0" variant="ghost" size="icon"
                                     class="text-blue-500 hover:text-blue-600" @click="handleMarkRead(notify.id)">
@@ -72,7 +72,7 @@
                     <template v-else>
                         <TableRow>
                             <TableCell :colspan="5" class="h-24 text-center">
-                                暂无数据
+                                {{ t('common.noData') }}
                             </TableCell>
                         </TableRow>
                     </template>
@@ -87,8 +87,8 @@
                 <template v-for="(item, index) in items">
                     <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                         <Button class="w-10 h-10 p-0" :variant="item.value === currentPage
-                                ? 'secondary'
-                                : 'outline'
+                            ? 'secondary'
+                            : 'outline'
                             " :disabled="item.value === currentPage">
                             {{ item.value }}
                         </Button>
@@ -100,15 +100,19 @@
         </Pagination>
     </div>
     <ConfirmModal :open="showConfirmDeleteModal" :onOpenChange="(open: any) => (showConfirmDeleteModal = open)"
-        :onConfirm="handleDeleteNotify" title="确认删除" description="你确定要删除这条通知吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteNotify" :title="t('common.operation.deleteConfirm')"
+        :description="t('system.notify.delete.desc')" />
     <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
-        :onConfirm="handleDeleteAllNotifys" title="确认全部删除" description="你确定要删除所有通知吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteAllNotifys" :title="t('system.notify.allDelete.title')"
+        :description="t('system.notify.allDelete.desc')" />
     <ConfirmModal :open="showConfirmMarkAllModal" :onOpenChange="(open: any) => (showConfirmMarkAllModal = open)"
-        :onConfirm="handleMarkAllRead" title="确认全部已读" description="你确定要将所有通知标记为已读吗？" />
+        :onConfirm="handleMarkAllRead" :title="t('system.notify.allRead.title')"
+        :description="t('system.notify.allRead.desc')" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import {
     listNotify,
     markNotify,
@@ -145,6 +149,7 @@ import { Trash2, BadgeCheck, CheckCheck } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 
+const { t } = useI18n();
 const showConfirmDeleteModal = ref(false);
 const showConfirmDeleteAllModal = ref(false);
 const showConfirmMarkAllModal = ref(false);
@@ -205,11 +210,11 @@ async function handleMarkRead(id: number) {
     try {
         const res: any = await markNotify(id);
         if (res.code !== 0) {
-            toast.error(res.msg || "标记失败");
+            toast.error(res.msg || t('system.notify.toast.markFailed'));
             return;
         }
         getNotifys();
-        toast.success("标记成功");
+        toast.success(t('system.notify.toast.markSuccess'));
     } catch (error) {
         console.error("Failed to mark notify:", error);
     }
@@ -219,11 +224,11 @@ async function handleMarkAllRead() {
     try {
         const res: any = await markAllNotify();
         if (res.code !== 0) {
-            toast.error(res.msg || "全部标记失败");
+            toast.error(res.msg || t('system.notify.toast.markAllFailed'));
             return;
         }
         getNotifys();
-        toast.success("全部标记成功");
+        toast.success(t('system.notify.toast.markAllSuccess'));
     } catch (error) {
         console.error("Failed to mark all notifys:", error);
     } finally {
@@ -238,11 +243,11 @@ async function handleDeleteNotify() {
     try {
         const res: any = await deleteNotify(notifyToDelete.value);
         if (res.code !== 0) {
-            toast.error(res.msg || "删除失败");
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
         getNotifys();
-        toast.success("删除成功");
+        toast.success(t('common.toast.deleteSuccess'));
     } catch (error) {
         console.error("Failed to delete notify:", error);
     } finally {
@@ -255,11 +260,11 @@ async function handleDeleteAllNotifys() {
     try {
         const res: any = await deleteAllNotify();
         if (res.code !== 0) {
-            toast.error(res.msg || "全部删除失败");
+            toast.error(res.msg || t('system.notify.toast.deleteAllFailed'));
             return;
         }
         getNotifys();
-        toast.success("全部删除成功");
+        toast.success(t('system.notify.toast.deleteAllSuccess'));
     } catch (error) {
         console.error("Failed to delete all notifys:", error);
     } finally {

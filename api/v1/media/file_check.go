@@ -22,8 +22,8 @@ type GetFileCheckListRes struct {
 
 type PostFileCheckReq struct {
 	g.Meta   `path:"/media/check" method:"post" tags:"文件检测" summary:"新增文件检测任务"`
-	Path     string `json:"path" v:"required#路径不能为空"`
-	Filename string `json:"filename" v:"required#文件名称不能为空"`
+	Path     string `json:"path" v:"required#media.check.valid.PathRequired"`
+	Filename string `json:"filename" v:"required#media.check.valid.FilenameRequired"`
 }
 
 type PostFileCheckRes struct {
@@ -32,7 +32,7 @@ type PostFileCheckRes struct {
 
 type DeleteFileCheckReq struct {
 	g.Meta `path:"/media/check/{id}" method:"delete" tags:"文件检测" summary:"删除文件检测任务"`
-	Id     int `json:"id" v:"required#任务 ID不能为空"`
+	Id     int `json:"id" v:"required#media.check.valid.TaskIDRequired"`
 }
 
 type DeleteFileCheckRes struct {

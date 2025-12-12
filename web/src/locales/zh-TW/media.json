@@ -1,0 +1,87 @@
+{
+  "file": {
+    "confirmCheck": {
+      "title": "確認檢查",
+      "desc": "你確定要為該檔案建立檢測任務嗎？"
+    },
+    "fields": {
+      "filesize": "檔案大小",
+      "lastModified": "上次修改時間",
+      "systemDir": "系統目錄"
+    },
+    "delete": {
+      "file": "你確定要刪除該檔案嗎？此操作無法撤銷。",
+      "folder": "你確定要刪除該空資料夾嗎？此操作無法撤銷。",
+      "folderNotEmpty": "資料夾不為空，你確定要刪除該資料夾及其所有內容嗎？此操作無法撤銷。"
+    },
+    "toast": {
+      "list": "獲取檔案列表失敗",
+      "createcCheck": "建立任務失敗",
+      "folderStatus": "檢查資料夾狀態失敗"
+    },
+    "createcCheckSuccess": "建立任務成功"
+  },
+  "check": {
+    "fields": {
+      "status": {
+        "title": "檔案狀態",
+        "pending": "待檢測",
+        "normal": "正常",
+        "bad": "疑似損壞",
+        "notExist": "檔案不存在",
+        "unknown": "未知"
+      },
+      "progress": {
+        "title": "進度",
+        "pending": "等待開始",
+        "qcing": "快檢中...",
+        "qcerr": "快檢異常",
+        "acing": "全量檢測中...",
+        "acerr": "全量檢測異常",
+        "success": "檢測完成"
+      },
+      "duration": "耗時",
+      "finishTime": "結束時間"
+    },
+    "deleteConfirmDesc": "你確定要刪除這個任務嗎？此操作無法撤銷。",
+    "clear": {
+      "button": "清空記錄",
+      "title": "確認清空",
+      "desc": "你確定要清空所有記錄嗎？此操作無法撤銷。",
+      "success": "清空成功"
+    },
+    "toast": {
+      "listErr": "獲取列表失敗",
+      "clearErr": "清空失敗"
+    }
+  },
+  "play": {
+    "playlist": "播放清單",
+    "clip": {
+      "fields": {
+        "startTime": "開始時間",
+        "setStartTime": "設為目前播放時間",
+        "endTime": "結束時間",
+        "setEndTime": "設為目前播放時間"
+      },
+      "button": "影片剪輯",
+      "clipping": "剪輯中...",
+      "startClip": "開始剪輯",
+      "success": "剪輯成功，檔案已保存",
+      "desc": "選擇開始與結束時間，生成精彩片段。原檔案將保留。",
+      "tooltip": "提示：為了快速處理，剪輯採用無損模式（Copy），時間定位可能存在關鍵影格級別的輕微誤差。"
+    },
+    "toast": {
+      "clipErr": "剪輯失敗",
+      "endBeforeStart": "結束時間必須大於開始時間",
+      "listErr": "獲取檔案列表失敗",
+      "loadVideoErr": "無法載入影片，缺少地址或參數。",
+      "requestFailed": "請求失敗"
+    }
+  },
+  "common": {
+    "fields": {
+      "filename": "檔名"
+    }
+  }
+}

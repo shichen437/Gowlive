@@ -6,12 +6,12 @@
                 <Button variant="ghost" class="w-full justify-start"
                     :class="{ 'bg-accent text-accent-foreground': activeView === 'account' }"
                     @click="activeView = 'account'">
-                    账户信息
+                    {{ t('user.profile.title') }}
                 </Button>
                 <Button variant="ghost" class="w-full justify-start"
                     :class="{ 'bg-accent text-accent-foreground': activeView === 'live-settings' }"
                     @click="activeView = 'live-settings'">
-                    直播设置
+                    {{ t('user.liveSettings.title') }}
                 </Button>
             </nav>
         </div>
@@ -28,32 +28,32 @@
                                 <AvatarFallback>{{ userInfo?.nickname?.charAt(0)?.toUpperCase() }}</AvatarFallback>
                             </Avatar>
                             <div class="flex gap-4 justify-center">
-                                <Button @click="showProfileModal = true">修改信息</Button>
-                                <Button variant="outline" @click="showPwdModal = true">修改密码</Button>
+                                <Button @click="showProfileModal = true">{{ t('user.profile.edit.button') }}</Button>
+                                <Button variant="outline" @click="showPwdModal = true">{{ t('user.profile.password.button') }}</Button>
                             </div>
                         </div>
 
                         <!-- 原左列（信息列表）改为右列 -->
                         <div class="md:col-span-3 space-y-4">
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">用户名</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.username') }}</span>
                                 <div class="ml-auto text-right">
                                     <p class="text-muted-foreground text-right">{{ userInfo?.username }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">昵称</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.nickname') }}</span>
                                 <p class="ml-auto">{{ userInfo?.nickname }}</p>
                             </div>
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">性别</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.gender') }}</span>
                                 <div class="ml-auto text-right">
                                     <Mars v-if="userInfo?.sex === 1" class="h-5 w-5 text-blue-500 inline-block" />
                                     <Venus v-else class="h-5 w-5 text-pink-500 inline-block" />
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">状态</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.status') }}</span>
                                 <Badge class="ml-auto" :variant="userInfo?.status === 1 ? 'default' : 'destructive'">
                                     {{ formattedStatus }}
                                 </Badge>
@@ -73,6 +73,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, type Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/store/user';
 import type { UserInfo } from '@/types/user';
 import {
@@ -87,6 +88,7 @@ import UpdateProfileModal from '@/components/modal/admin/UpdateProfileModal.vue'
 import UpdatePwdModal from '@/components/modal/admin/UpdatePwdModal.vue';
 import LiveSettings from './LiveSettings.vue';
 
+const { t } = useI18n();
 const userStore = useUserStore();
 const userInfo: Ref<UserInfo | null> = computed(() => userStore.userInfo);
 
@@ -95,8 +97,8 @@ const showPwdModal = ref(false);
 const activeView = ref('account');
 
 const formattedStatus = computed(() => {
-    if (userInfo.value?.status === 1) return '活跃';
-    return '禁用';
+    if (userInfo.value?.status === 1) return t('user.profile.fileds.active');
+    return t('user.profile.fileds.disabled');
 });
 
 const onProfileUpdateSuccess = async () => {

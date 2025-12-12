@@ -1,0 +1,136 @@
+{
+  "about": {
+    "intro": {
+      "title": "Project Introduction",
+      "desc": "Gowlive is an open-source live streaming recording tool designed to provide users with convenient and efficient solutions for recording live content. It is suitable for scenarios where you need to save, review, or analyze live content for learning and communication. We encourage developers and enthusiasts to collaboratively improve features and enhance user experience.",
+      "security": "This project is for learning and technical exchange only. Do not use it for any commercial purposes or any behavior that infringes on the rights of others."
+    },
+    "info": {
+      "title": "Project Information",
+      "currentVersion": "Current Version",
+      "new": "New Version Found",
+      "email": "Author Email",
+      "sourceCode": "Source Code",
+      "sourceMirror": "Source Mirror"
+    },
+    "support": {
+      "title": "Sponsorship & Support",
+      "wechat": "WeChat",
+      "alipay": "Alipay"
+    }
+  },
+  "login": {
+    "title": "Login",
+    "logout": {
+      "title": "Log Out",
+      "confirm": "Confirm Logout",
+      "confirmDesc": "Are you sure you want to log out?"
+    },
+    "slogan": "A live recording platform",
+    "desc": "Enter your username and password to log in to your account",
+    "fields": {
+      "username": "Username",
+      "password": "Password"
+    },
+    "placeholders": {
+      "username": "Please enter your username",
+      "password": "Please enter your password"
+    }
+  },
+  "router": {
+    "overview": "Overview",
+    "liveManagement": "Live",
+    "roomList": "Rooms",
+    "anchorData": "Anchors",
+    "liveHistory": "History",
+    "monitoringMetrics": "Metrics",
+    "mediaCenter": "Media",
+    "fileManagement": "Files",
+    "fileDetection": "Scan",
+    "systemManagement": "System",
+    "logCenter": "Logs",
+    "pushChannel": "Push",
+    "notificationCenter": "Notifications",
+    "commonQuestions": "FAQ",
+    "personalCenter": "Profile",
+    "about": "About",
+    "mediaPlayer": "Player",
+    "cookie": "Cookie"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Good morning, {nickname}! Have a great day!",
+      "noon": "Good noon, {nickname}! Eat well and have a good rest!",
+      "afternoon": "Good afternoon, {nickname}! Keep up the good work and stay in a good mood!",
+      "evening": "Good evening, {nickname}! Relax after a long day!",
+      "night": "It's late, sleep tight and have a sweet dream. Good night~"
+    },
+    "cardTitle": {
+      "total": "Total Rooms",
+      "recording": "Recording",
+      "duration": "Recording Duration",
+      "unread": "Unread Notifications"
+    },
+    "cpu": {
+      "model": "Model",
+      "cores": "Cores",
+      "frequency": "Frequency",
+      "usage": "Usage"
+    },
+    "memory": "Memory",
+    "disk": "Disk",
+    "common": {
+      "total": "Total",
+      "used": "Used",
+      "available": "Available",
+      "usage": "Usage"
+    }
+  },
+  "help": {
+    "title": "FAQ",
+    "desc": "Here are some frequently asked questions.",
+    "faqs": [
+      {
+        "value": "item-0",
+        "question": "About Monitoring Types",
+        "answer": "Smart monitoring dynamically adjusts polling intervals based on live status, history, and metrics. For high real-time requirements, it's recommended to enable real-time monitoring. If the broadcast time is fixed, scheduled monitoring is suggested."
+      },
+      {
+        "value": "item-1",
+        "question": "About Monitoring Quantity",
+        "answer": "Currently, no stress tests have been performed, so there is no valid data on the maximum number of concurrent monitors per platform."
+      },
+      {
+        "value": "item-2",
+        "question": "About Monitoring Metrics",
+        "answer": "Monitoring metrics collect live request data within a five-minute window. A global alert is triggered when abnormal metrics appear."
+      },
+      {
+        "value": "item-3",
+        "question": "Live Stream URL Format",
+        "answer": "Only web live room URLs are supported for now, for example: https://live.platform.com/xxxxxx"
+      },
+      {
+        "value": "item-4",
+        "question": "Homepage URL Format",
+        "answer": "Only web anchor homepage URLs are supported for now, for example: https://www.platform.com/user/xxxxxx"
+      },
+      {
+        "value": "item-5",
+        "question": "About Video Playback",
+        "answer": "For H5 players: \r\nAudio decoding for MKV format is only supported by some browsers (e.g., Edge);\r\nSeeking functionality for FLV/TS formats is limited due to lack of native support."
+      },
+      {
+        "value": "item-6",
+        "question": "About Recording Formats",
+        "answer": "MKV/TS: Resilient to power loss, easy to repair; FLV: Low overhead, continuous writing; MP4: Feature-rich, not resilient to power loss."
+      }
+    ]
+  },
+  "topbar": {
+    "errRate": "Request Error Rate",
+    "diskUsage": "Disk Usage",
+    "publish": "Published on",
+    "detail": "View Details"
+  }
+}

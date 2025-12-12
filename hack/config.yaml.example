@@ -7,7 +7,7 @@ gfcli:
     arch:     "amd64"
     system:   "linux"
     mod:      "none"
-    packSrc:  "api,internal"
+    packSrc:  "api,internal,i18n"
     packDst:  "temp/pack.go"
     path:     "./temp"
   gen:

@@ -7,18 +7,18 @@
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" class="w-64 p-4 space-y-4">
             <div class="space-y-2">
-                <Label for="anchor">主播名称</Label>
+                <Label for="anchor">{{ t('stream.common.fields.anchorName') }}</Label>
                 <Input id="anchor" v-model="localFilter.anchor" />
             </div>
             <div class="space-y-2">
-                <Label for="roomName">房间名称</Label>
+                <Label for="roomName">{{ t('stream.rooms.fields.roomName') }}</Label>
                 <Input id="roomName" v-model="localFilter.roomName" />
             </div>
             <div class="space-y-2">
-                <Label for="platform">平台</Label>
+                <Label for="platform">{{ t('common.fields.platform') }}</Label>
                 <Select v-model="localFilter.platform">
                     <SelectTrigger class="w-full">
-                        <SelectValue placeholder="选择平台" />
+                        <SelectValue :placeholder="t('stream.cookie.placeholder.platform')" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem v-for="item in platformOptions" :key="item.value" :value="String(item.value)">
@@ -28,8 +28,8 @@
                 </Select>
             </div>
             <div class="flex justify-end space-x-2">
-                <Button variant="outline" @click="handleReset">重置</Button>
-                <Button @click="handleApply">确定</Button>
+                <Button variant="outline" @click="handleReset">{{ t('common.operation.reset') }}</Button>
+                <Button @click="handleApply">{{ t('common.operation.confirm') }}</Button>
             </div>
         </DropdownMenuContent>
     </DropdownMenu>
@@ -54,6 +54,9 @@ import {
 } from '@/components/ui/select'
 import { ListFilter } from 'lucide-vue-next'
 import { useDict } from '@/utils/useDict'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Filter {
     anchor: string

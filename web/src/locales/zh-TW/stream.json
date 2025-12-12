@@ -1,0 +1,167 @@
+{
+  "anchor": {
+    "add": {
+      "button": "新增主播"
+    },
+    "fields": {
+      "sign": "簽名",
+      "homeUrl": "主頁連結",
+      "following": "關注數",
+      "followers": "粉絲數",
+      "videos": "影片數",
+      "likes": "按讚數"
+    },
+    "deleteDesc": "你確定要刪除該主播嗎？此操作無法撤銷。",
+    "toast": {
+      "statErr": "獲取統計資訊失敗"
+    }
+  },
+  "cookie": {
+    "add": {
+      "title": "新增 Cookie",
+      "desc": "將 Cookie 加入列表。"
+    },
+    "edit": {
+      "title": "編輯 Cookie",
+      "desc": "更新 Cookie 詳細資訊。"
+    },
+    "deleteDesc": "你確定要刪除這個 Cookie 嗎？此操作無法撤銷。",
+    "placeholder": {
+      "platform": "選擇平台"
+    },
+    "toast": {
+      "listErr": "獲取 Cookie 列表失敗"
+    }
+  },
+  "history": {
+    "fields": {
+      "duration": "直播時長",
+      "startTime": "直播開始時間",
+      "endTime": "直播結束時間"
+    },
+    "clear": {
+      "button": "清空歷史",
+      "title": "確認清空",
+      "desc": "你確定要清空所有歷史嗎？此操作無法撤銷。",
+      "success": "清空成功",
+      "failed": "清空失敗"
+    },
+    "deleteDesc": "你確定要刪除這條歷史記錄嗎？此操作無法撤銷。",
+    "toast": {
+      "listErr": "獲取列表失敗"
+    }
+  },
+  "metrics": {
+    "emptyDesc": "目前沒有直播監控資料。",
+    "every5Min": "每五分鐘",
+    "totalReqCount": "總請求數",
+    "totalFailedCount": "總失敗數",
+    "totalFailedRate": "總失敗率",
+    "mainReqCount": "主線請求數",
+    "mainFailedCount": "主線失敗數",
+    "mainFailedRate": "主線失敗率"
+  },
+  "rooms": {
+    "fields": {
+      "roomName": "房間名稱",
+      "roomUrl": "直播連結",
+      "interval": "間隔時間（秒）",
+      "format": "錄製格式",
+      "onlyAudio": "僅音訊",
+      "monitorStartTime": "監控開始時間",
+      "monitorEndTime": "監控結束時間",
+      "segment": "切片時長",
+      "segmentNone": "不切片",
+      "export": "導出",
+      "createTime": "添加時間",
+      "monitorStatus": {
+        "title": "監控狀態",
+        "none": "未監控",
+        "cron": "定時監控",
+        "realtime": "即時監控",
+        "intelligent": "智慧監控",
+        "recording": "錄製中"
+      },
+      "monitorType": {
+        "title": "監控類型",
+        "stop": "停止監控",
+        "cron": "定時監控",
+        "cronTip": "定時監控：在指定時段內依間隔時間取得直播狀態。",
+        "realtime": "即時監控",
+        "realTimeTip": "即時監控：依設定的間隔時間輪詢取得直播狀態。",
+        "intelligent": "智慧監控",
+        "intelligentTip": "智慧監控：依監控指標與有效直播歷史動態調整間隔時間大小。"
+      },
+      "quality": {
+        "title": "清晰度",
+        "tooltip": "僅支援抖音。",
+        "original": "原畫",
+        "super": "超清",
+        "high": "高清",
+        "medium": "標清",
+        "low": "流暢"
+      }
+    },
+    "add": {
+      "title": "新增房間"
+    },
+    "edit": {
+      "title": "編輯房間"
+    },
+    "batch": {
+      "button": "批量新增",
+      "title": "批量新增房間"
+    },
+    "buttons": {
+      "openFolder": "打開資料夾",
+      "top": "置頂",
+      "unTop": "取消置頂",
+      "cardView": "切換到卡片視圖",
+      "listView": "切換到列表視圖"
+    },
+    "deleteDesc": "你確定要刪除該房間嗎？此操作無法撤銷。",
+    "startMonitor": {
+      "title": "確認開始監控",
+      "desc": "你確定要開始監控該房間嗎？"
+    },
+    "stopMonitor": {
+      "title": "確認停止監控",
+      "desc": "你確定要停止監控該房間嗎？"
+    },
+    "toast": {
+      "topErr": "置頂失敗",
+      "topSuccess": "置頂成功",
+      "unTopErr": "取消置頂失敗",
+      "unTopSuccess": "取消置頂成功",
+      "startMonitor": "已開始監控",
+      "stopMonitor": "已停止監控",
+      "exportErr": "匯出失敗",
+      "detailErr": "獲取房間詳情失敗",
+      "batchSuccess": "新增成功，請稍後查看"
+    },
+    "placeholder": {
+      "roomUrl": "請輸入直播連結",
+      "anchorName": "請輸入主播名稱",
+      "format": "選擇錄製格式",
+      "quality": "選擇清晰度",
+      "segment": "選擇切片時長",
+      "remark": "請輸入備註",
+      "batchUrls": "請輸入直播連結，支援英文逗號或換行分隔，最多 30 個"
+    },
+    "valid": {
+      "validUrl": "請輸入有效的 URL",
+      "intervalMin": "間隔時間最小為 30 秒",
+      "intervalMax": "間隔時間最大為 600 秒",
+      "timeFormat": "時間格式必須為 HH:mm",
+      "remarkLength": "備註最長為 45 個字",
+      "cronTime": "定時監控需要設定開始與結束時間",
+      "batchUrlsNum": "最多支援 30 個直播連結",
+      "batchUrlInvalid": "連結格式無效："
+    }
+  },
+  "common": {
+    "fields": {
+      "anchorName": "主播名稱"
+    }
+  }
+}

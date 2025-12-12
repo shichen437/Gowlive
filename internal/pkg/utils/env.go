@@ -11,11 +11,13 @@ import (
 const (
 	E_PROJECT_DATA   = "PROJECT_DATA"
 	E_PROJECT_SM4KEY = "PROJECT_SM4KEY"
+	E_PROJECT_LANG   = "PROJECT_LANG"
 )
 
 var (
 	DATA_PATH     = getEnvWithDefault(E_PROJECT_DATA)
 	SM4_KEY       = getEnvWithDefault(E_PROJECT_SM4KEY)
+	LANG          = getEnvWithDefault(E_PROJECT_LANG)
 	STREAM_PATH   = DATA_PATH + "/stream"
 	DOWNLOAD_PATH = DATA_PATH + "/download"
 )

@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <Button @click="openAddAnchorModal">
                 <Plus class="w-4 h-4 mr-2" />
-                添加主播
+                {{ t('stream.anchor.add.button') }}
             </Button>
             <div class="flex items-center space-x-2">
                 <FilterAuthorDropDownMenu v-model:filter="filter" @update:filter="handleFilterChange" />
@@ -14,14 +14,14 @@
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="text-center">平台</TableHead>
-                        <TableHead class="text-center">主播名称</TableHead>
-                        <TableHead class="text-center">签名</TableHead>
-                        <TableHead class="text-center">关注数</TableHead>
-                        <TableHead class="text-center">粉丝数</TableHead>
-                        <TableHead class="text-center">点赞数</TableHead>
-                        <TableHead class="text-center">视频数</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.platform') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.common.fields.anchorName') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.anchor.fields.sign') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.anchor.fields.following') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.anchor.fields.followers') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.anchor.fields.likes') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.anchor.fields.videos') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -61,7 +61,7 @@
                     <template v-else>
                         <TableRow>
                             <TableCell :colspan="9" class="h-24 text-center">
-                                暂无数据
+                                {{ t('common.noData') }}
                             </TableCell>
                         </TableRow>
                     </template>
@@ -90,12 +90,13 @@
     </div>
     <AuthorModal ref="authorModal" @refresh="getAnchors" />
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="handleDeleteAnchor" title="确认删除" description="你确定要删除该主播吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteAnchor" :title="t('common.operation.deleteConfirm')" :description="t('stream.anchor.deleteDesc')" />
     <AnchorStatInfoModal ref="statModal" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import { anchorList, deleteAnchor, getAnchorStatInfo } from "@/api/stream/anchor_info";
 import type { AnchorInfo } from "@/types/stream";
 import AuthorModal from "@/components/modal/stream/AuthorModal.vue";
@@ -131,6 +132,7 @@ import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
 import { formatBigNumber } from "@/utils/convert";
 
+const { t } = useI18n();
 const showConfirmModal = ref(false);
 const anchors = ref<AnchorInfo[]>([]);
 const pageNum = ref(1);
@@ -185,7 +187,7 @@ const openStatModal = async (id: number) => {
         if (response.code === 0) {
             statModal.value?.openModal(response.data.data);
         } else {
-            toast.error(response.msg || "获取统计信息失败");
+            toast.error(response.msg || t('stream.anchor.toast.statErr'));
         }
     } catch (error) {
         console.error("Failed to fetch anchor stats:", error);
@@ -204,11 +206,11 @@ async function handleDeleteAnchor() {
     try {
         const res: any = await deleteAnchor(anchorToDelete.value);
         if (res.code !== 0) {
-            toast.error(res.msg || "删除失败");
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
         getAnchors();
-        toast.success("删除成功");
+        toast.success(t('common.toast.deleteSuccess'));
     } catch (error) {
         console.error("Failed to delete anchor:", error);
     } finally {

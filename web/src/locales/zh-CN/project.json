@@ -1,0 +1,136 @@
+{
+  "about": {
+    "intro": {
+      "title": "项目介绍",
+      "desc": "Gowlive 是一个开源的直播录制工具，旨在为用户提供便捷、高效的直播内容录制解决方案，适用于需要保存、回看或分析直播内容的学习和交流场景。我们鼓励开发者和爱好者共同完善功能，提升用户体验。",
+      "security": "本项目仅供学习和技术交流使用，请勿将其用于任何商业用途或侵犯他人权益的行为。"
+    },
+    "info": {
+      "title": "项目信息",
+      "currentVersion": "当前版本",
+      "new": "发现新版本",
+      "email": "作者邮箱",
+      "sourceCode": "访问源码",
+      "sourceMirror": "源码镜像"
+    },
+    "support": {
+      "title": "赞助 & 支持",
+      "wechat": "微信",
+      "alipay": "支付宝"
+    }
+  },
+  "login": {
+    "title": "登录",
+    "logout": {
+      "title": "退出登录",
+      "confirm": "确认退出",
+      "confirmDesc": "你确定要退出登录吗？"
+    },
+    "slogan": "一个直播录制平台",
+    "desc": "输入你的用户名和密码以登录你的帐户",
+    "fields": {
+      "username": "用户名",
+      "password": "密码"
+    },
+    "placeholders": {
+      "username": "请输入用户名",
+      "password": "请输入密码"
+    }
+  },
+  "router": {
+    "overview": "概览",
+    "liveManagement": "直播管理",
+    "roomList": "房间列表",
+    "anchorData": "主播数据",
+    "liveHistory": "直播历史",
+    "monitoringMetrics": "监控指标",
+    "mediaCenter": "媒体中心",
+    "fileManagement": "文件管理",
+    "fileDetection": "文件检测",
+    "systemManagement": "系统管理",
+    "logCenter": "日志中心",
+    "pushChannel": "推送渠道",
+    "notificationCenter": "通知中心",
+    "commonQuestions": "常见问题",
+    "personalCenter": "个人中心",
+    "about": "关于",
+    "mediaPlayer": "媒体播放",
+    "cookie": "Cookie"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "早上好，{nickname}！今天也要元气满满哦！",
+      "noon": "中午好，{nickname}！吃饱喝足，午休一会儿更舒服！",
+      "afternoon": "下午好，{nickname}！继续加油，保持好心情！",
+      "evening": "晚上好，{nickname}！辛苦一天，放松一下吧！",
+      "night": "夜深了，盖好被子，做个好梦，晚安~"
+    },
+    "cardTitle": {
+      "total": "房间总数",
+      "recording": "正在录制",
+      "duration": "录制时长",
+      "unread": "未读通知"
+    },
+    "cpu": {
+      "model": "型号",
+      "cores": "核心",
+      "frequency": "频率",
+      "usage": "使用率"
+    },
+    "memory": "内存",
+    "disk": "磁盘",
+    "common": {
+      "total": "总计",
+      "used": "已用",
+      "available": "可用",
+      "usage": "使用率"
+    }
+  },
+  "help": {
+    "title": "常见问题",
+    "desc": "这里是一些比较常见的问题。",
+    "faqs": [
+      {
+        "value": "item-0",
+        "question": "关于监控类型",
+        "answer": "智能监控会通过直播状态、直播历史和监控指标动态调整轮询时间。如对实时性要求较高，建议开启实时监控。如直播时间固定，建议开启定时监控。"
+      },
+      {
+        "value": "item-1",
+        "question": "关于监控数量",
+        "answer": "目前未进行压测，暂无单平台最大同时监控数的有效数据。"
+      },
+      {
+        "value": "item-2",
+        "question": "关于监控指标",
+        "answer": "监控指标会统计五分钟内的直播请求数据，出现异常指标时会进行全局告警。"
+      },
+      {
+        "value": "item-3",
+        "question": "直播链接格式",
+        "answer": "暂时只支持 web 端直播间链接，例如：https://live.platform.com/xxxxxx"
+      },
+      {
+        "value": "item-4",
+        "question": "主页链接格式",
+        "answer": "暂时只支持 web 端主播主页链接，例如：https://www.platform.com/user/xxxxxx"
+      },
+      {
+        "value": "item-5",
+        "question": "关于视频播放",
+        "answer": "对于 H5 播放器： \r\nMKV格式仅部分浏览器支持音频解码(如 Edge);\r\nFLV/TS格式由于原生不支持，拖拽进度条功能受限。"
+      },
+      {
+        "value": "item-6",
+        "question": "关于录制格式",
+        "answer": "MKV/TS：抗断电，易修复；FLV：低开销，连续写入；MP4：功能全面，不抗断电。"
+      }
+    ]
+  },
+  "topbar": {
+    "errRate": "请求错误率",
+    "diskUsage": "磁盘使用率",
+    "publish": "发布于",
+    "detail": "查看详情"
+  }
+}

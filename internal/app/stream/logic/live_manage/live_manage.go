@@ -9,7 +9,6 @@ import (
 	"sync"
 
 	"github.com/gogf/gf/v2/database/gdb"
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
@@ -79,7 +78,7 @@ func (s *sLiveManage) Get(ctx context.Context, req *v1.GetLiveManageReq) (res *v
 		return
 	}
 	if entity == nil || entity.Id == 0 {
-		err = gerror.New("直播间不存在")
+		err = utils.TError(ctx, "stream.live.error.NotExists")
 		return
 	}
 	res.Data = entity
@@ -97,14 +96,14 @@ func (s *sLiveManage) Add(ctx context.Context, req *v1.PostLiveManageReq) (res *
 	info, err := liveApi.GetInfo()
 	if err != nil || info == nil {
 		g.Log().Errorf(ctx, "获取直播数据失败，错误信息：%v", err)
-		err = gerror.New("获取直播间信息失败")
+		err = utils.TError(ctx, "stream.live.error.GetRoomInfo")
 		return
 	}
 	var liveId int64
 	err = saveLiveConfig(ctx, req, &liveId, info)
 	if err != nil {
 		g.Log().Error(ctx, err)
-		return nil, gerror.Wrap(err, "添加直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.Add")
 	}
 	go listenerForAdd(int(liveId), req.MonitorType, req.MonitorStartAt, req.MonitorStopAt)
 	return
@@ -114,7 +113,7 @@ func (s *sLiveManage) BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchR
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	if len(req.RoomUrls) < 1 || len(req.RoomUrls) > 30 {
-		err = gerror.New("批量添加直播间数量限制为 1-30 个")
+		err = utils.TError(ctx, "stream.live.error.BatchAddNumLimit")
 		return
 	}
 	go func() {
@@ -149,10 +148,10 @@ func (s *sLiveManage) BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchR
 			}
 		}
 		if len(errUrls) > 0 {
-			manager.GetNotifyManager().AddWarningNotify("批量添加直播间失败", "批量添加直播间失败，失败链接："+strings.Join(errUrls, ","))
+			manager.GetNotifyManager().AddWarningNotify(utils.T(ctx, "stream.live.error.BatchAdd"), utils.T(ctx, "stream.live.error.BatchAddWithFailedLink")+strings.Join(errUrls, ","))
 			return
 		}
-		manager.GetNotifyManager().AddInfoNotify("批量添加直播间成功", "批量添加直播间成功，链接数量："+strconv.Itoa(len(req.RoomUrls)))
+		manager.GetNotifyManager().AddInfoNotify(utils.T(ctx, "stream.live.success.BatchAdd"), utils.T(ctx, "stream.live.success.BatchAddWithLinkNum")+strconv.Itoa(len(req.RoomUrls)))
 	}()
 	return
 }
@@ -163,10 +162,10 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 	var tempData *entity.LiveManage
 	err = dao.LiveManage.Ctx(ctx).WherePri(req.Id).Scan(&tempData)
 	if err != nil {
-		return nil, gerror.New("获取直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.Get")
 	}
 	if tempData == nil || tempData.Id == 0 {
-		return nil, gerror.New("直播间不存在")
+		return nil, utils.TError(ctx, "stream.live.error.NotExists")
 	}
 	validNeedUpdate := false
 	if tempData.MonitorType != req.MonitorType || tempData.Interval != req.Interval || tempData.Format != req.Format ||
@@ -196,7 +195,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 	}
 	if err != nil {
 		g.Log().Errorf(ctx, "更新直播间失败，错误信息：%v", err)
-		return nil, gerror.New("更新直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.Update")
 	}
 	go listenerForUpdate(req, tempData)
 	return
@@ -218,7 +217,7 @@ func (s *sLiveManage) Delete(ctx context.Context, req *v1.DeleteLiveManageReq) (
 	})
 	if err != nil {
 		g.Log().Errorf(ctx, "删除直播间失败，错误信息：%v", err)
-		err = gerror.New("删除直播间失败")
+		err = utils.TError(ctx, "stream.live.error.Delete")
 		return
 	}
 	go listenerForDelete(req.LiveId)
@@ -229,13 +228,13 @@ func (s *sLiveManage) Start(ctx context.Context, req *v1.PutLiveManageStartReq) 
 	var tempData *entity.LiveManage
 	err = dao.LiveManage.Ctx(ctx).WherePri(req.Id).Scan(&tempData)
 	if err != nil {
-		return nil, gerror.New("获取直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.Get")
 	}
 	if tempData == nil || tempData.Id == 0 {
-		return nil, gerror.New("直播间不存在")
+		return nil, utils.TError(ctx, "stream.live.error.NotExists")
 	}
 	if tempData.MonitorType != consts.MonitorTypeStop {
-		return nil, gerror.New("直播间已在监控中")
+		return nil, utils.TError(ctx, "stream.live.error.AlreadyInMonitor")
 	}
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 		_, err = dao.LiveManage.Ctx(ctx).WherePri(req.Id).Update(do.LiveManage{
@@ -257,7 +256,7 @@ func (s *sLiveManage) Start(ctx context.Context, req *v1.PutLiveManageStartReq) 
 		return nil
 	})
 	if err != nil {
-		return nil, gerror.New("开始监控直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.Start")
 	}
 
 	go listenerForQuickAdd(req.Id)
@@ -285,7 +284,7 @@ func (s *sLiveManage) Stop(ctx context.Context, req *v1.PutLiveManageStopReq) (r
 		return nil
 	})
 	if err != nil {
-		return nil, gerror.New("停止监控直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.Stop")
 	}
 	go listenerForDelete(req.Id)
 	return
@@ -294,10 +293,10 @@ func (s *sLiveManage) Stop(ctx context.Context, req *v1.PutLiveManageStopReq) (r
 func (s *sLiveManage) Top(ctx context.Context, req *v1.PutLiveManageTopReq) (res *v1.PutLiveManageTopRes, err error) {
 	count, err := dao.LiveRoomInfo.Ctx(ctx).Where(dao.LiveRoomInfo.Columns().IsTop, 1).Count()
 	if err != nil {
-		return nil, gerror.New("获取置顶直播间数量失败")
+		return nil, utils.TError(ctx, "stream.live.error.GetTopNum")
 	}
 	if count >= consts.MaxTopCount {
-		return nil, gerror.New("置顶直播间数量已达上限")
+		return nil, utils.TError(ctx, "stream.live.error.TopNumLimit")
 	}
 	_, err = dao.LiveRoomInfo.Ctx(ctx).Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).Update(do.LiveRoomInfo{
 		IsTop:     1,
@@ -305,7 +304,7 @@ func (s *sLiveManage) Top(ctx context.Context, req *v1.PutLiveManageTopReq) (res
 		UpdatedAt: utils.Now(),
 	})
 	if err != nil {
-		return nil, gerror.New("置顶直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.Top")
 	}
 	return
 }
@@ -317,7 +316,7 @@ func (s *sLiveManage) UnTop(ctx context.Context, req *v1.PutLiveManageUnTopReq) 
 		"updated_at": utils.Now(),
 	}).Where(dao.LiveRoomInfo.Columns().LiveId, req.Id).Update()
 	if err != nil {
-		return nil, gerror.New("取消置顶直播间失败")
+		return nil, utils.TError(ctx, "stream.live.error.UnTop")
 	}
 	return
 }
@@ -328,7 +327,7 @@ func (s *sLiveManage) Export(ctx context.Context, req *v1.ExportRoomInfoReq) (re
 		return nil, err
 	}
 	if len(list) == 0 {
-		return nil, gerror.New("没有需要导出的数据")
+		return nil, utils.TError(ctx, "stream.live.error.NoDataToExport")
 	}
 	r := g.RequestFromCtx(ctx)
 	r.Response.ClearBuffer()
@@ -455,11 +454,11 @@ func getExportData(ctx context.Context, req *v1.ExportRoomInfoReq) ([]*model.Exp
 	m = dealSortParams(m, req.Sort)
 	count, err := m.Count()
 	if err != nil || count <= 0 {
-		return nil, gerror.New("获取直播间信息失败")
+		return nil, utils.TError(ctx, "stream.live.error.GetRoomInfo")
 	}
 	err = m.Scan(&list)
 	if err != nil {
-		return nil, gerror.New("获取直播间信息失败")
+		return nil, utils.TError(ctx, "stream.live.error.GetRoomInfo")
 	}
 	ids := make([]int, count)
 	for i, item := range list {
@@ -468,7 +467,7 @@ func getExportData(ctx context.Context, req *v1.ExportRoomInfoReq) ([]*model.Exp
 	var mList []*entity.LiveManage
 	err = dao.LiveManage.Ctx(ctx).WhereIn(dao.LiveManage.Columns().Id, ids).Scan(&mList)
 	if err != nil {
-		return nil, gerror.New("获取直播间配置失败")
+		return nil, utils.TError(ctx, "stream.live.error.GetConfig")
 	}
 	mMap := make(map[int]*entity.LiveManage, count)
 	for _, item := range mList {
@@ -484,7 +483,7 @@ func getExportData(ctx context.Context, req *v1.ExportRoomInfoReq) ([]*model.Exp
 
 func exportTxt(r *ghttp.Request, ustr int64, list []*model.ExportRoomInfo) {
 	r.Response.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	filename := fmt.Sprintf("房间信息_%d.txt", ustr)
+	filename := utils.Tf(r.Context(), "stream.live.info.ExportTxtTitle", ustr)
 	disposition := fmt.Sprintf("attachment; filename=%s; filename*=UTF-8''%s", filename, url.QueryEscape(filename))
 	r.Response.Header().Set("Content-Disposition", disposition)
 
@@ -501,7 +500,7 @@ func exportTxt(r *ghttp.Request, ustr int64, list []*model.ExportRoomInfo) {
 
 func exportExcel(r *ghttp.Request, ustr int64, list []*model.ExportRoomInfo) {
 	r.Response.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-	filename := fmt.Sprintf("房间信息_%d.xlsx", ustr)
+	filename := utils.Tf(r.Context(), "stream.live.info.ExportExcelTitle", ustr)
 	disposition := fmt.Sprintf("attachment; filename=%s; filename*=UTF-8''%s", filename, url.QueryEscape(filename))
 	r.Response.Header().Set("Content-Disposition", disposition)
 	f := excelize.NewFile()
@@ -509,7 +508,7 @@ func exportExcel(r *ghttp.Request, ustr int64, list []*model.ExportRoomInfo) {
 	const sheet = "房间信息"
 	index, _ := f.NewSheet(sheet)
 	f.SetActiveSheet(index)
-	_ = f.SetSheetRow(sheet, "A1", &[]string{"直播间URL", "平台", "主播名称", "房间名称"})
+	_ = f.SetSheetRow(sheet, "A1", &[]string{utils.T(r.Context(), "stream.live.info.ExportURL"), utils.T(r.Context(), "stream.live.info.ExportPlatform"), utils.T(r.Context(), "stream.live.info.ExportAnchor"), utils.T(r.Context(), "stream.live.info.ExportRoomName")})
 	for i, row := range list {
 		cell := fmt.Sprintf("A%d", i+2)
 		_ = f.SetSheetRow(sheet, cell, &[]string{

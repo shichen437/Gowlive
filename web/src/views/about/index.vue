@@ -2,43 +2,43 @@
     <div class="space-y-4">
         <Card>
             <CardHeader>
-                <CardTitle>项目介绍</CardTitle>
+                <CardTitle>{{ t('project.about.intro.title') }}</CardTitle>
             </CardHeader>
             <CardContent>
                 <p class="text-base">
-                    Gowlive 是一个开源的直播录制工具，旨在为用户提供便捷、高效的直播内容录制解决方案，适用于需要保存、回看或分析直播内容的学习和交流场景。我们鼓励开发者和爱好者共同完善功能，提升用户体验。
+                    {{ t('project.about.intro.desc') }}
                 </p>
                 <br />
-                <p class="text-slate-500 underline">本项目仅供学习和技术交流使用，请勿将其用于任何商业用途或侵犯他人权益的行为。</p>
+                <p class="text-slate-500 underline">{{ t('project.about.intro.security') }}</p>
             </CardContent>
         </Card>
 
         <Card>
             <CardHeader>
-                <CardTitle>项目信息</CardTitle>
+                <CardTitle>{{ t('project.about.info.title') }}</CardTitle>
             </CardHeader>
             <CardContent>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <p class="flex items-center">
                         <Tag class="w-4 h-4 mr-2" />
-                        当前版本: v{{ currentVersion }}
+                        {{ t('project.about.info.currentVersion') }}: v{{ currentVersion }}
                         <span v-if="hasNewVersion"
                             class="ml-2 px-2 py-1 text-xs font-semibold text-white bg-red-500 rounded-full">
-                            发现新版本: {{ latestVersion }}
+                            {{ t('project.about.info.new') }}: {{ latestVersion }}
                         </span>
                     </p>
                     <p class="flex items-center truncate">
                         <Github class="w-4 h-4 mr-2" />
-                        访问源码: <a href="https://github.com/shichen437/Gowlive" target="_blank"
+                        {{ t('project.about.info.sourceCode') }}: <a href="https://github.com/shichen437/Gowlive" target="_blank"
                             class="text-slate-500 hover:underline ml-1">Github</a>
                     </p>
                     <p class="flex items-center">
                         <Mail class="w-4 h-4 mr-2" />
-                        作者邮箱: shichen437@126.com
+                        {{ t('project.about.info.email') }}: shichen437@126.com
                     </p>
                     <p class="flex items-center truncate">
                         <Gitlab class="w-4 h-4 mr-2" />
-                        源码镜像: <a href="https://gitee.com/shichen437/Gowlive" target="_blank"
+                        {{ t('project.about.info.sourceMirror') }}: <a href="https://gitee.com/shichen437/Gowlive" target="_blank"
                             class="text-slate-500 hover:underline ml-1">Gitee</a>
                     </p>
                 </div>
@@ -46,15 +46,15 @@
         </Card>
 
         <div class="flex flex-col items-center justify-center pt-8">
-            <h2 class="text-lg font-semibold mb-4">赞助 & 支持</h2>
+            <h2 class="text-lg font-semibold mb-4">{{ t('project.about.support.title') }}</h2>
             <div class="flex space-x-8">
                 <div class="flex flex-col items-center">
                     <img src="/support/alipay-qrcode.png" alt="Alipay QR Code" class="w-32 h-32">
-                    <p class="text-center mt-2">支付宝</p>
+                    <p class="text-center mt-2">{{ t('project.about.support.alipay') }}</p>
                 </div>
                 <div class="flex flex-col items-center">
                     <img src="/support/wechat-qrcode.png" alt="WeChat QR Code" class="w-32 h-32">
-                    <p class="text-center mt-2">微信</p>
+                    <p class="text-center mt-2">{{ t('project.about.support.wechat') }}</p>
                 </div>
             </div>
         </div>
@@ -63,10 +63,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Github, Gitlab, Tag, Mail } from 'lucide-vue-next'
 import { latestVersion as apiLatestVersion } from '@/api/system/settings'
 
+const { t } = useI18n()
 const currentVersion = import.meta.env.VITE_APP_VERSION
 const latestVersion = ref('')
 const hasNewVersion = ref(false)

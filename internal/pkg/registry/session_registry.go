@@ -13,6 +13,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/recorders"
 	"github.com/shichen437/gowlive/internal/pkg/service"
+	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
 var (
@@ -82,7 +83,7 @@ func (r *SessionRegistry) add(ctx context.Context, session *lives.LiveSession) e
 
 	liveApi, err := lives.New(session.Config.RoomUrl)
 	if err != nil {
-		manager.GetLogManager().AddErrorLog(consts.LogTypeLive, "解析 Api 失败: "+session.Config.RoomUrl)
+		manager.GetLogManager().AddErrorLog(consts.LogTypeLive, utils.T(ctx, "ext.live.parse.api.error")+session.Config.RoomUrl)
 		return gerror.Newf("failed to create live session : %s", err)
 	}
 	session.LiveApi = liveApi
@@ -105,7 +106,7 @@ func (r *SessionRegistry) add(ctx context.Context, session *lives.LiveSession) e
 	}
 
 	r.sessions[session.Id] = session
-	manager.GetLogManager().AddSuccessLog(consts.LogTypeLive, "创建直播会话成功："+session.Config.RoomUrl)
+	manager.GetLogManager().AddSuccessLog(consts.LogTypeLive, utils.T(ctx, "ext.live.add.session.success")+session.Config.RoomUrl)
 	g.Log().Infof(ctx, "Successfully added and started session %d (%s)", session.Id, session.Config.RoomUrl)
 	return nil
 }
@@ -131,7 +132,7 @@ func (r *SessionRegistry) Remove(ctx context.Context, sessionId int) error {
 
 	delete(r.sessions, sessionId)
 	g.Log().Infof(ctx, "Successfully stopped and removed session %d", sessionId)
-	manager.GetLogManager().AddSuccessLog(consts.LogTypeLive, "删除直播会话成功")
+	manager.GetLogManager().AddSuccessLog(consts.LogTypeLive, utils.T(ctx, "ext.live.remove.session.success"))
 	return nil
 }
 

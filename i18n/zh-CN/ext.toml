@@ -1,0 +1,11 @@
+"ext.storage.waning.title" = "空间预警"
+"ext.storage.waning.desc" = "存储空间使用率已达到 %s %%"
+
+"ext.push.live.start.title" = "开播通知"
+"ext.push.live.start.content" = "你关注的主播 【 %s 】 开播啦！"
+"ext.push.live.end.title" = "下播通知"
+"ext.push.live.end.content" = "你关注的主播 【 %s 】 已下播。"
+
+"ext.live.add.session.success" = "创建直播会话成功："
+"ext.live.remove.session.success" = "删除直播会话成功"
+"ext.live.parse.api.error" = "解析 Api 失败: "

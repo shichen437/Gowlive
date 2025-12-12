@@ -2,7 +2,6 @@ package message_push
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -10,17 +9,11 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/service"
+	"github.com/shichen437/gowlive/internal/pkg/utils"
 
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcache"
-)
-
-const (
-	LiveStartTitle          = "开播通知"
-	LiveEndTitle            = "下播通知"
-	LiveStartNotifyTemplate = "你关注的主播 【 %s 】 开播啦！"
-	LiveEndNotifyTemplate   = "你关注的主播 【 %s 】 已下播。"
 )
 
 var (
@@ -48,11 +41,11 @@ type Builder interface {
 func LivePush(ctx context.Context, anchor string, isLiving bool) {
 	var title, content string
 	if isLiving {
-		title = LiveStartTitle
-		content = fmt.Sprintf(LiveStartNotifyTemplate, anchor)
+		title = utils.T(ctx, "ext.push.live.start.title")
+		content = utils.Tf(ctx, "ext.push.live.start.content", anchor)
 	} else {
-		title = LiveEndTitle
-		content = fmt.Sprintf(LiveEndNotifyTemplate, anchor)
+		title = utils.T(ctx, "ext.push.live.end.title")
+		content = utils.Tf(ctx, "ext.push.live.end.content", anchor)
 	}
 	manager.GetNotifyManager().AddInfoNotify(title, content)
 	PushMessage(ctx, &MessageModel{Title: title, Content: content})

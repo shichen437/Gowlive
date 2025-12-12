@@ -4,18 +4,18 @@
             <div class="flex items-center space-x-2">
                 <Button @click="openAddRoomModal">
                     <Plus class="w-4 h-4 mr-2" />
-                    添加房间
+                    {{ t('stream.rooms.add.title') }}
                 </Button>
                 <Button @click="openBatchAddRoomModal" variant="secondary">
                     <CopyPlus class="w-4 h-4 mr-2" />
-                    批量添加
+                    {{ t('stream.rooms.batch.button') }}
                 </Button>
             </div>
             <div class="flex items-center space-x-2">
                 <div class="flex items-center">
                     <Button variant="outline" size="icon"
                         @click="setDisplayMode(displayMode === 'list' ? 'card' : 'list')"
-                        :aria-label="displayMode === 'list' ? '切换到卡片视图' : '切换到列表视图'">
+                        :aria-label="displayMode === 'list' ? t('stream.rooms.buttons.cardView') : t('stream.rooms.buttons.listView')">
                         <LayoutGrid v-if="displayMode === 'card'" class="w-4 h-4" />
                         <List v-else class="w-4 h-4" />
                     </Button>
@@ -30,11 +30,11 @@
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="text-center">主播名称</TableHead>
-                        <TableHead class="text-center">房间名称</TableHead>
-                        <TableHead class="text-center">平台</TableHead>
-                        <TableHead class="text-center">监控状态</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead class="text-center">{{ t('stream.common.fields.anchorName') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.rooms.fields.roomName') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.platform') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.rooms.fields.monitorStatus.title') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -81,20 +81,20 @@
                                     <DropdownMenuContent align="end">
                                         <DropdownMenuItem v-if="!room.isTop" @click="handleTopRoom(room.liveId)">
                                             <Pin class="w-4 h-4 mr-2" />
-                                            <span>置顶</span>
+                                            <span>{{ t('stream.rooms.buttons.top') }}</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem v-else @click="handleUnTopRoom(room.liveId)">
                                             <PinOff class="w-4 h-4 mr-2" />
-                                            <span>取消置顶</span>
+                                            <span>{{ t('stream.rooms.buttons.unTop') }}</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem @click="handleGoToRoomFolder(room)">
                                             <Folder class="w-4 h-4 mr-2" />
-                                            <span>打开文件夹</span>
+                                            <span>{{ t('stream.rooms.buttons.openFolder') }}</span>
                                         </DropdownMenuItem>
                                         <Separator class="my-1" />
                                         <DropdownMenuItem @click="openConfirmModal(room.liveId)" variant="destructive">
                                             <Trash2 class="w-4 h-4 mr-2" />
-                                            <span>删除</span>
+                                            <span>{{ t('common.operation.delete') }}</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -104,7 +104,7 @@
                     <template v-else>
                         <TableRow>
                             <TableCell :colspan="5" class="h-24 text-center">
-                                暂无数据
+                                {{ t('common.noData') }}
                             </TableCell>
                         </TableRow>
                     </template>
@@ -155,20 +155,20 @@
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem v-if="!room.isTop" @click="handleTopRoom(room.liveId)">
                                         <Pin class="w-4 h-4 mr-2" />
-                                        <span>置顶</span>
+                                        <span>{{ t('stream.rooms.buttons.top') }}</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem v-else @click="handleUnTopRoom(room.liveId)">
                                         <PinOff class="w-4 h-4 mr-2" />
-                                        <span>取消置顶</span>
+                                        <span>{{ t('stream.rooms.buttons.unTop') }}</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem @click="handleGoToRoomFolder(room)">
                                         <Folder class="w-4 h-4 mr-2" />
-                                        <span>打开文件夹</span>
+                                        <span>{{ t('stream.rooms.buttons.openFolder') }}</span>
                                     </DropdownMenuItem>
                                     <Separator class="my-1" />
                                     <DropdownMenuItem @click="openConfirmModal(room.liveId)" variant="destructive">
                                         <Trash2 class="w-4 h-4 mr-2" />
-                                        <span>删除</span>
+                                        <span>{{ t('common.operation.delete') }}</span>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -179,7 +179,7 @@
             <template v-else>
                 <div class="col-span-full">
                     <div class="border rounded-md h-32 flex justify-center items-center">
-                        暂无数据
+                        {{ t('common.noData') }}
                     </div>
                 </div>
             </template>
@@ -210,15 +210,16 @@
     <RoomModal ref="roomModal" @refresh="getRooms" />
     <BatchAddRoomModal ref="batchAddRoomModal" @refresh="getRooms" />
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => (showConfirmModal = open)"
-        :onConfirm="handleDeleteRoom" title="确认删除" description="你确定要删除该房间吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteRoom" :title="t('common.operation.deleteConfirm')" :description="t('stream.rooms.deleteDesc')" />
     <ConfirmModal :open="showStartConfirmModal" :onOpenChange="(open: any) => (showStartConfirmModal = open)"
-        :onConfirm="handleStartRoom" title="确认开始监控" description="你确定要开始监控该房间吗？" />
+        :onConfirm="handleStartRoom" :title="t('stream.rooms.startMonitor.title')" :description="t('stream.rooms.startMonitor.desc')" />
     <ConfirmModal :open="showStopConfirmModal" :onOpenChange="(open: any) => (showStopConfirmModal = open)"
-        :onConfirm="handleStopRoom" title="确认停止监控" description="你确定要停止监控该房间吗？" />
+        :onConfirm="handleStopRoom" :title="t('stream.rooms.stopMonitor.title')" :description="t('stream.rooms.stopMonitor.desc')" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import {
     roomList,
@@ -275,6 +276,7 @@ import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
 
+const { t } = useI18n();
 const router = useRouter();
 
 const showConfirmModal = ref(false);
@@ -348,17 +350,17 @@ const getStatusColor = (status: number, isRecording: boolean) => {
 
 const getStatusText = (status: number, isRecording: boolean) => {
     if (isRecording) {
-        return "录制中";
+        return t('stream.rooms.fields.monitorStatus.recording');
     }
     switch (status) {
         case 1:
-            return "实时监控";
+            return t('stream.rooms.fields.monitorStatus.realtime');
         case 2:
-            return "定时监控";
+            return t('stream.rooms.fields.monitorStatus.cron');
         case 3:
-            return "智能监控";
+            return t('stream.rooms.fields.monitorStatus.intelligent');
         default:
-            return "未监控";
+            return t('stream.rooms.fields.monitorStatus.none');
     }
 };
 
@@ -418,11 +420,11 @@ async function handleDeleteRoom() {
     try {
         const res: any = await deleteRoom(roomToDelete.value);
         if (res.code !== 0) {
-            toast.error(res.msg || "删除失败");
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
         getRooms();
-        toast.success("删除成功");
+        toast.success(t('common.toast.deleteSuccess'));
     } catch (error) {
         console.error("Failed to delete room:", error);
     } finally {
@@ -448,11 +450,11 @@ async function handleStartRoom() {
     try {
         const res: any = await startRoom(roomToStart.value);
         if (res.code !== 0) {
-            toast.error(res.msg || "操作失败");
+            toast.error(res.msg || t('common.toast.operationFailed'));
             return;
         }
         getRooms();
-        toast.success("已开始监控");
+        toast.success(t('stream.rooms.toast.startMonitor'));
     } catch (error) {
         console.error("Failed to start room:", error);
     } finally {
@@ -468,11 +470,11 @@ async function handleStopRoom() {
     try {
         const res: any = await stopRoom(roomToStop.value);
         if (res.code !== 0) {
-            toast.error(res.msg || "操作失败");
+            toast.error(res.msg || t('common.toast.operationFailed'));
             return;
         }
         getRooms();
-        toast.success("已停止监控");
+        toast.success(t('stream.rooms.toast.stopMonitor'));
     } catch (error) {
         console.error("Failed to stop room:", error);
     } finally {
@@ -485,11 +487,11 @@ async function handleTopRoom(id: number) {
     try {
         const res: any = await topRoom(id);
         if (res.code !== 0) {
-            toast.error(res.msg || "置顶失败");
+            toast.error(res.msg || t('stream.rooms.toast.topErr'));
             return;
         }
         getRooms();
-        toast.success("置顶成功");
+        toast.success(t('stream.rooms.toast.topSuccess'));
     } catch (error) {
         console.error("Failed to top room:", error);
     }
@@ -499,11 +501,11 @@ async function handleUnTopRoom(id: number) {
     try {
         const res: any = await unTopRoom(id);
         if (res.code !== 0) {
-            toast.error(res.msg || "取消置顶失败");
+            toast.error(res.msg || t('stream.rooms.toast.unTopErr'));
             return;
         }
         getRooms();
-        toast.success("取消置顶成功");
+        toast.success(t('stream.rooms.toast.unTopSuccess'));
     } catch (error) {
         console.error("Failed to un-top room:", error);
     }
@@ -529,7 +531,7 @@ const handleExport = async (exportType: number) => {
             }
             const payload = JSON.parse(text);
             const code = payload?.code ?? -1;
-            const msg = payload?.msg || '导出失败';
+            const msg = payload?.msg || t('stream.rooms.toast.exportErr');
             if (code !== 0) {
                 toast.error(msg);
                 return;

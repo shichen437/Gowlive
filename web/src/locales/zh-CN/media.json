@@ -1,0 +1,87 @@
+{
+  "file": {
+    "confirmCheck": {
+      "title": "确认检查",
+      "desc": "你确定要为该文件创建检测任务吗？"
+    },
+    "fields": {
+      "filesize": "文件大小",
+      "lastModified": "上次修改时间",
+      "systemDir": "系统目录"
+    },
+    "delete": {
+      "file": "你确定要删除该文件吗？此操作无法撤销。",
+      "folder": "你确定要删除该空文件夹吗？此操作无法撤销。",
+      "folderNotEmpty": "文件夹不为空，你确定要删除该文件夹及其所有内容吗？此操作无法撤销。"
+    },
+    "toast": {
+      "list": "获取文件列表失败",
+      "createcCheck": "创建任务失败",
+      "folderStatus": "检查文件夹状态失败"
+    },
+    "createcCheckSuccess": "创建任务成功"
+  },
+  "check": {
+    "fields": {
+      "status": {
+        "title": "文件状态",
+        "pending": "待检测",
+        "normal": "正常",
+        "bad": "疑似损坏",
+        "notExist": "文件不存在",
+        "unknown": "未知"
+      },
+      "progress": {
+        "title": "进度",
+        "pending": "等待开始",
+        "qcing": "快检中...",
+        "qcerr": "快检异常",
+        "acing": "全量检测中...",
+        "acerr": "全量检测异常",
+        "success": "检测完成"
+      },
+      "duration": "耗时",
+      "finishTime": "结束时间"
+    },
+    "deleteConfirmDesc": "你确定要删除这个任务吗？此操作无法撤销。",
+    "clear": {
+      "button": "清空记录",
+      "title": "确认清空",
+      "desc": "你确定要清空所有记录吗？此操作无法撤销。",
+      "success": "清空成功"
+    },
+    "toast": {
+      "listErr": "获取列表失败",
+      "clearErr": "清空失败"
+    }
+  },
+  "play": {
+    "playlist": "播放列表",
+    "clip": {
+      "fields": {
+        "startTime": "开始时间",
+        "setStartTime": "设为当前播放时间",
+        "endTime": "结束时间",
+        "setEndTime": "设为当前播放时间"
+      },
+      "button": "视频剪辑",
+      "clipping": "剪辑中...",
+      "startClip": "开始剪辑",
+      "success": "剪辑成功，文件已保存",
+      "desc": "选择开始和结束时间，生成精彩片段。原文件将保留。",
+      "tooltip": "提示：为了快速处理，剪辑采用无损模式（Copy），时间定位可能存在关键帧级别的轻微误差。"
+    },
+    "toast": {
+      "clipErr": "剪辑失败",
+      "endBeforeStart": "结束时间必须大于开始时间",
+      "listErr": "获取文件列表失败",
+      "loadVideoErr": "无法加载视频，缺少地址或参数。",
+      "requestFailed": "请求失败"
+    }
+  },
+  "common": {
+    "fields": {
+      "filename": "文件名"
+    }
+  }
+}

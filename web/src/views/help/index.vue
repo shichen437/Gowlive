@@ -2,14 +2,12 @@
     <div class="flex justify-center p-4 md:p-6">
         <div class="w-full max-w-4xl">
             <div class="mb-8 text-center">
-                <h1 class="text-3xl font-bold tracking-tight">常见问题</h1>
-                <p class="text-muted-foreground mt-2">这里是一些比较常见的问题。</p>
+                <h1 class="text-3xl font-bold tracking-tight">{{ t('project.help.title') }}</h1>
+                <p class="text-muted-foreground mt-2">{{ t('project.help.desc') }}</p>
             </div>
-            <Accordion type="single" class="w-full" collapsible :default-value="faqs[0].value">
+            <Accordion v-if="faqs.length > 0" type="single" class="w-full" collapsible :default-value="faqs[0].value">
                 <AccordionItem v-for="faq in faqs" :key="faq.value" :value="faq.value">
-                    <AccordionTrigger class="text-md">{{
-                        faq.question
-                    }}</AccordionTrigger>
+                    <AccordionTrigger class="text-md">{{ faq.question }}</AccordionTrigger>
                     <AccordionContent>
                         <p class="leading-relaxed whitespace-pre-line">
                             {{ faq.answer }}
@@ -28,45 +26,24 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
-const faqs = [
-    {
-        value: "item-0",
-        question: "关于监控类型",
-        answer:
-            "智能监控会通过直播状态、直播历史和监控指标动态调整轮询时间。如对实时性要求较高，建议开启实时监控。如直播时间固定，建议开启定时监控。",
-    },
-    {
-        value: "item-1",
-        question: "关于监控数量",
-        answer: "目前未进行压测，暂无单平台最大同时监控数的有效数据。",
-    },
-    {
-        value: "item-2",
-        question: "关于监控指标",
-        answer: "监控指标会统计五分钟内的直播请求数据，出现异常指标时会进行全局告警。",
-    },
-    {
-        value: "item-3",
-        question: "直播链接格式",
-        answer:
-            "暂时只支持 web 端直播间链接，例如：https://live.platform.com/xxxxxx",
-    },
-    {
-        value: "item-4",
-        question: "主页链接格式",
-        answer:
-            "暂时只支持 web 端主播主页链接，例如：https://www.platform.com/user/xxxxxx",
-    },
-    {
-        value: "item-5",
-        question: "关于视频播放",
-        answer: "对于 H5 播放器： \r\nMKV格式仅部分浏览器支持音频解码(如 Edge);\r\nFLV/TS格式由于原生不支持，拖拽进度条功能受限。",
-    },
-    {
-        value: "item-6",
-        question: "关于录制格式",
-        answer: "MKV/TS：抗断电，易修复；FLV：低开销，连续写入；MP4：功能全面，不抗断电。",
+const { t, locale, messages } = useI18n();
+
+interface Faq {
+    value: string;
+    question: string;
+    answer: string;
+}
+
+const faqs = computed<Faq[]>(() => {
+    try {
+        const faqsData = (messages.value[locale.value] as any).project.help.faqs;
+        return Array.isArray(faqsData) ? faqsData : [];
+    } catch (e) {
+        console.error("Could not load FAQs:", e);
+        return [];
     }
-];
+});
 </script>

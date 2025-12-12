@@ -2,13 +2,13 @@
     <Dialog :open="open" @update:open="onOpenChange">
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
-                <DialogTitle>修改信息</DialogTitle>
-                <DialogDescription>修改你的个人昵称和性别。</DialogDescription>
+                <DialogTitle>{{ t('user.profile.edit.title') }}</DialogTitle>
+                <DialogDescription>{{ t('user.profile.edit.desc') }}</DialogDescription>
             </DialogHeader>
             <form class="space-y-4">
                 <FormField v-slot="{ componentField }" name="nickname">
                     <FormItem class="grid grid-cols-4 items-center gap-4">
-                        <FormLabel class="text-right">昵称</FormLabel>
+                        <FormLabel class="text-right">{{ t('user.profile.fileds.nickname') }}</FormLabel>
                         <FormControl class="col-span-3">
                             <Input v-bind="componentField" />
                         </FormControl>
@@ -17,16 +17,16 @@
                 </FormField>
                 <FormField v-slot="{ componentField }" name="sex">
                     <FormItem class="grid grid-cols-4 items-center gap-4">
-                        <FormLabel class="text-right">性别</FormLabel>
+                        <FormLabel class="text-right">{{ t('user.profile.fileds.gender') }}</FormLabel>
                         <Select v-bind="componentField">
                             <FormControl class="col-span-3">
                                 <SelectTrigger class="w-full">
-                                    <SelectValue placeholder="请选择性别" />
+                                    <SelectValue :placeholder="t('user.profile.edit.placeholder.sex')" />
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem :value="1">男</SelectItem>
-                                <SelectItem :value="0">女</SelectItem>
+                                <SelectItem :value="1">{{ t('user.profile.fileds.male') }}</SelectItem>
+                                <SelectItem :value="0">{{ t('user.profile.fileds.female') }}</SelectItem>
                             </SelectContent>
                         </Select>
                         <FormMessage class="col-start-2 col-span-3" />
@@ -34,7 +34,7 @@
                 </FormField>
             </form>
             <DialogFooter>
-                <Button type="button" @click="onSubmit">保存</Button>
+                <Button type="button" @click="onSubmit">{{ t('common.operation.save') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>
@@ -72,6 +72,9 @@ import {
 import { putProfile } from '@/api/admin/user';
 import type { UserInfo } from '@/types/user';
 import { toast } from 'vue-sonner';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     open: boolean;
@@ -81,7 +84,7 @@ const props = defineProps<{
 const emit = defineEmits(['update:open', 'success']);
 
 const formSchema = toTypedSchema(z.object({
-    nickname: z.string().min(2, '昵称至少需要 2 个字符。'),
+    nickname: z.string().min(2, t('user.profile.edit.valid.nickname')),
     sex: z.coerce.number().int().nonnegative().max(1),
 }));
 
@@ -105,13 +108,13 @@ const onOpenChange = (open: boolean) => {
 const onSubmit = handleSubmit((values) => {
     const promise = putProfile(values.nickname, values.sex);
     toast.promise(promise, {
-        loading: '正在保存...',
+        loading: t('common.operation.saving'),
         success: () => {
             emit('success');
             onOpenChange(false);
-            return '修改成功';
+            return t('common.toast.updateSuccess');
         },
-        error: '修改失败',
+        error: t('common.toast.updateFailed'),
     });
 });
 </script>

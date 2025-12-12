@@ -6,3 +6,13 @@ export async function overview() {
     method: "get",
   });
 }
+
+export async function lang() {
+  return request({
+    url: "/system/lang",
+    method: "get",
+    headers: {
+      isToken: false,
+    },
+  });
+}

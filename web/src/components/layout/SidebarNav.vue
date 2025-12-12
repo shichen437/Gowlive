@@ -12,6 +12,9 @@ import {
 } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface MenuItem {
   title: string;
@@ -57,7 +60,7 @@ watch(route, updateOpenCollapsible, { immediate: true });
         :variant="isLinkActive(item.to) ? 'outline' : 'default'">
         <router-link :to="item.to || '/'">
           <component :is="item.icon" class="h-5 w-5 shrink-0" />
-          <span>{{ item.title }}</span>
+          <span>{{ t(item.title) }}</span>
         </router-link>
       </SidebarMenuButton>
     </SidebarMenuItem>
@@ -68,19 +71,19 @@ watch(route, updateOpenCollapsible, { immediate: true });
         <SidebarMenuButton class="w-full px-4 text-base"
           :variant="isChildActive(item.children) ? 'outline' : 'default'">
           <component :is="item.icon" class="h-5 w-5 shrink-0" />
-          <span>{{ item.title }}</span>
+          <span>{{ t(item.title) }}</span>
           <ChevronDown
             class="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </SidebarMenuButton>
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div class="py-1 pl-8">
-          <template v-for="(child) in item.children" :key="childIndex">
+          <template v-for="(child, childIndex) in item.children" :key="childIndex">
             <SidebarMenuItem>
               <SidebarMenuButton :as-child="true" class="text-sm"
                 :variant="isLinkActive(child.to) ? 'outline' : 'default'">
                 <router-link :to="child.to || '/'">
-                  {{ child.title }}
+                  {{ t(child.title) }}
                 </router-link>
               </SidebarMenuButton>
             </SidebarMenuItem>

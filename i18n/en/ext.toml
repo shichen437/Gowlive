@@ -1,0 +1,11 @@
+"ext.storage.waning.title" = "Storage Warning"
+"ext.storage.waning.desc" = "Storage usage has reached %s %%"
+
+"ext.push.live.start.title" = "Live Stream Started"
+"ext.push.live.start.content" = "The streamer you follow 【 %s 】 has started streaming!"
+"ext.push.live.end.title" = "Live Stream Ended"
+"ext.push.live.end.content" = "The streamer you follow 【 %s 】 has ended the stream."
+
+"ext.live.add.session.success" = "Live session created successfully: "
+"ext.live.remove.session.success" = "Live session deleted successfully"
+"ext.live.parse.api.error" = "Failed to parse API: "

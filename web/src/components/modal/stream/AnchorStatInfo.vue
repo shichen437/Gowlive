@@ -22,13 +22,13 @@
                 <div v-if="chartData.length > 0">
                     <h3 class="text-s mb-2">粉丝趋势</h3>
                     <div class="border rounded-md p-4">
-                        <LineChart :data="chartData" :categories="['粉丝数', '点赞数']" index="date" :show-legend="true"
+                        <LineChart :data="chartData" :categories="[t('stream.anchor.fields.followers'), t('stream.anchor.fields.likes')]" index="date" :show-legend="true"
                             :margin="{ left: 60, right: 20, top: 20, bottom: 50 }" :curve-type="CurveType.Linear" />
                     </div>
                 </div>
             </div>
             <DialogFooter>
-                <Button @click="closeModal">关闭</Button>
+                <Button @click="closeModal">{{ t('common.operation.cancel') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>
@@ -47,11 +47,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { LineChart } from '@/components/ui/chart-line';
 import { CurveType } from '@unovis/ts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface ChartDataItem {
     date: string;
-    粉丝数: number;
-    点赞数: number;
+    [key: string]: number | string;
 }
 
 const isOpen = ref(false);
@@ -68,8 +70,8 @@ const chartData = computed<ChartDataItem[]>(() => {
 
     return displayData.map((item, _) => ({
         date: item.recordDate,
-        粉丝数: item.followers,
-        点赞数: item.likeCount
+        [t('stream.anchor.fields.followers')]: item.followers,
+        [t('stream.anchor.fields.likes')]: item.likeCount
     }));
 });
 

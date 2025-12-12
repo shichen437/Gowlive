@@ -5,7 +5,6 @@ import (
 	"slices"
 
 	"github.com/gogf/gf/v2/database/gdb"
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	v1 "github.com/shichen437/gowlive/api/v1/system"
 	"github.com/shichen437/gowlive/internal/app/system/dao"
@@ -46,7 +45,7 @@ func (s *sPushChannel) List(ctx context.Context, req *v1.GetPushChannelListReq) 
 	m = m.OrderDesc(dao.PushChannel.Columns().Id)
 	err = m.Page(req.PageNum, req.PageSize).Scan(&res.Rows)
 	if err != nil {
-		return nil, gerror.New("获取渠道列表失败")
+		return nil, utils.TError(ctx, "system.push.error.GetList")
 	}
 	return
 }
@@ -147,14 +146,14 @@ func (s *sPushChannel) Get(ctx context.Context, req *v1.GetPushChannelReq) (res 
 	res = &v1.GetPushChannelRes{}
 	err = dao.PushChannel.Ctx(ctx).WherePri(req.Id).Scan(&res)
 	if err != nil || res == nil || res.Id == 0 {
-		err = gerror.New("获取渠道详情失败")
+		err = utils.TError(ctx, "system.push.error.GetDetail")
 		return
 	}
 	if res.Type == "email" {
 		var email *entity.PushChannelEmail
 		err = dao.PushChannelEmail.Ctx(ctx).Where(dao.PushChannelEmail.Columns().ChannelId, req.Id).Limit(1).Scan(&email)
 		if err != nil {
-			err = gerror.New("获取渠道详情失败")
+			err = utils.TError(ctx, "system.push.error.GetDetail")
 			return
 		}
 		if email != nil {
@@ -165,7 +164,7 @@ func (s *sPushChannel) Get(ctx context.Context, req *v1.GetPushChannelReq) (res 
 		var webhook *entity.PushChannelWebhook
 		err = dao.PushChannelWebhook.Ctx(ctx).Where(dao.PushChannelWebhook.Columns().ChannelId, req.Id).Limit(1).Scan(&webhook)
 		if err != nil {
-			err = gerror.New("获取渠道详情失败")
+			err = utils.TError(ctx, "system.push.error.GetDetail")
 			return
 		}
 		if webhook != nil {
@@ -192,7 +191,7 @@ func (s *sPushChannel) Delete(ctx context.Context, req *v1.DeletePushChannelReq)
 		return nil
 	})
 	if err != nil {
-		return nil, gerror.New("删除推送渠道失败")
+		return nil, utils.TError(ctx, "system.push.error.Delete")
 	}
 	return
 }

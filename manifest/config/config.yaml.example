@@ -6,6 +6,7 @@ server:
 project:
   data: "resources/data"
   sm4key: "abcdefghijklmnopqrstuvwxyz123456"
+  lang: "zh-CN"
 
 logger:
   path: "resources/logs/system/"

@@ -7,17 +7,17 @@
                     <template v-for="(item, index) in breadcrumbs" :key="item.path">
                         <BreadcrumbItem>
                             <BreadcrumbPage v-if="index === breadcrumbs.length - 1">
-                                {{ item.meta.title }}
+                                {{ t(item.meta.title as string) }}
                             </BreadcrumbPage>
                             <BreadcrumbLink as="span" v-else-if="
                                 item.children && item.children.length > 0
                             " class="cursor-default">
-                                {{ item.meta.title }}
+                                {{ t(item.meta.title as string) }}
                             </BreadcrumbLink>
                             <BreadcrumbLink v-else :as-child="true">
                                 <router-link :to="item.path">{{
-                                    item.meta.title
-                                }}</router-link>
+                                    t(item.meta.title as string)
+                                    }}</router-link>
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator v-if="index < breadcrumbs.length - 1" />
@@ -36,16 +36,16 @@
                     <TooltipContent>
                         <div class="grid gap-2">
                             <p>
-                                <span class="mr-2">请求错误率:</span>
+                                <span class="mr-2">{{ t('project.topbar.errRate') }}:</span>
                                 <span>{{
                                     healthInfo.errorPercent.toFixed(2)
-                                    }}%</span>
+                                }}%</span>
                             </p>
                             <p>
-                                <span class="mr-2">磁盘使用率:</span>
+                                <span class="mr-2">{{ t('project.topbar.diskUsage') }}:</span>
                                 <span>{{
                                     healthInfo.diskUsage.toFixed(2)
-                                    }}%</span>
+                                }}%</span>
                             </p>
                         </div>
                     </TooltipContent>
@@ -54,6 +54,18 @@
             <Button @click="toggleFullscreen" variant="ghost" size="icon">
                 <component :is="isFullscreen ? Minimize : Maximize" class="h-5 w-5" />
             </Button>
+            <DropdownMenu>
+                <DropdownMenuTrigger as-child>
+                    <Button variant="ghost" size="icon">
+                        <Languages class="h-5 w-5" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem v-for="l in locales" :key="l.locale" @click="changeLocale(l.locale)">
+                        {{ l.name }}
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
             <Button @click="cycle()" variant="ghost" size="icon">
                 <Sun class="h-5 w-5" v-if="mode === 'light'" />
                 <Moon class="h-5 w-5" v-else-if="mode === 'dark'" />
@@ -85,7 +97,7 @@
                             <div class="flex pt-2">
                                 <Calendar class="mr-2 h-4 w-4 opacity-70" />
                                 <span class="text-xs text-muted-foreground">
-                                    发布于 {{ features.date }}
+                                    {{ t('project.topbar.publish') }} {{ features.date }}
                                 </span>
                             </div>
                         </div>
@@ -97,7 +109,7 @@
                     <Avatar class="h-8 w-8">
                         <AvatarFallback>{{
                             userInfo?.nickname?.charAt(0)?.toUpperCase()
-                        }}</AvatarFallback>
+                            }}</AvatarFallback>
                     </Avatar>
                 </router-link>
             </Button>
@@ -111,6 +123,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/store/user";
 import { useTheme } from "@/composables/useTheme";
 import { createSSEConnection } from "@/lib/sse";
+import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -123,6 +136,13 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
     HoverCard,
     HoverCardContent,
@@ -144,8 +164,22 @@ import {
     Megaphone,
     Calendar,
     Frown,
+    Languages,
 } from "lucide-vue-next";
 import features from "@/lib/others/feature.json";
+
+const { t, locale } = useI18n();
+
+const locales = [
+    { locale: 'en', name: 'English' },
+    { locale: 'zh-CN', name: '简体中文' },
+    { locale: 'zh-TW', name: '繁體中文' },
+]
+
+const changeLocale = (lang: string) => {
+    locale.value = lang;
+    localStorage.setItem('locale', lang);
+};
 
 const { mode, cycle } = useTheme();
 
@@ -201,7 +235,7 @@ onMounted(async () => {
                     } else {
                         toast.error(msg.data.notify.title, {
                             position: 'top-center', duration: 7000, action: {
-                                label: '查看详情',
+                                label: t('project.topbar.detail'),
                                 onClick: () => {
                                     router.push('/system/notify')
                                 }

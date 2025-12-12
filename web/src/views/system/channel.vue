@@ -3,25 +3,25 @@
         <div class="flex justify-between items-center">
             <Button @click="handleAdd">
                 <Plus class="w-4 h-4 mr-2" />
-                添加渠道
+                {{ t('system.channel.add.button') }}
             </Button>
         </div>
         <div class="border rounded-lg">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="text-center">渠道名称</TableHead>
-                        <TableHead class="text-center">渠道类型</TableHead>
-                        <TableHead class="text-center">启用状态</TableHead>
-                        <TableHead class="text-center">备注</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead class="text-center">{{ t('system.channel.fields.name') }}</TableHead>
+                        <TableHead class="text-center">{{ t('system.channel.fields.type') }}</TableHead>
+                        <TableHead class="text-center">{{ t('system.channel.fields.status') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.remark') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     <template v-if="channels.length === 0">
                         <TableRow>
                             <TableCell :colspan="5" class="h-24 text-center">
-                                暂无数据
+                                {{ t('common.noData') }}
                             </TableCell>
                         </TableRow>
                     </template>
@@ -32,7 +32,7 @@
                             <TableCell class="text-center">
                                 <Badge variant="outline"
                                     :class="channel.status === 1 ? 'text-green-600' : 'text-red-600'">
-                                    {{ channel.status === 1 ? "启用" : "禁用" }}
+                                    {{ channel.status === 1 ? t('system.channel.fields.statusActive') : "禁用" }}
                                 </Badge>
                             </TableCell>
                             <TableCell class="text-center">{{ channel.remark }}</TableCell>
@@ -73,12 +73,14 @@
         <ChannelModal v-model="isChannelModalOpen" :channel="selectedChannel" @success="handleModalSuccess" />
 
         <ConfirmModal :open="isConfirmModalOpen" :onOpenChange="(v) => (isConfirmModalOpen = v)"
-            :onConfirm="handleDeleteConfirm" title="确认删除" description="此操作无法撤销。这将永久删除该推送渠道。" />
+            :onConfirm="handleDeleteConfirm" :title="t('common.operation.deleteConfirm')"
+            :description="t('system.channel.deleteDesc')" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -105,6 +107,7 @@ import ChannelModal from "@/components/modal/system/ChannelModal.vue";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
 import { toast } from "vue-sonner";
 
+const { t } = useI18n();
 const { dict } = useDict("channel_type");
 
 const channels = ref<PushChannel[]>([]);
@@ -128,7 +131,7 @@ async function getChannels() {
         };
         const res: any = await listPushChannel(params);
         if (res.code !== 0) {
-            toast.error(res.msg || "获取列表失败");
+            toast.error(res.msg || t('system.channel.toast.listErr'));
         }
         channels.value = res.data.rows || [];
         total.value = res.data.total || 0;
@@ -169,11 +172,11 @@ async function handleDeleteConfirm() {
     try {
         const res: any = await deletePushChannel(channelToDelete.value);
         if (res.code !== 0) {
-            toast.error(res.msg || "删除失败");
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
         getChannels();
-        toast.success("删除成功");
+        toast.success(t('common.toast.deleteSuccess'));
     } catch (error) {
         console.error("Failed to delete channel:", error);
     } finally {

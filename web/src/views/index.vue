@@ -17,7 +17,7 @@
                             <SidebarMenuButton :as-child="true" class="px-4 text-base">
                                 <router-link to="/">
                                     <ChartNoAxesGantt class="h-5 w-5 shrink-0" />
-                                    <span>概览</span>
+                                    <span>{{ t('project.router.overview') }}</span>
                                 </router-link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
@@ -31,7 +31,7 @@
                             <SidebarMenuButton
                                 class="w-full justify-center text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
                                 <LogOut class="h-8 w-8" />
-                                <span>退出登录</span>
+                                <span>{{ t('project.login.logout.title') }}</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
@@ -49,7 +49,8 @@
         </div>
     </SidebarProvider>
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="handleLogout" title="确认退出" description="你确定要退出登录吗？" />
+        :onConfirm="handleLogout" :title="t('project.login.logout.confirm')"
+        :description="t('project.login.logout.confirmDesc')" />
 </template>
 
 <script setup lang="ts">
@@ -74,6 +75,9 @@ import {
 } from 'lucide-vue-next';
 import { ref } from 'vue';
 import ConfirmModal from '@/components/modal/ConfirmModal.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const userStore = useUserStore();
 const router = useRouter();

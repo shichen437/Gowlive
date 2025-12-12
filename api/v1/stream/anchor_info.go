@@ -21,7 +21,7 @@ type GetAnchorListRes struct {
 
 type PostAnchorReq struct {
 	g.Meta `path:"/live/anchor" method:"post" tags:"主播数据" summary:"新增主播"`
-	Url    string `json:"url" dc:"主播URL" v:"required#主播URL不能为空"`
+	Url    string `json:"url" dc:"主播URL" v:"required#stream.anchor.valid.UrlRequired"`
 }
 type PostAnchorRes struct {
 	g.Meta `mime:"application/json"`
@@ -29,7 +29,7 @@ type PostAnchorRes struct {
 
 type DeleteAnchorReq struct {
 	g.Meta `path:"/live/anchor/{id}" method:"delete" tags:"主播数据" summary:"删除主播"`
-	Id     *int `json:"id" dc:"主播ID" v:"required#主播ID不能为空"`
+	Id     *int `json:"id" dc:"主播ID" v:"required#stream.anchor.valid.IDRequired"`
 }
 type DeleteAnchorRes struct {
 	g.Meta `mime:"application/json"`
@@ -37,7 +37,7 @@ type DeleteAnchorRes struct {
 
 type GetAnchorStatInfoReq struct {
 	g.Meta `path:"/live/anchor/stat/{id}" method:"get" tags:"主播数据" summary:"获取主播统计信息"`
-	Id     *int `json:"id" dc:"主播ID" v:"required#主播ID不能为空"`
+	Id     *int `json:"id" dc:"主播ID" v:"required#stream.anchor.valid.IDRequired"`
 }
 type GetAnchorStatInfoRes struct {
 	g.Meta `mime:"application/json"`

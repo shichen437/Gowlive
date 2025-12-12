@@ -1,0 +1,136 @@
+{
+  "about": {
+    "intro": {
+      "title": "專案介紹",
+      "desc": "Gowlive 是一個開源的直播錄製工具，旨在為使用者提供便捷、高效的直播內容錄製解決方案，適用於需要保存、回看或分析直播內容的學習與交流情境。我們鼓勵開發者與愛好者共同完善功能，提升使用體驗。",
+      "security": "本專案僅供學習與技術交流使用，請勿將其用於任何商業用途或侵犯他人權益之行為。"
+    },
+    "info": {
+      "title": "專案資訊",
+      "currentVersion": "目前版本",
+      "new": "發現新版本",
+      "email": "作者信箱",
+      "sourceCode": "存取原始碼",
+      "sourceMirror": "原始碼鏡像"
+    },
+    "support": {
+      "title": "贊助與支援",
+      "wechat": "微信",
+      "alipay": "支付寶"
+    }
+  },
+  "login": {
+    "title": "登入",
+    "logout": {
+      "title": "登出",
+      "confirm": "確認登出",
+      "confirmDesc": "你確定要登出嗎？"
+    },
+    "slogan": "一個直播錄製平台",
+    "desc": "輸入你的使用者名稱與密碼以登入帳戶",
+    "fields": {
+      "username": "使用者名稱",
+      "password": "密碼"
+    },
+    "placeholders": {
+      "username": "請輸入使用者名稱",
+      "password": "請輸入密碼"
+    }
+  },
+  "router": {
+    "overview": "總覽",
+    "liveManagement": "直播管理",
+    "roomList": "房間列表",
+    "anchorData": "主播資料",
+    "liveHistory": "直播歷史",
+    "monitoringMetrics": "監控指標",
+    "mediaCenter": "媒體中心",
+    "fileManagement": "檔案管理",
+    "fileDetection": "檔案檢測",
+    "systemManagement": "系統管理",
+    "logCenter": "日誌中心",
+    "pushChannel": "推送管道",
+    "notificationCenter": "通知中心",
+    "commonQuestions": "常見問題",
+    "personalCenter": "個人中心",
+    "about": "關於",
+    "mediaPlayer": "媒體播放",
+    "cookie": "Cookie"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "早安，{nickname}！今天也要元氣滿滿哦！",
+      "noon": "午安，{nickname}！吃飽喝足，午休一會兒更舒服！",
+      "afternoon": "午安，{nickname}！繼續加油，保持好心情！",
+      "evening": "晚安，{nickname}！辛苦一天，放鬆一下吧！",
+      "night": "夜深了，蓋好被子，做個好夢，晚安~"
+    },
+    "cardTitle": {
+      "total": "房間總數",
+      "recording": "正在錄製",
+      "duration": "錄製時長",
+      "unread": "未讀通知"
+    },
+    "cpu": {
+      "model": "型號",
+      "cores": "核心",
+      "frequency": "頻率",
+      "usage": "使用率"
+    },
+    "memory": "記憶體",
+    "disk": "磁碟",
+    "common": {
+      "total": "總計",
+      "used": "已用",
+      "available": "可用",
+      "usage": "使用率"
+    }
+  },
+  "help": {
+    "title": "常見問題",
+    "desc": "這裡是一些較為常見的問題。",
+    "faqs": [
+      {
+        "value": "item-0",
+        "question": "關於監控類型",
+        "answer": "智慧監控會透過直播狀態、直播歷史和監控指標動態調整輪詢時間。如對即時性要求較高，建議開啟即時監控。如直播時間固定，建議開啟定時監控。"
+      },
+      {
+        "value": "item-1",
+        "question": "關於監控數量",
+        "answer": "目前未進行壓力測試，尚無單平台最大同時監控數的有效數據。"
+      },
+      {
+        "value": "item-2",
+        "question": "關於監控指標",
+        "answer": "監控指標會統計五分鐘內的直播請求數據，出現異常指標時會進行全域警報。"
+      },
+      {
+        "value": "item-3",
+        "question": "直播連結格式",
+        "answer": "暫時僅支援網頁端直播間連結，例如：https://live.platform.com/xxxxxx"
+      },
+      {
+        "value": "item-4",
+        "question": "主頁連結格式",
+        "answer": "暫時僅支援網頁端主播主頁連結，例如：https://www.platform.com/user/xxxxxx"
+      },
+      {
+        "value": "item-5",
+        "question": "關於影片播放",
+        "answer": "對於 H5 播放器：\r\nMKV 格式僅部分瀏覽器支援音訊解碼 (如 Edge)；\r\nFLV/TS 格式由於原生不支援，拖曳進度條功能受限。"
+      },
+      {
+        "value": "item-6",
+        "question": "關於錄製格式",
+        "answer": "MKV/TS：抗斷電，易修復；FLV：低開銷，連續寫入；MP4：功能全面，不抗斷電。"
+      }
+    ]
+  },
+  "topbar": {
+    "errRate": "請求錯誤率",
+    "diskUsage": "磁碟使用率",
+    "publish": "發布於",
+    "detail": "查看詳細"
+  }
+}

@@ -8,8 +8,8 @@
               <SquareActivity class="size-8" />
             </EmptyMedia>
             <EmptyHeader>
-              <EmptyTitle>暂无数据</EmptyTitle>
-              <EmptyDescription> 当前没有直播监控数据。 </EmptyDescription>
+              <EmptyTitle>{{ t('common.noData') }}</EmptyTitle>
+              <EmptyDescription> {{ t('stream.metrics.emptyDesc') }} </EmptyDescription>
             </EmptyHeader>
           </Empty>
         </CardContent>
@@ -27,18 +27,18 @@
             getPlatformLabel(platform)
           }}</CardTitle>
           <CardDescription class="text-sm text-muted-foreground">
-            每五分钟
+            {{ t('stream.metrics.every5Min') }}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div class="grid grid-cols-2 gap-2 text-sm">
-            <div class="text-muted-foreground">总请求数</div>
+            <div class="text-muted-foreground">{{ t('stream.metrics.totalReqCount') }}</div>
             <div class="font-semibold text-right">
               {{ metric.totalRequests }}
             </div>
-            <div class="text-muted-foreground">总失败数</div>
+            <div class="text-muted-foreground">{{ t('stream.metrics.totalFailedCount') }}</div>
             <div class="font-semibold text-right">{{ metric.totalErrors }}</div>
-            <div class="text-muted-foreground">总失败率</div>
+            <div class="text-muted-foreground">{{ t('stream.metrics.totalFailedRate') }}</div>
             <div
               class="font-semibold text-right"
               :class="
@@ -51,13 +51,13 @@
             >
               {{ metric.totalPercent }}%
             </div>
-            <div class="text-muted-foreground">主线请求数</div>
+            <div class="text-muted-foreground">{{ t('stream.metrics.mainReqCount') }}</div>
             <div class="font-semibold text-right">
               {{ metric.mainRequests }}
             </div>
-            <div class="text-muted-foreground">主线失败数</div>
+            <div class="text-muted-foreground">{{ t('stream.metrics.mainFailedCount') }}</div>
             <div class="font-semibold text-right">{{ metric.mainErrors }}</div>
-            <div class="text-muted-foreground">主线失败率</div>
+            <div class="text-muted-foreground">{{ t('stream.metrics.mainFailedRate') }}</div>
             <div
               class="font-semibold text-right"
               :class="
@@ -92,7 +92,9 @@ import type { MetricsData } from "@/types/overview";
 import { createSSEConnection } from "@/lib/sse";
 import { useDict } from "@/utils/useDict";
 import CardDescription from "@/components/ui/card/CardDescription.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const metricsData = ref<Map<string, MetricsData>>(new Map());
 const { getLabel: getPlatformLabel } = useDict("live_platform");
 

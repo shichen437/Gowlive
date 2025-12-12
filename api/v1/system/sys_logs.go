@@ -9,8 +9,8 @@ import (
 type GetLogsListReq struct {
 	g.Meta `path:"/system/logs/list" method:"get" tags:"日志管理" summary:"获取日志列表"`
 	common.PageReq
-	Type   *int   `json:"type" v:"in:1,2#日志类型错误"`
-	Status *int   `json:"status" v:"in:0,1#日志状态错误"`
+	Type   *int   `json:"type" v:"in:1,2#system.logs.valid.TypeInvalid"`
+	Status *int   `json:"status" v:"in:0,1#system.logs.valid.StatusInvalid"`
 	Sort   string `json:"sort"`
 }
 
@@ -22,7 +22,7 @@ type GetLogsListRes struct {
 
 type DeleteLogsReq struct {
 	g.Meta `path:"/system/logs/{id}" method:"delete" tags:"日志管理" summary:"删除日志"`
-	Id     *int `json:"" v:"required#日志ID不能为空"`
+	Id     *int `json:"" v:"required#system.logs.valid.IDBlank"`
 }
 type DeleteLogsRes struct {
 	g.Meta `mime:"application/json"`

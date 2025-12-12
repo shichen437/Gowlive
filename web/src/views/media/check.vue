@@ -3,24 +3,24 @@
         <div class="flex justify-between items-center">
             <Button variant="destructive" @click="openConfirmDeleteAllModal">
                 <Trash2 class="w-4 h-4 mr-2" />
-                清空记录
+                {{ t('media.check.clear.button') }}
             </Button>
         </div>
         <div class="border rounded-md">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="text-center">文件名</TableHead>
-                        <TableHead class="text-center">进度</TableHead>
-                        <TableHead class="text-center">文件状态</TableHead>
-                        <TableHead class="text-center">耗时</TableHead>
-                        <TableHead class="text-center">结束时间</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead class="text-center">{{ t('media.common.fields.filename') }}</TableHead>
+                        <TableHead class="text-center">{{ t('media.check.fields.progress.title') }}</TableHead>
+                        <TableHead class="text-center">{{ t('media.check.fields.status.title') }}</TableHead>
+                        <TableHead class="text-center">{{ t('media.check.fields.duration') }}</TableHead>
+                        <TableHead class="text-center">{{ t('media.check.fields.finishTime') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     <TableRow v-if="!list || list.length === 0">
-                        <TableCell :colspan="6" class="text-center h-24">暂无数据</TableCell>
+                        <TableCell :colspan="6" class="text-center h-24">{{ t('common.noData') }}</TableCell>
                     </TableRow>
                     <TableRow v-for="item in list" :key="item.id">
                         <TableCell class="text-center">{{ item.filename }}</TableCell>
@@ -34,7 +34,7 @@
                                 {{ getFileStatusDisplay(item.fileStatus).text }}
                             </Badge>
                         </TableCell>
-                        <TableCell class="text-center">{{ item.duration }}秒</TableCell>
+                        <TableCell class="text-center">{{ item.duration }}{{ t('common.fields.second') }}</TableCell>
                         <TableCell class="text-center">{{ item.updatedAt }}</TableCell>
                         <TableCell class="text-center space-x-2">
                             <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
@@ -67,13 +67,14 @@
     </div>
 
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="performDelete" title="确认删除" description="你确定要删除这个任务吗？此操作无法撤销。" />
+        :onConfirm="performDelete" :title="t('common.operation.deleteConfirm')" :description="t('media.check.deleteConfirmDesc')" />
     <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
-        :onConfirm="handleDeleteAllTasks" title="确认清空" description="你确定要清空所有记录吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteAllTasks" :title="t('media.check.clear.title')" :description="t('media.check.clear.desc')" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { listTasks, deleteTask, deleteAllTask } from '@/api/media/file_check';
 import type { FileCheckTask } from '@/types/media';
 import {
@@ -98,7 +99,7 @@ import { Trash2 } from 'lucide-vue-next';
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
 import { Badge } from '@/components/ui/badge';
 
-
+const { t } = useI18n();
 const list = ref<FileCheckTask[]>([]);
 const total = ref(0);
 const pageNum = ref(1);
@@ -125,7 +126,7 @@ const getList = async () => {
         }
     } catch (error) {
         console.error(error);
-        toast.error("获取列表失败");
+        toast.error(t('media.check.toast.listErr'));
     }
 };
 
@@ -156,10 +157,10 @@ async function performDelete() {
     try {
         const res: any = await deleteTask(itemToDelete.value);
         if (res.code !== 0) {
-            toast.error(res.msg || '删除失败');
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
-        toast.success("删除成功")
+        toast.success(t('common.toast.deleteSuccess'))
         getList();
     } catch (error) {
         console.error(error);
@@ -173,11 +174,11 @@ async function handleDeleteAllTasks() {
     try {
         const res: any = await deleteAllTask();
         if (res.code !== 0) {
-            toast.error(res.msg || "清空失败");
+            toast.error(res.msg || t('media.check.toast.clearErr'));
             return;
         }
         getList();
-        toast.success("清空成功");
+        toast.success(t('media.check.clear.success'));
     } catch (error) {
         console.error("Failed to delete all tasks:", error);
     } finally {
@@ -192,23 +193,23 @@ const handlePageChange = (page: number) => {
 
 function getFileStatusDisplay(status: number): ({ text: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; }) {
     switch (status) {
-        case 0: return { text: "待检测", variant: "default" };
-        case 1: return { text: "正常", variant: "outline" };
-        case 2: return { text: "疑似损坏", variant: "destructive" };
-        case 3: return { text: "文件不存在", variant: "default" };
-        default: return { text: "未知", variant: "outline" };
+        case 0: return { text: t('media.check.fields.status.pending'), variant: "default" };
+        case 1: return { text: t('media.check.fields.status.normal'), variant: "outline" };
+        case 2: return { text: t('media.check.fields.status.bad'), variant: "destructive" };
+        case 3: return { text: t('media.check.fields.status.notExist'), variant: "default" };
+        default: return { text: t('media.check.fields.status.unknown'), variant: "outline" };
     }
 };
 
 function getProgressDisplay(progress: number): ({ text: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; }) {
     switch (progress) {
-        case 0: return { text: "等待开始", variant: "default" };
-        case 1: return { text: "快检中...", variant: "secondary" };
-        case 2: return { text: "快检异常", variant: "destructive" };
-        case 3: return { text: "全量检测中...", variant: "secondary" };
-        case 4: return { text: "全量检测异常", variant: "destructive" };
-        case 5: return { text: "检测完成", variant: "outline" };
-        default: return { text: "未知", variant: "secondary" };
+        case 0: return { text: t('media.check.fields.progress.pending'), variant: "default" };
+        case 1: return { text: t('media.check.fields.progress.qcing'), variant: "secondary" };
+        case 2: return { text: t('media.check.fields.progress.qcerr'), variant: "destructive" };
+        case 3: return { text: t('media.check.fields.progress.acing'), variant: "secondary" };
+        case 4: return { text: t('media.check.fields.progress.acerr'), variant: "destructive" };
+        case 5: return { text: t('media.check.fields.progress.success'), variant: "outline" };
+        default: return { text: t('media.check.fields.status.unknown'), variant: "secondary" };
     }
 };
 

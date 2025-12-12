@@ -1,0 +1,99 @@
+{
+  "logs": {
+    "fields": {
+      "type": "日誌類型",
+      "createTime": "新增時間",
+      "status": "日誌狀態"
+    },
+    "placeholders": {
+      "type": "選擇日誌類型",
+      "status": "選擇狀態"
+    },
+    "clear": {
+      "button": "清空日誌",
+      "title": "確認清空",
+      "desc": "你確定要清空所有日誌嗎？此操作無法撤銷。"
+    },
+    "delete": {
+      "desc": "你確定要刪除這條日誌嗎？此操作無法撤銷。"
+    },
+    "toast": {
+      "clearSuccess": "清空成功",
+      "clearFailed": "清空失敗"
+    }
+  },
+  "notify": {
+    "allRead": {
+      "button": "全部已讀",
+      "title": "確認全部已讀",
+      "desc": "你確定要將所有通知標記為已讀嗎？"
+    },
+    "fields": {
+      "level": "通知級別",
+      "time": "通知時間"
+    },
+    "delete": {
+      "desc": "你確定要刪除這條通知嗎？此操作無法撤銷。"
+    },
+    "allDelete": {
+      "button": "全部刪除",
+      "title": "確認全部刪除",
+      "desc": "你確定要刪除所有通知嗎？此操作無法撤銷。"
+    },
+    "toast": {
+      "markSuccess": "標記成功",
+      "markFailed": "標記失敗",
+      "markAllSuccess": "全部標記成功",
+      "markAllFailed": "全部標記失敗",
+      "deleteAllSuccess": "全部刪除成功",
+      "deleteAllFailed": "全部刪除失敗"
+    }
+  },
+  "channel": {
+    "add": {
+      "button": "添加渠道"
+    },
+    "fields": {
+      "channel": {
+        "title": "渠道",
+        "email": "郵箱",
+        "lark": "飛書",
+        "dingTalk": "釘釘",
+        "weCom": "企業微信"
+      },
+      "name": "渠道名稱",
+      "type": "渠道類型",
+      "messageType": "消息類型",
+      "sign": "簽名",
+      "status": "啟用狀態",
+      "statusActive": "啟用",
+      "statusDisabled": "停用",
+      "smtpServer": "SMTP 伺服器",
+      "port": "連接埠",
+      "sender": "發件人",
+      "authCode": "授權碼",
+      "receiver": "收件人",
+      "text": "文本",
+      "richtext": "富文本",
+      "card": "卡片"
+    },
+    "deleteDesc": "此操作無法撤銷。這將永久刪除該推送渠道。",
+    "placeholder": {
+      "name": "請輸入渠道名稱",
+      "authCode": "請輸入授權碼",
+      "remark": "請輸入備註（可選）",
+      "larkMsgType": "選擇飛書消息類型",
+      "dingMsgType": "選擇釘釘消息類型",
+      "weComMsgType": "選擇企業微信消息類型",
+      "msgType": "選擇消息類型"
+    },
+    "toast": {
+      "listErr": "獲取列表失敗",
+      "detailErr": "獲取詳情失敗"
+    },
+    "valid": {
+      "nameNotEmpty": "渠道名稱不能為空",
+      "typeNotEmpty": "渠道類型不能為空"
+    }
+  }
+}

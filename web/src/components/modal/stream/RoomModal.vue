@@ -8,9 +8,10 @@
                 <div class="grid gap-4 py-4">
                     <FormField v-slot="{ componentField, errorMessage }" name="roomUrl">
                         <FormItem>
-                            <FormLabel>直播链接</FormLabel>
+                            <FormLabel>{{ t('stream.rooms.fields.roomUrl') }}</FormLabel>
                             <FormControl>
-                                <Input type="text" placeholder="请输入直播链接" v-bind="componentField" :disabled="isEditMode"
+                                <Input type="text" :placeholder="t('stream.rooms.placeholder.roomUrl')"
+                                    v-bind="componentField" :disabled="isEditMode"
                                     :class="{ 'border-red-500': errorMessage }" />
                             </FormControl>
                             <FormMessage />
@@ -20,7 +21,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <FormField v-slot="{ componentField, errorMessage }" name="interval">
                             <FormItem>
-                                <FormLabel>间隔时间 (秒)</FormLabel>
+                                <FormLabel>{{ t('stream.rooms.fields.interval') }}</FormLabel>
                                 <FormControl>
                                     <Input type="number" placeholder="30-600" v-bind="componentField"
                                         :class="{ 'border-red-500': errorMessage }" />
@@ -31,11 +32,11 @@
 
                         <FormField v-slot="{ componentField, errorMessage }" name="format">
                             <FormItem>
-                                <FormLabel>录制格式</FormLabel>
+                                <FormLabel>{{ t('stream.rooms.fields.format') }}</FormLabel>
                                 <Select v-bind="componentField">
                                     <FormControl>
                                         <SelectTrigger class="w-full" :class="{ 'border-red-500': errorMessage }">
-                                            <SelectValue placeholder="选择录制格式" />
+                                            <SelectValue :placeholder="t('stream.rooms.placeholder.format')" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent class="w-[--radix-select-trigger-width]">
@@ -43,7 +44,7 @@
                                         <SelectItem value="mkv">MKV</SelectItem>
                                         <SelectItem value="ts">TS</SelectItem>
                                         <SelectItem value="mp4">MP4</SelectItem>
-                                        <SelectItem value="mp3">MP3(仅音频)</SelectItem>
+                                        <SelectItem value="mp3">{{ t('stream.rooms.fields.onlyAudio') }}</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -54,14 +55,14 @@
                     <div class="grid grid-cols-2 gap-4">
                         <FormField v-slot="{ componentField, errorMessage }" name="quality">
                             <FormItem>
-                                <FormLabel>清晰度
+                                <FormLabel>{{ t('stream.rooms.fields.quality.title') }}
                                     <TooltipProvider>
                                         <Tooltip>
                                             <TooltipTrigger as-child>
                                                 <Info class="w-4 h-4 ml-1" />
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>仅支持抖音。</p>
+                                                <p>{{ t('stream.rooms.fields.quality.tooltip') }}</p>
                                             </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>
@@ -69,15 +70,17 @@
                                 <Select v-bind="componentField">
                                     <FormControl>
                                         <SelectTrigger class="w-full" :class="{ 'border-red-500': errorMessage }">
-                                            <SelectValue placeholder="选择清晰度" />
+                                            <SelectValue :placeholder="t('stream.rooms.placeholder.quality')" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent class="w-[--radix-select-trigger-width]">
-                                        <SelectItem :value="0">原画</SelectItem>
-                                        <SelectItem :value="1">超清</SelectItem>
-                                        <SelectItem :value="2">高清</SelectItem>
-                                        <SelectItem :value="3">标清</SelectItem>
-                                        <SelectItem :value="4">流畅</SelectItem>
+                                        <SelectItem :value="0">{{ t('stream.rooms.fields.quality.original') }}
+                                        </SelectItem>
+                                        <SelectItem :value="1">{{ t('stream.rooms.fields.quality.super') }}</SelectItem>
+                                        <SelectItem :value="2">{{ t('stream.rooms.fields.quality.high') }}</SelectItem>
+                                        <SelectItem :value="3">{{ t('stream.rooms.fields.quality.medium') }}
+                                        </SelectItem>
+                                        <SelectItem :value="4">{{ t('stream.rooms.fields.quality.low') }}</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -85,20 +88,20 @@
                         </FormField>
                         <FormField v-slot="{ componentField, errorMessage }" name="segmentTime">
                             <FormItem>
-                                <FormLabel>切片时长</FormLabel>
+                                <FormLabel>{{ t('stream.rooms.fields.segment') }}</FormLabel>
                                 <Select v-bind="componentField">
                                     <FormControl>
                                         <SelectTrigger class="w-full" :class="{ 'border-red-500': errorMessage }">
-                                            <SelectValue placeholder="选择切片时长" />
+                                            <SelectValue :placeholder="t('stream.rooms.placeholder.segment')" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent class="w-[--radix-select-trigger-width]">
-                                        <SelectItem :value="0">不切片</SelectItem>
-                                        <SelectItem :value="900">15 分钟</SelectItem>
-                                        <SelectItem :value="1800">30 分钟</SelectItem>
-                                        <SelectItem :value="3600">1 小时</SelectItem>
-                                        <SelectItem :value="7200">2 小时</SelectItem>
-                                        <SelectItem :value="14400">4 小时</SelectItem>
+                                        <SelectItem :value="0">{{ t('stream.rooms.fields.segmentNone') }}</SelectItem>
+                                        <SelectItem :value="900">15 {{ t('common.fields.minute') }}</SelectItem>
+                                        <SelectItem :value="1800">30 {{ t('common.fields.minute') }}</SelectItem>
+                                        <SelectItem :value="3600">1 {{ t('common.fields.hour') }}</SelectItem>
+                                        <SelectItem :value="7200">2 {{ t('common.fields.hour') }}</SelectItem>
+                                        <SelectItem :value="14400">4 {{ t('common.fields.hour') }}</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -109,16 +112,16 @@
                     <FormField v-slot="{ field, errorMessage }" name="monitorType">
                         <FormItem>
                             <FormLabel class="flex items-center">
-                                监控类型
+                                {{ t('stream.rooms.fields.monitorType.title') }}
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger as-child>
                                             <Info class="w-4 h-4 ml-1" />
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            <p>实时监控：根据设置的间隔时间轮询获取直播状态。</p>
-                                            <p>定时监控：在指定时间段内根据间隔时间获取直播状态。</p>
-                                            <p>智能监控：根据监控指标及有效直播历史动态调整间隔时间大小。</p>
+                                            <p>{{ t('stream.rooms.fields.monitorType.realTimeTip') }}</p>
+                                            <p>{{ t('stream.rooms.fields.monitorType.cronTip') }}</p>
+                                            <p>{{ t('stream.rooms.fields.monitorType.intelligentTip') }}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
@@ -147,7 +150,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             <FormField v-slot="{ componentField, errorMessage }" name="monitorStartAt">
                                 <FormItem>
-                                    <FormLabel>监控开始时间</FormLabel>
+                                    <FormLabel>{{ t('stream.rooms.fields.monitorStartTime') }}</FormLabel>
                                     <FormControl>
                                         <VueDatePicker v-bind="componentField" time-picker auto-apply model-type="HH:mm"
                                             :format="'HH:mm'" text-input placeholder="HH:mm"
@@ -158,7 +161,7 @@
                             </FormField>
                             <FormField v-slot="{ componentField, errorMessage }" name="monitorStopAt">
                                 <FormItem>
-                                    <FormLabel>监控结束时间</FormLabel>
+                                    <FormLabel>{{ t('stream.rooms.fields.monitorEndTime') }}</FormLabel>
                                     <FormControl>
                                         <VueDatePicker v-bind="componentField" time-picker auto-apply model-type="HH:mm"
                                             :format="'HH:mm'" text-input placeholder="HH:mm"
@@ -172,10 +175,10 @@
 
                     <FormField v-slot="{ componentField, errorMessage }" name="remark">
                         <FormItem>
-                            <FormLabel>备注</FormLabel>
+                            <FormLabel>{{ t('common.fields.remark') }}</FormLabel>
                             <FormControl>
-                                <Input type="text" placeholder="请输入备注" v-bind="componentField"
-                                    :class="{ 'border-red-500': errorMessage }" />
+                                <Input type="text" :placeholder="t('stream.rooms.placeholder.remark')"
+                                    v-bind="componentField" :class="{ 'border-red-500': errorMessage }" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -183,7 +186,7 @@
                 </div>
                 <DialogFooter>
                     <Button type="submit" :disabled="isSubmitting">
-                        {{ isSubmitting ? '保存中...' : '保存' }}
+                        {{ isSubmitting ? t('common.operation.saving') : t('common.operation.save') }}
                     </Button>
                 </DialogFooter>
             </form>
@@ -233,40 +236,42 @@ import {
     TooltipTrigger
 } from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const isOpen = ref(false);
 const emit = defineEmits(['refresh']);
 const roomId = ref<number | null>(null);
 const isSubmitting = ref(false);
 
 const isEditMode = computed(() => !!roomId.value);
-const dialogTitle = computed(() => isEditMode.value ? '编辑房间' : '添加房间');
+const dialogTitle = computed(() => isEditMode.value ? t('stream.rooms.edit.title') : t('stream.rooms.add.title'));
 
-const monitorTypeOptions = [
-    { value: 0, label: '停止监控' },
-    { value: 1, label: '实时监控' },
-    { value: 2, label: '定时监控' },
-    { value: 3, label: '智能监控' }
-];
+const monitorTypeOptions = computed(() => [
+    { value: 0, label: t('stream.rooms.fields.monitorType.stop') },
+    { value: 1, label: t('stream.rooms.fields.monitorType.realtime') },
+    { value: 2, label: t('stream.rooms.fields.monitorType.cron') },
+    { value: 3, label: t('stream.rooms.fields.monitorType.intelligent') }
+]);
 
 const formSchema = toTypedSchema(
     z.object({
-        roomUrl: z.string().url({ message: '请输入有效的URL' }),
-        interval: z.coerce.number().min(30, { message: '间隔时间最小为30秒' }).max(600, { message: '间隔时间最大为600秒' }),
+        roomUrl: z.string().url({ message: t('stream.rooms.valid.validUrl') }),
+        interval: z.coerce.number().min(30, { message: t('stream.rooms.valid.intervalMin') }).max(600, { message: t('stream.rooms.valid.intervalMax') }),
         format: z.enum(['flv', 'mp4', 'mkv', 'ts', 'mp3']),
         quality: z.coerce.number(),
         segmentTime: z.coerce.number(),
         monitorType: z.coerce.number(),
-        monitorStartAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: '时间格式必须为 HH:mm' }).optional().nullable(),
-        monitorStopAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: '时间格式必须为 HH:mm' }).optional().nullable(),
-        remark: z.string().max(45, { message: '备注最长为45个字符' }).optional().nullable(),
+        monitorStartAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: t('stream.rooms.valid.timeFormat') }).optional().nullable(),
+        monitorStopAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: t('stream.rooms.valid.timeFormat') }).optional().nullable(),
+        remark: z.string().max(45, { message: t('stream.rooms.valid.remarkLength') }).optional().nullable(),
     }).refine(data => {
         if (data.monitorType === 2) {
             return !!data.monitorStartAt && !!data.monitorStopAt;
         }
         return true;
     }, {
-        message: '定时监控需要设置开始和结束时间',
+        message: t('stream.rooms.valid.cronTime'),
         path: ['monitorStartAt'],
     })
 );
@@ -300,17 +305,17 @@ const onSubmit = handleSubmit(async (formValues) => {
         if (isEditMode.value && roomId.value) {
             const res: any = await updateRoom({ id: roomId.value, ...payload });
             if (res.code !== 0) {
-                toast.error(res.data.msg || '更新失败');
+                toast.error(res.data.msg || t('common.toast.updateFailed'));
                 return;
             }
-            toast.success('更新成功');
+            toast.success(t('common.toast.updateSuccess'));
         } else {
             const res: any = await addRoom(payload);
             if (res.code !== 0) {
-                toast.error(res.data.msg || '添加失败');
+                toast.error(res.data.msg || t('common.toast.addFailed'));
                 return;
             }
-            toast.success('添加成功');
+            toast.success(t('common.toast.addSuccess'));
         }
 
         isOpen.value = false;
@@ -343,7 +348,7 @@ const openModal = async (id?: number) => {
             setValues(formattedData);
         } catch (error) {
             console.error('Failed to fetch room details:', error);
-            toast.error('获取房间详情失败');
+            toast.error(t('stream.rooms.toast.detailErr'));
             return;
         }
     } else {

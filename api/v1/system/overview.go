@@ -12,3 +12,11 @@ type GetOverviewRes struct {
 	g.Meta `mime:"application/json"`
 	Data   *model.Overview `json:"data"`
 }
+
+type GetLangReq struct {
+	g.Meta `path:"/system/lang" method:"get" tags:"系统" summary:"获取系统语言"`
+}
+type GetLangRes struct {
+	g.Meta `mime:"application/json"`
+	Lang   string `json:"lang"`
+}

@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	v1 "github.com/shichen437/gowlive/api/v1/stream"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
@@ -40,7 +39,7 @@ func (s *sLiveCookie) All(ctx context.Context, req *v1.GetAllCookieReq) (res *v1
 func (s *sLiveCookie) Add(ctx context.Context, req *v1.PostLiveCookieReq) (res *v1.PostLiveCookieRes, err error) {
 	count, err := dao.LiveCookie.Ctx(ctx).Where(dao.LiveCookie.Columns().Platform, req.Platform).Count()
 	if count > 0 {
-		err = gerror.New("已添加过该平台 Cookie")
+		err = utils.TError(ctx, "stream.cookie.error.Added")
 		return
 	}
 	_, err = dao.LiveCookie.Ctx(ctx).Insert(do.LiveCookie{
@@ -102,7 +101,7 @@ func getLiveCookieById(ctx context.Context, id int) (cookie *entity.LiveCookie, 
 		return
 	}
 	if item == nil {
-		err = gerror.New("cookie not found")
+		err = utils.TError(ctx, "stream.cookie.error.NotFound")
 		return
 	}
 	cookie = item

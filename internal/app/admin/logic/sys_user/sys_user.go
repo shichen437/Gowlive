@@ -59,11 +59,11 @@ func (s *sSysUser) UpdateProfile(ctx context.Context, req *v1.PutProfileReq) (re
 		UpdatedAt: utils.Now(),
 	})
 	if err != nil {
-		err = gerror.New("修改用户信息失败")
-		manager.GetLogManager().AddErrorLog(consts.LogTypeUser, "修改信息失败")
+		err = gerror.New(utils.T(ctx, "user.profile.error.Update"))
+		manager.GetLogManager().AddErrorLog(consts.LogTypeUser, utils.T(ctx, "user.profile.error.Update"))
 		return
 	}
-	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, "修改用户信息成功")
+	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, utils.T(ctx, "user.profile.success.Update"))
 	return
 }
 
@@ -74,17 +74,17 @@ func (s *sSysUser) UpdatePassword(ctx context.Context, req *v1.PutPasswordReq) (
 	}
 	op, err := utils.Encrypt(ctx, req.OldPwd)
 	if err != nil {
-		err = gerror.New("密码加密失败")
+		err = gerror.New(utils.T(ctx, "user.profile.error.Encrypt"))
 		return
 	}
 	user := getUserById(ctx, uid)
 	if user == nil || user.Password != op {
-		err = gerror.New("旧密码错误")
+		err = gerror.New(utils.T(ctx, "user.password.error.OldPwd"))
 		return
 	}
 	np, err := utils.Encrypt(ctx, req.NewPwd)
 	if err != nil {
-		err = gerror.New("密码加密失败")
+		err = gerror.New(utils.T(ctx, "user.profile.error.Encrypt"))
 		return
 	}
 	_, err = dao.SysUser.Ctx(ctx).WherePri(uid).Update(do.SysUser{
@@ -92,11 +92,11 @@ func (s *sSysUser) UpdatePassword(ctx context.Context, req *v1.PutPasswordReq) (
 		UpdatedAt: utils.Now(),
 	})
 	if err != nil {
-		err = gerror.New("修改用户密码失败")
-		manager.GetLogManager().AddErrorLog(consts.LogTypeUser, "修改用户密码失败")
+		err = gerror.New(utils.T(ctx, "user.password.error.Update"))
+		manager.GetLogManager().AddErrorLog(consts.LogTypeUser, utils.T(ctx, "user.password.error.Update"))
 		return
 	}
-	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, "修改用户密码成功")
+	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, utils.T(ctx, "user.password.success.Update"))
 	return
 }
 

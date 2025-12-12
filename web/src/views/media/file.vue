@@ -22,10 +22,10 @@
                 <TableHeader>
                     <TableRow>
                         <TableHead class="w-10"></TableHead>
-                        <TableHead>文件名</TableHead>
-                        <TableHead>文件大小</TableHead>
-                        <TableHead>上次修改时间</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead>{{ t('media.common.fields.filename') }}</TableHead>
+                        <TableHead>{{ t('media.file.fields.filesize') }}</TableHead>
+                        <TableHead>{{ t('media.file.fields.lastModified') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -67,9 +67,9 @@
         </div>
     </div>
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="handleDeleteFile" title="确认删除" :description="confirmModalDescription" />
+        :onConfirm="handleDeleteFile" :title="t('common.operation.deleteConfirm')" :description="confirmModalDescription" />
     <ConfirmModal :open="showFileCheckConfirmModal" :onOpenChange="(open: any) => showFileCheckConfirmModal = open"
-        :onConfirm="performFileCheck" title="确认检查" description="你确定要为该文件创建检测任务吗？" />
+        :onConfirm="performFileCheck" :title="t('media.file.confirmCheck.title')" :description="t('media.file.confirmCheck.desc')" />
 </template>
 
 <script setup lang="ts">
@@ -101,7 +101,9 @@ import { toast } from "vue-sonner";
 import { Button } from "@/components/ui/button";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
 import { formatBytes, formatDate } from "@/utils/convert";
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -111,7 +113,7 @@ const showConfirmModal = ref(false);
 const fileToDelete = ref<FileInfo | null>(null);
 const showFileCheckConfirmModal = ref(false);
 const fileToCheck = ref<FileInfo | null>(null);
-const confirmModalDescription = ref("你确定要删除该文件吗？此操作无法撤销。");
+const confirmModalDescription = ref("");
 
 function getFileIcon(file: FileInfo) {
     if (file.isFolder) {
@@ -156,21 +158,21 @@ const openConfirmModal = async (file: FileInfo) => {
         try {
             const res: any = await getEmptyDir({ path: `${currentPath.value}/${file.filename}`.replace(/^\.\//, '') });
             if (res.code !== 0) {
-                toast.error(res.msg || "检查文件夹状态失败");
+                toast.error(res.msg || t('media.file.toast.folderStatus'));
                 return;
             }
             if (res.data.isEmpty) {
-                confirmModalDescription.value = "你确定要删除该空文件夹吗？此操作无法撤销。";
+                confirmModalDescription.value = t('media.file.delete.folder');
             } else {
-                confirmModalDescription.value = "文件夹不为空，你确定要删除该文件夹及其所有内容吗？此操作无法撤销。";
+                confirmModalDescription.value = t('media.file.delete.folderNotEmpty');
             }
         } catch (error) {
             console.error("Failed to check if dir is empty:", error);
-            toast.error("检查文件夹状态失败");
+            toast.error(t('media.file.toast.folderStatus'));
             return;
         }
     } else {
-        confirmModalDescription.value = "你确定要删除该文件吗？此操作无法撤销。";
+        confirmModalDescription.value = t('media.file.delete.file');
     }
     showConfirmModal.value = true;
 };
@@ -179,7 +181,7 @@ const fetchFiles = async (path: string) => {
     try {
         const res: any = await listFiles({ path: path });
         if (res.code !== 0) {
-            toast.error(res.msg || "获取文件列表失败")
+            toast.error(res.msg || t('media.file.toast.list'))
             return
         }
         files.value = res.data.rows;
@@ -199,11 +201,11 @@ async function handleDeleteFile() {
             filename: fileToDelete.value.filename,
         });
         if (res.code !== 0) {
-            toast.error(res.msg || "删除失败");
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
         fetchFiles(currentPath.value);
-        toast.success("删除成功");
+        toast.success(t('common.toast.deleteSuccess'));
     } catch (error) {
         console.error("Failed to delete file:", error);
     } finally {
@@ -222,10 +224,10 @@ async function performFileCheck() {
             filename: fileToCheck.value.filename,
         });
         if (res.code !== 0) {
-            toast.error(res.msg || "创建任务失败");
+            toast.error(res.msg || t('media.file.toast.createcCheck'));
             return;
         }
-        toast.success("创建任务成功");
+        toast.success(t('media.file.createcCheckSuccess'));
     } catch (error) {
         console.error("Failed to create file check task:", error);
     } finally {
@@ -251,7 +253,7 @@ const breadcrumbs = computed(() => {
     return pathParts.map((part, index) => {
         const path = pathParts.slice(0, index + 1).join("/");
         return {
-            label: part === '.' ? '系统目录' : part,
+            label: part === '.' ? t('media.file.fields.systemDir') : part,
             path: path,
             isCurrent: index === pathParts.length - 1,
         };

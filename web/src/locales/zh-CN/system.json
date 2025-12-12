@@ -1,0 +1,99 @@
+{
+  "logs": {
+    "fields": {
+      "type": "日志类型",
+      "createTime": "添加时间",
+      "status": "日志状态"
+    },
+    "placeholders": {
+      "type": "选择日志类型",
+      "status": "选择状态"
+    },
+    "clear": {
+      "button": "清空日志",
+      "title": "确认清空",
+      "desc": "你确定要清空所有日志吗？此操作无法撤销。"
+    },
+    "delete": {
+      "desc": "你确定要删除这条日志吗？此操作无法撤销。"
+    },
+    "toast": {
+      "clearSuccess": "清空成功",
+      "clearFailed": "清空失败"
+    }
+  },
+  "notify": {
+    "allRead": {
+      "button": "全部已读",
+      "title": "确认全部已读",
+      "desc": "你确定要将所有通知标记为已读吗？"
+    },
+    "fields": {
+      "level": "通知级别",
+      "time": "通知时间"
+    },
+    "delete": {
+      "desc": "你确定要删除这条通知吗？此操作无法撤销。"
+    },
+    "allDelete": {
+      "button": "全部删除",
+      "title": "确认全部删除",
+      "desc": "你确定要删除所有通知吗？此操作无法撤销。"
+    },
+    "toast": {
+      "markSuccess": "标记成功",
+      "markFailed": "标记失败",
+      "markAllSuccess": "全部标记成功",
+      "markAllFailed": "全部标记失败",
+      "deleteAllSuccess": "全部删除成功",
+      "deleteAllFailed": "全部删除失败"
+    }
+  },
+  "channel": {
+    "add": {
+      "button": "添加渠道"
+    },
+    "fields": {
+      "channel": {
+        "title": "渠道",
+        "email": "邮箱",
+        "lark": "飞书",
+        "dingTalk": "钉钉",
+        "weCom": "企业微信"
+      },
+      "name": "渠道名称",
+      "type": "渠道类型",
+      "messageType": "消息类型",
+      "sign": "签名",
+      "status": "启用状态",
+      "statusActive": "启用",
+      "statusDisabled": "禁用",
+      "smtpServer": "SMTP服务器",
+      "port": "端口",
+      "sender": "发送人",
+      "authCode": "授权码",
+      "receiver": "收件人",
+      "text": "文本",
+      "richtext": "富文本",
+      "card": "卡片"
+    },
+    "deleteDesc": "此操作无法撤销。这将永久删除该推送渠道。",
+    "placeholder": {
+      "name": "请输入渠道名称",
+      "authCode": "请输入授权码",
+      "remark": "请输入备注(可选)",
+      "larkMsgType": "选择飞书消息类型",
+      "dingMsgType": "选择钉钉消息类型",
+      "weComMsgType": "选择企业微信消息类型",
+      "msgType": "选择消息类型"
+    },
+    "toast": {
+      "listErr": "获取列表失败",
+      "detailErr": "获取详情失败"
+    },
+    "valid": {
+      "nameNotEmpty": "渠道名称不能为空",
+      "typeNotEmpty": "渠道类型不能为空"
+    }
+  }
+}

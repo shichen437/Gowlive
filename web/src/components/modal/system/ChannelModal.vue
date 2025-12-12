@@ -2,31 +2,33 @@
     <Dialog v-model:open="open">
         <DialogContent class="sm:max-w-[600px]">
             <DialogHeader>
-                <DialogTitle>{{ isEdit ? "编辑" : "添加" }}渠道</DialogTitle>
+                <DialogTitle>{{ isEdit ? t('common.fields.edit') : t('common.fields.add') }}{{
+                    t('system.channel.fields.channel.title') }}</DialogTitle>
             </DialogHeader>
             <form @submit="onSubmit" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <FormField name="name" v-slot="{ componentField }">
                         <FormItem>
-                            <FormLabel>渠道名称</FormLabel>
+                            <FormLabel>{{ t('system.channel.fields.name') }}</FormLabel>
                             <FormControl>
-                                <Input type="text" placeholder="请输入渠道名称" v-bind="componentField" />
+                                <Input type="text" :placeholder="t('system.channel.placeholder.name')"
+                                    v-bind="componentField" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     </FormField>
                     <FormField name="status" v-slot="{ value, handleChange }">
                         <FormItem>
-                            <FormLabel>渠道状态</FormLabel>
+                            <FormLabel>{{ t('system.channel.fields.status') }}</FormLabel>
                             <FormControl>
                                 <div class="flex gap-2">
                                     <Button type="button" class="flex-1" :variant="value === 1 ? 'default' : 'outline'"
                                         @click="handleChange(1)">
-                                        启用
+                                        {{ t('system.channel.fields.statusActive') }}
                                     </Button>
                                     <Button type="button" class="flex-1" :variant="value === 0 ? 'default' : 'outline'"
                                         @click="handleChange(0)">
-                                        禁用
+                                        {{ t('system.channel.fields.statusDisabled') }}
                                     </Button>
                                 </div>
                             </FormControl>
@@ -38,17 +40,17 @@
                 <Tabs :model-value="values.type" @update:model-value="(val) => handleTypeChange(String(val))"
                     default-value="email" class="w-full">
                     <TabsList class="grid w-full grid-cols-5" :class="{ 'pointer-events-none opacity-50': isEdit }">
-                        <TabsTrigger value="email"> 邮箱 </TabsTrigger>
+                        <TabsTrigger value="email"> {{ t('system.channel.fields.channel.email') }} </TabsTrigger>
                         <TabsTrigger value="gotify"> Gotify </TabsTrigger>
-                        <TabsTrigger value="lark"> 飞书 </TabsTrigger>
-                        <TabsTrigger value="dingTalk"> 钉钉 </TabsTrigger>
-                        <TabsTrigger value="weCom"> 企业微信 </TabsTrigger>
+                        <TabsTrigger value="lark"> {{ t('system.channel.fields.channel.lark') }} </TabsTrigger>
+                        <TabsTrigger value="dingTalk"> {{ t('system.channel.fields.channel.dingTalk') }} </TabsTrigger>
+                        <TabsTrigger value="weCom"> {{ t('system.channel.fields.channel.weCom') }} </TabsTrigger>
                     </TabsList>
                     <TabsContent value="email" class="space-y-4 mt-4 border-0 p-0">
                         <div class="grid grid-cols-2 gap-4">
                             <FormField name="email.server" v-slot="{ componentField }">
                                 <FormItem>
-                                    <FormLabel>SMTP服务器</FormLabel>
+                                    <FormLabel>{{ t('system.channel.fields.smtpServer') }}</FormLabel>
                                     <FormControl>
                                         <Input type="text" placeholder="smtp.example.com" v-bind="componentField" />
                                     </FormControl>
@@ -57,7 +59,7 @@
                             </FormField>
                             <FormField name="email.port" v-slot="{ componentField }">
                                 <FormItem>
-                                    <FormLabel>端口</FormLabel>
+                                    <FormLabel>{{ t('system.channel.fields.port') }}</FormLabel>
                                     <FormControl>
                                         <Input type="number" placeholder="465" v-bind="componentField" />
                                     </FormControl>
@@ -67,7 +69,7 @@
                         </div>
                         <FormField name="email.sender" v-slot="{ componentField }">
                             <FormItem>
-                                <FormLabel>发送人</FormLabel>
+                                <FormLabel>{{ t('system.channel.fields.sender') }}</FormLabel>
                                 <FormControl>
                                     <Input type="email" placeholder="sender@example.com" v-bind="componentField" />
                                 </FormControl>
@@ -76,16 +78,17 @@
                         </FormField>
                         <FormField name="email.authCode" v-slot="{ componentField }">
                             <FormItem>
-                                <FormLabel>授权码</FormLabel>
+                                <FormLabel>{{ t('system.channel.fields.authCode') }}</FormLabel>
                                 <FormControl>
-                                    <Input type="password" placeholder="请输入授权码" v-bind="componentField" />
+                                    <Input type="password" :placeholder="t('system.channel.placeholder.authCode')"
+                                        v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
                         <FormField name="email.receiver" v-slot="{ componentField }">
                             <FormItem>
-                                <FormLabel>收件人</FormLabel>
+                                <FormLabel>{{ t('system.channel.fields.receiver') }}</FormLabel>
                                 <FormControl>
                                     <Input type="email" placeholder="receiver@example.com" v-bind="componentField" />
                                 </FormControl>
@@ -120,17 +123,18 @@
 
                 <FormField name="remark" v-slot="{ componentField }">
                     <FormItem>
-                        <FormLabel>备注</FormLabel>
+                        <FormLabel>{{ t('common.fields.remark') }}</FormLabel>
                         <FormControl>
-                            <Input placeholder="请输入备注(可选)" v-bind="componentField" />
+                            <Input :placeholder="t('system.channel.placeholder.remark')" v-bind="componentField" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 </FormField>
 
                 <DialogFooter>
-                    <Button type="button" variant="outline" @click="open = false">取消</Button>
-                    <Button type="submit">保存</Button>
+                    <Button type="button" variant="outline" @click="open = false">{{ t('common.operation.cancel')
+                        }}</Button>
+                    <Button type="submit">{{ t('common.operation.save') }}</Button>
                 </DialogFooter>
             </form>
         </DialogContent>
@@ -167,6 +171,9 @@ import {
 import type { PushChannel } from "@/types/system";
 import { toast } from "vue-sonner";
 import WebhookForm from './webhookForm.vue'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const larkOptions = [
     { value: 0, label: '文本' },
@@ -214,8 +221,8 @@ const isEdit = computed(() => !!props.channel);
 const formSchema = toTypedSchema(
     z
         .object({
-            name: z.string().min(1, "渠道名称不能为空"),
-            type: z.string().min(1, "渠道类型不能为空"),
+            name: z.string().min(1, t('system.channel.valid.nameNotEmpty')),
+            type: z.string().min(1, t('system.channel.valid.typeNotEmpty')),
             status: z.coerce.number(),
             remark: z.string().optional(),
             url: z.string().optional(),
@@ -248,7 +255,7 @@ watch(open, async (isOpen) => {
             try {
                 const res: any = await getPushChannel(props.channel.id);
                 if (res.code !== 0) {
-                    toast.error(res.msg || "获取详情失败")
+                    toast.error(res.msg || t('system.channel.toast.detailErr'))
                 }
                 setValues({
                     ...res.data,

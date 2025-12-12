@@ -12,7 +12,7 @@ type GetLatestVersionRes struct {
 
 type GetSysSettingsReq struct {
 	g.Meta `path:"/system/settings" method:"get" tags:"系统管理" summary:"获取系统配置"`
-	Key    string `json:"key" v:"required#键名不能为空"`
+	Key    string `json:"key" v:"required#system.settings.valid.KeyRequired"`
 }
 type GetSysSettingsRes struct {
 	g.Meta `mime:"application/json"`
@@ -21,8 +21,8 @@ type GetSysSettingsRes struct {
 
 type PutSysSettingsReq struct {
 	g.Meta `path:"/system/settings" method:"put" tags:"系统管理" summary:"修改系统配置"`
-	Key    string `json:"key" v:"required#键名不能为空"`
-	Value  int    `json:"value" v:"required#值不能为空"`
+	Key    string `json:"key" v:"required#system.settings.valid.KeyRequired"`
+	Value  int    `json:"value" v:"required#system.settings.valid.ValueRequired"`
 }
 type PutSysSettingsRes struct {
 	g.Meta `mime:"application/json"`

@@ -1,0 +1,11 @@
+"ext.storage.waning.title" = "空間警示"
+"ext.storage.waning.desc" = "儲存空間使用率已達到 %s %%"
+
+"ext.push.live.start.title" = "開播通知"
+"ext.push.live.start.content" = "你追蹤的實況主【 %s 】開始開播囉！"
+"ext.push.live.end.title" = "下播通知"
+"ext.push.live.end.content" = "你追蹤的實況主【 %s 】已下播。"
+
+"ext.live.add.session.success" = "建立直播工作階段成功："
+"ext.live.remove.session.success" = "刪除直播工作階段成功"
+"ext.live.parse.api.error" = "解析 API 失敗："

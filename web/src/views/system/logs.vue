@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <Button variant="destructive" @click="openConfirmDeleteAllModal">
                 <Trash2 class="w-4 h-4 mr-2" />
-                清空日志
+                {{ t('system.logs.clear.button') }}
             </Button>
             <div class="flex items-center space-x-2">
                 <SortLogsDropDownMenu v-model:sort="sort" @update:sort="handleSortChange" />
@@ -15,11 +15,11 @@
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="text-center">类型</TableHead>
-                        <TableHead class="text-center">状态</TableHead>
-                        <TableHead class="text-center">内容</TableHead>
-                        <TableHead class="text-center">时间</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead class="text-center">{{ t('system.logs.fields.type') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.status') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.content') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.fields.time') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -28,7 +28,7 @@
                             <TableCell class="text-center">
                                 <Badge :variant="getTypeVariant(log.type)">{{
                                     getTypeLabel(log.type)
-                                    }}</Badge>
+                                }}</Badge>
                             </TableCell>
                             <TableCell class="text-center">
                                 <Badge :variant="getStatusVariant(log.status)">{{ getStatusLabel(log.status) }}</Badge>
@@ -47,7 +47,7 @@
                             </TableCell>
                             <TableCell class="text-center">{{
                                 log.createdAt
-                                }}</TableCell>
+                            }}</TableCell>
                             <TableCell class="text-center">
                                 <Button variant="ghost" size="icon" class="text-destructive hover:text-destructive"
                                     @click="openConfirmModal(log.id)">
@@ -59,7 +59,7 @@
                     <template v-else>
                         <TableRow>
                             <TableCell :colspan="5" class="h-24 text-center">
-                                暂无数据
+                                {{ t('common.noData') }}
                             </TableCell>
                         </TableRow>
                     </template>
@@ -87,13 +87,16 @@
         </Pagination>
     </div>
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => (showConfirmModal = open)"
-        :onConfirm="handleDeleteLog" title="确认删除" description="你确定要删除这条日志吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteLog" :title="t('common.operation.deleteConfirm')"
+        :description="t('system.logs.delete.desc')" />
     <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
-        :onConfirm="handleDeleteAllLogs" title="确认清空" description="你确定要清空所有日志吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteAllLogs" :title="t('system.logs.clear.title')"
+        :description="t('system.logs.clear.desc')" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import { listLogs, deleteLogs, deleteAllLogs } from "@/api/system/sys_logs";
 import type { SysLogs } from "@/types/system";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
@@ -126,6 +129,7 @@ import { Trash2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 
+const { t } = useI18n();
 const showConfirmModal = ref(false);
 const showConfirmDeleteAllModal = ref(false);
 const logs = ref<SysLogs[]>([]);
@@ -162,13 +166,13 @@ onMounted(async () => {
 const getTypeLabel = (type: number) => {
     switch (type) {
         case 1:
-            return "用户";
+            return t('common.fields.user');
         case 2:
-            return "直播";
+            return t('common.fields.live');
         case 3:
-            return "推送";
+            return t('common.fields.push');
         default:
-            return "未知";
+            return t('common.fields.unknown');
     }
 };
 
@@ -186,11 +190,11 @@ const getTypeVariant = (type: number) => {
 const getStatusLabel = (status: number) => {
     switch (status) {
         case 0:
-            return "错误";
+            return t('common.fields.error');
         case 1:
-            return "成功";
+            return t('common.fields.success');
         default:
-            return "未知";
+            return t('common.fields.unknown');
     }
 };
 
@@ -236,11 +240,11 @@ async function handleDeleteLog() {
     try {
         const res: any = await deleteLogs(logToDelete.value);
         if (res.code !== 0) {
-            toast.error(res.msg || "删除失败");
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
         getLogs();
-        toast.success("删除成功");
+        toast.success(t('common.toast.deleteSuccess'));
     } catch (error) {
         console.error("Failed to delete log:", error);
     } finally {
@@ -253,11 +257,11 @@ async function handleDeleteAllLogs() {
     try {
         const res: any = await deleteAllLogs({});
         if (res.code !== 0) {
-            toast.error(res.msg || "清空失败");
+            toast.error(res.msg || t('system.logs.toast.clearFailed'));
             return;
         }
         getLogs();
-        toast.success("清空成功");
+        toast.success(t('system.logs.toast.clearSuccess'));
     } catch (error) {
         console.error("Failed to delete all logs:", error);
     } finally {

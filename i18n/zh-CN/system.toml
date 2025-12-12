@@ -1,0 +1,46 @@
+"system.push.valid.ChannelIDRequired" = "渠道ID不能为空"
+"system.push.valid.ChannelNameRequired" = "渠道名称不能为空"
+"system.push.valid.ChannelStatusRequired" = "渠道启用状态不能为空"
+"system.push.valid.ChannelTypeRequired" = "渠道类型不能为空"
+"system.push.valid.ChannelTypeUnsupported" = "不支持的渠道类型"
+"system.push.valid.RemarkLength" = "备注最大长度为45"
+"system.push.valid.UrlRequired" = "Url不能为空"
+
+"system.push.valid.EmailAuthCodeRequired" = "邮箱授权码不能为空"
+"system.push.valid.EmailFormatInvalid" = "邮箱格式不正确"
+"system.push.valid.EmailPortRequired" = "邮箱端口不能为空"
+"system.push.valid.EmailSenderRequired" = "发送邮箱不能为空"
+"system.push.valid.EmailServerRequired" = "邮箱服务器不能为空"
+"system.push.valid.EmailReceiverRequired" = "接收邮箱不能为空"
+
+"system.push.valid.MessageTypeInvalid" = "消息类型参数不正确"
+"system.push.valid.MessageTypeRequired" = "消息类型不能为空"
+"system.push.valid.WebhookUrlFormatInvalid" = "webhookUrl格式不正确"
+"system.push.valid.WebhookUrlRequired" = "webhookUrl不能为空"
+
+"system.notify.valid.IDBlank" = "通知ID不能为空"
+
+"system.logs.valid.IDBlank" = "日志ID不能为空"
+"system.logs.valid.StatusInvalid" = "日志状态错误"
+"system.logs.valid.TypeInvalid" = "日志类型错误"
+
+"system.settings.valid.KeyRequired" = "键名不能为空"
+"system.settings.valid.ValueRequired" = "值不能为空"
+
+"system.push.error.Delete" = "删除推送渠道失败"
+"system.push.error.GetDetail" = "获取渠道详情失败"
+"system.push.error.GetList" = "获取渠道列表失败"
+
+"system.notify.error.Delete" = "删除通知失败"
+"system.notify.error.DeleteAll" = "删除全部通知失败"
+"system.notify.error.GetList" = "获取通知列表失败"
+"system.notify.error.Mark" = "标记通知失败"
+"system.notify.error.MarkAll" = "标记全部通知失败"
+
+"system.logs.error.Delete" = "删除日志失败"
+"system.logs.error.DeleteAll" = "删除全部日志失败"
+"system.logs.error.GetList" = "获取日志列表失败"
+
+"system.settings.error.Add" = "添加设置失败"
+"system.settings.error.Update" = "修改设置失败"
+"system.settings.error.Get" = "获取设置数据失败"

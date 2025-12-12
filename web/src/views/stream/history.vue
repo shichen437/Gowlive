@@ -3,23 +3,23 @@
         <div class="flex justify-between items-center">
             <Button variant="destructive" @click="openConfirmDeleteAllModal">
                 <Trash2 class="w-4 h-4 mr-2" />
-                清空历史
+                {{ t('stream.history.clear.button') }}
             </Button>
         </div>
         <div class="border rounded-md">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead class="text-center">主播名称</TableHead>
-                        <TableHead class="text-center">直播开始时间</TableHead>
-                        <TableHead class="text-center">直播结束时间</TableHead>
-                        <TableHead class="text-center">直播时长</TableHead>
-                        <TableHead class="text-center">操作</TableHead>
+                        <TableHead class="text-center">{{ t('stream.common.fields.anchorName') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.history.fields.startTime') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.history.fields.endTime') }}</TableHead>
+                        <TableHead class="text-center">{{ t('stream.history.fields.duration') }}</TableHead>
+                        <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     <TableRow v-if="!list || list.length === 0">
-                        <TableCell :colspan="5" class="text-center h-24">暂无数据</TableCell>
+                        <TableCell :colspan="5" class="text-center h-24">{{ t('common.noData') }}</TableCell>
                     </TableRow>
                     <TableRow v-for="item in list" :key="item.id">
                         <TableCell class="text-center">{{ item.anchor }}</TableCell>
@@ -57,13 +57,14 @@
     </div>
 
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="performDelete" title="确认删除" description="你确定要删除这条历史记录吗？此操作无法撤销。" />
+        :onConfirm="performDelete" :title="t('common.operation.deleteConfirm')" :description="t('stream.history.deleteDesc')" />
     <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
-        :onConfirm="handleDeleteAllHistory" title="确认清空" description="你确定要清空所有历史吗？此操作无法撤销。" />
+        :onConfirm="handleDeleteAllHistory" :title="t('stream.history.clear.title')" :description="t('stream.history.clear.desc')" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { historyList, deleteHistory, deleteAllHistory } from '@/api/stream/live_history';
 import type { LiveHistory } from '@/types/stream';
 import {
@@ -87,6 +88,7 @@ import { toast } from "vue-sonner";
 import { Trash2 } from 'lucide-vue-next';
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
 
+const { t } = useI18n();
 const list = ref<LiveHistory[]>([]);
 const total = ref(0);
 const pageNum = ref(1);
@@ -101,7 +103,7 @@ const getList = async () => {
         total.value = res.data.total;
     } catch (error) {
         console.error(error);
-        toast.error("获取列表失败");
+        toast.error(t('stream.history.toast.listErr'));
     }
 };
 
@@ -126,10 +128,10 @@ async function performDelete() {
     try {
         const res: any = await deleteHistory(itemToDelete.value);
         if (res.code !== 0) {
-            toast.error(res.msg || '删除失败');
+            toast.error(res.msg || t('common.toast.deleteFailed'));
             return;
         }
-        toast.success("删除成功")
+        toast.success(t('common.toast.deleteSuccess'))
         getList();
     } catch (error) {
         console.error(error);
@@ -143,11 +145,11 @@ async function handleDeleteAllHistory() {
     try {
         const res: any = await deleteAllHistory();
         if (res.code !== 0) {
-            toast.error(res.msg || "清空失败");
+            toast.error(res.msg || t('stream.history.clear.failed'));
             return;
         }
         getList();
-        toast.success("清空成功");
+        toast.success(t('stream.history.clear.success'));
     } catch (error) {
         console.error("Failed to delete all history:", error);
     } finally {

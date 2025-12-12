@@ -12,14 +12,11 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
-var (
-	title = "空间预警"
-)
-
 func StorageWarning(ctx context.Context) {
 	usage := utils.GetDiskUsage()
 	if usage > consts.StorageThreshold {
-		content := "存储空间使用率已达到" + gconv.String(usage) + "%"
+		title := utils.T(ctx, "ext.storage.waning.title")
+		content := utils.Tf(ctx, "ext.storage.waning.desc", gconv.String(usage))
 		manager.GetNotifyManager().AddWarningNotify(title, content)
 		err := mp.PushMessage(gctx.New(), &mp.MessageModel{
 			Title:   title,

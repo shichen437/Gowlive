@@ -1,0 +1,46 @@
+"system.push.valid.ChannelIDRequired" = "Channel ID cannot be empty"
+"system.push.valid.ChannelNameRequired" = "Channel name cannot be empty"
+"system.push.valid.ChannelStatusRequired" = "Channel enabled status cannot be empty"
+"system.push.valid.ChannelTypeRequired" = "Channel type cannot be empty"
+"system.push.valid.ChannelTypeUnsupported" = "Unsupported channel type"
+"system.push.valid.RemarkLength" = "Remark maximum length is 45"
+"system.push.valid.UrlRequired" = "URL cannot be empty"
+
+"system.push.valid.EmailAuthCodeRequired" = "Email authorization code cannot be empty"
+"system.push.valid.EmailFormatInvalid" = "Invalid email format"
+"system.push.valid.EmailPortRequired" = "Email port cannot be empty"
+"system.push.valid.EmailSenderRequired" = "Sender email cannot be empty"
+"system.push.valid.EmailServerRequired" = "Email server cannot be empty"
+"system.push.valid.EmailReceiverRequired" = "Receiver email cannot be empty"
+
+"system.push.valid.MessageTypeInvalid" = "Invalid message type parameter"
+"system.push.valid.MessageTypeRequired" = "Message type cannot be empty"
+"system.push.valid.WebhookUrlFormatInvalid" = "Invalid Webhook URL format"
+"system.push.valid.WebhookUrlRequired" = "Webhook URL cannot be empty"
+
+"system.notify.valid.IDBlank" = "Notification ID cannot be empty"
+
+"system.logs.valid.IDBlank" = "Log ID cannot be empty"
+"system.logs.valid.StatusInvalid" = "Invalid log status"
+"system.logs.valid.TypeInvalid" = "Invalid log type"
+
+"system.settings.valid.KeyRequired" = "Key cannot be empty"
+"system.settings.valid.ValueRequired" = "Value cannot be empty"
+
+"system.push.error.Delete" = "Failed to delete push channel"
+"system.push.error.GetDetail" = "Failed to get channel details"
+"system.push.error.GetList" = "Failed to get channel list"
+
+"system.notify.error.Delete" = "Failed to delete notification"
+"system.notify.error.DeleteAll" = "Failed to delete all notifications"
+"system.notify.error.GetList" = "Failed to get notification list"
+"system.notify.error.Mark" = "Failed to mark notification"
+"system.notify.error.MarkAll" = "Failed to mark all notifications"
+
+"system.logs.error.Delete" = "Failed to delete log"
+"system.logs.error.DeleteAll" = "Failed to delete all logs"
+"system.logs.error.GetList" = "Failed to get log list"
+
+"system.settings.error.Add" = "Failed to add setting"
+"system.settings.error.Update" = "Failed to update setting"
+"system.settings.error.Get" = "Failed to get setting data"

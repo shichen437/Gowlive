@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 
-	"github.com/gogf/gf/v2/errors/gerror"
 	v1 "github.com/shichen437/gowlive/api/v1/media"
 	"github.com/shichen437/gowlive/internal/app/media/dao"
 	"github.com/shichen437/gowlive/internal/app/media/model/do"
@@ -55,11 +54,11 @@ func (s *sFileCheck) Post(ctx context.Context, req *v1.PostFileCheckReq) (res *v
 		CreatedAt: utils.Now(),
 	})
 	if err != nil {
-		return nil, gerror.New("添加检查任务失败")
+		return nil, utils.TError(ctx, "media.check.error.Add")
 	}
 	resultId, err := result.LastInsertId()
 	if err != nil {
-		return nil, gerror.New("获取检查任务ID失败")
+		return nil, utils.TError(ctx, "media.check.error.GetID")
 	}
 	manager.GetFileCheckManager().Add(int(resultId))
 	return

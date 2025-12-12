@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/gogf/gf/v2/errors/gerror"
 	v1 "github.com/shichen437/gowlive/api/v1/system"
 	"github.com/shichen437/gowlive/internal/app/system/dao"
 	"github.com/shichen437/gowlive/internal/app/system/model/do"
@@ -34,7 +33,7 @@ func (s *sSystemSettings) LatestVersion(ctx context.Context, req *v1.GetLatestVe
 func (s *sSystemSettings) PutSettings(ctx context.Context, req *v1.PutSysSettingsReq) (res *v1.PutSysSettingsRes, err error) {
 	count, err := dao.SysSettings.Ctx(ctx).Where(dao.SysSettings.Columns().SKey, req.Key).Count()
 	if err != nil {
-		return nil, gerror.New("获取设置数据失败")
+		return nil, utils.TError(ctx, "system.settings.error.Get")
 	}
 	if count > 0 {
 		_, err = dao.SysSettings.Ctx(ctx).
@@ -44,7 +43,7 @@ func (s *sSystemSettings) PutSettings(ctx context.Context, req *v1.PutSysSetting
 				UpdatedAt: utils.Now(),
 			})
 		if err != nil {
-			return nil, gerror.New("修改设置失败")
+			return nil, utils.TError(ctx, "system.settings.error.Update")
 		}
 	} else {
 		_, err = dao.SysSettings.Ctx(ctx).
@@ -54,7 +53,7 @@ func (s *sSystemSettings) PutSettings(ctx context.Context, req *v1.PutSysSetting
 				CreatedAt: utils.Now(),
 			})
 		if err != nil {
-			return nil, gerror.New("添加设置失败")
+			return nil, utils.TError(ctx, "system.settings.error.Add")
 		}
 	}
 	manager.GetSettingsManager().SaveSetting(req.Key, req.Value)

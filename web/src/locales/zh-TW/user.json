@@ -1,0 +1,82 @@
+{
+  "profile": {
+    "title": "帳戶資訊",
+    "fileds": {
+      "username": "使用者名稱",
+      "nickname": "暱稱",
+      "gender": "性別",
+      "status": "狀態",
+      "active": "活躍",
+      "disabled": "禁用",
+      "male": "男",
+      "female": "女"
+    },
+    "edit": {
+      "button": "修改資訊",
+      "title": "修改資訊",
+      "desc": "修改你的暱稱與性別。",
+      "placeholder": {
+        "sex": "請選擇性別"
+      },
+      "valid": {
+        "nickname": "暱稱至少需要 2 個字。"
+      }
+    },
+    "password": {
+      "button": "修改密碼",
+      "title": "修改密碼",
+      "desc": "請輸入你的舊密碼與新密碼。修改成功後將會登出。",
+      "fields": {
+        "oldPwd": "舊密碼",
+        "newPwd": "新密碼",
+        "confirmPwd": "確認新密碼"
+      },
+      "placeholder": {
+        "oldPwd": "請輸入舊密碼",
+        "newPwd": "請輸入新密碼",
+        "confirmPwd": "請再次輸入新密碼"
+      },
+      "valid": {
+        "oldBlank": "舊密碼不可為空。",
+        "newPwdLength": "新密碼至少需要 6 個字。",
+        "confirmPwd": "請再次輸入新密碼。",
+        "notSame": "兩次輸入的密碼不一致。"
+      }
+    }
+  },
+  "liveSettings": {
+    "title": "直播設定",
+    "desc": "在這裡調整你的直播相關設定。",
+    "archive": {
+      "title": "歸檔策略",
+      "placeholder": "選擇歸檔策略",
+      "values": {
+        "monthly": "月",
+        "daily": "天",
+        "monthlyAndDaily": "月＋天",
+        "none": "不歸檔"
+      }
+    },
+    "filenameTemplate": {
+      "title": "檔名範本",
+      "placeholder": "選擇檔名範本"
+    },
+    "diskProtected": {
+      "title": "磁碟空間保護",
+      "tooltip": "當磁碟空間小於指定門檻時停止錄製；當空間恢復時，錄製將自動恢復。",
+      "placeholder": "選擇最小可用空間門檻"
+    },
+    "autoCleanLittleFile": {
+      "title": "自動清除小檔案",
+      "placeholder": "選擇小檔案門檻"
+    },
+    "fixedResolution": {
+      "title": "固定解析度",
+      "tooltip": "僅針對 YY 直播錄製 MKV 格式時，遇到解析度變更造成花屏的問題。"
+    },
+    "liveCloseNotice": "下播通知",
+    "toast": {
+      "updateErr": "更新設定失敗"
+    }
+  }
+}

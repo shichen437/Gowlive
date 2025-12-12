@@ -1,37 +1,37 @@
 <template>
     <div class="space-y-4">
-        <h2 class="text-2xl font-bold tracking-tight">直播设置</h2>
-        <p class="text-muted-foreground">在这里调整你的直播相关设置。</p>
+        <h2 class="text-2xl font-bold tracking-tight">{{ t('user.liveSettings.title') }}</h2>
+        <p class="text-muted-foreground">{{ t('user.liveSettings.desc') }}</p>
         <Card>
             <CardContent>
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
                         <Label for="archive-strategy" class="flex flex-col space-y-1">
-                            <span class="text-md">归档策略</span>
+                            <span class="text-md">{{ t('user.liveSettings.archive.title') }}</span>
                         </Label>
                         <Select id="archive-strategy" v-model="archiveStrategy"
                             @update:model-value="updateSetting('sk_archive_strategy', $event)">
                             <SelectTrigger class="w-[330px]">
-                                <SelectValue placeholder="选择归档策略" />
+                                <SelectValue :placeholder="t('user.liveSettings.archive.placeholder')" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem :value=0>月</SelectItem>
-                                    <SelectItem :value=1>天</SelectItem>
-                                    <SelectItem :value=2>月+天</SelectItem>
-                                    <SelectItem :value=3>不归档</SelectItem>
+                                    <SelectItem :value=0>{{ t('user.liveSettings.archive.values.monthly') }}</SelectItem>
+                                    <SelectItem :value=1>{{ t('user.liveSettings.archive.values.daily') }}</SelectItem>
+                                    <SelectItem :value=2>{{ t('user.liveSettings.archive.values.monthlyAndDaily') }}</SelectItem>
+                                    <SelectItem :value=3>{{ t('user.liveSettings.archive.values.none') }}</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
                     <div class="flex items-center justify-between">
                         <Label for="filename-template" class="flex flex-col space-y-1">
-                            <span class="text-md">文件名称模板</span>
+                            <span class="text-md">{{ t('user.liveSettings.filenameTemplate.title') }}</span>
                         </Label>
                         <Select id="filename-template" v-model="filenameTemplate"
                             @update:model-value="updateSetting('sk_filename_template', $event)">
                             <SelectTrigger class="w-[330px]">
-                                <SelectValue placeholder="选择文件名称模板" />
+                                <SelectValue :placeholder="t('user.liveSettings.filenameTemplate.placeholder')" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -56,7 +56,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-1">
                             <Label for="disk-protection" class="flex flex-col space-y-1">
-                                <span class="text-md">磁盘空间保护</span>
+                                <span class="text-md">{{ t('user.liveSettings.diskProtected.title') }}</span>
                             </Label>
                             <TooltipProvider>
                                 <Tooltip>
@@ -64,7 +64,7 @@
                                         <Info class="w-4 h-4 ml-1" />
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>在磁盘空间小于指定阈值时停止录制。当磁盘空间恢复时，录制将自动恢复。</p>
+                                        <p>{{ t('user.liveSettings.diskProtected.tooltip') }}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
@@ -72,7 +72,7 @@
                         <Select id="disk-protection" v-model="diskProtection"
                             @update:model-value="updateSetting('sk_disk_protection', $event)">
                             <SelectTrigger class="w-[330px]">
-                                <SelectValue placeholder="选择最小可用空间阈值" />
+                                <SelectValue :placeholder="t('user.liveSettings.diskProtected.placeholder')" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -88,13 +88,13 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-1">
                             <Label for="auto-clean-little-file" class="flex flex-col space-y-1">
-                                <span class="text-md">自动清除小文件</span>
+                                <span class="text-md">{{ t('user.liveSettings.autoCleanLittleFile.title') }}</span>
                             </Label>
                         </div>
                         <Select id="auto-clean-little-file" v-model="autoCleanLittleFile"
                             @update:model-value="updateSetting('sk_auto_clean_little_file', $event)">
                             <SelectTrigger class="w-[330px]">
-                                <SelectValue placeholder="选择小文件阈值" />
+                                <SelectValue :placeholder="t('user.liveSettings.autoCleanLittleFile.placeholder')" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -116,7 +116,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-1">
                             <Label for="fixed-resolution" class="flex flex-col space-y-1">
-                                <span class="text-md">固定分辨率</span>
+                                <span class="text-md">{{ t('user.liveSettings.fixedResolution.title') }}</span>
                             </Label>
                             <TooltipProvider>
                                 <Tooltip>
@@ -124,7 +124,7 @@
                                         <Badge variant="secondary">BETA</Badge>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>仅针对 YY 直播录制 MKV 格式时遇到分辨率变更时花屏问题。</p>
+                                        <p>{{ t('user.liveSettings.fixedResolution.tooltip') }}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
@@ -140,7 +140,7 @@
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
                         <Label for="live-end-notify" class="flex flex-col space-y-1">
-                            <span class="text-md">下播通知</span>
+                            <span class="text-md">{{ t('user.liveSettings.liveCloseNotice') }}</span>
                         </Label>
                         <Switch id="live-end-notify" :checked="liveEndNotify" v-model="liveEndNotify"
                             @update:checked="updateSetting('sk_live_end_notify', $event)" />
@@ -153,6 +153,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, type Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
     Card,
     CardContent,
@@ -177,6 +178,8 @@ import {
 import { Info } from 'lucide-vue-next';
 import { getSettings, updateSettings } from '@/api/system/settings';
 import { toast } from "vue-sonner";
+
+const { t } = useI18n();
 
 const liveEndNotify = ref(false);
 const fixedResolution = ref(false);
@@ -216,7 +219,7 @@ const updateSetting = async (key: string, value: any) => {
         await updateSettings({ key, value });
     } catch (error) {
         console.error(`Error updating setting ${key}:`, error);
-        toast.error("更新设置失败");
+        toast.error(t('user.liveSettings.toast.updateErr'));
     }
 };
 

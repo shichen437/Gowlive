@@ -2,40 +2,40 @@
     <Dialog :open="open" @update:open="onOpenChange">
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
-                <DialogTitle>修改密码</DialogTitle>
-                <DialogDescription>请输入你的旧密码和新密码。修改成功后将会退出登录。</DialogDescription>
+                <DialogTitle>{{ t('user.profile.password.title') }}</DialogTitle>
+                <DialogDescription>{{ t('user.profile.password.desc') }}</DialogDescription>
             </DialogHeader>
             <form @submit="onSubmit" class="space-y-4">
                 <FormField v-slot="{ componentField }" name="oldPwd">
                     <FormItem>
-                        <FormLabel>旧密码</FormLabel>
+                        <FormLabel>{{ t('user.profile.password.fields.oldPwd') }}</FormLabel>
                         <FormControl>
-                            <Input type="password" v-bind="componentField" placeholder="请输入旧密码" />
+                            <Input type="password" v-bind="componentField" :placeholder="t('user.profile.password.placeholder.oldPwd')" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 </FormField>
                 <FormField v-slot="{ componentField }" name="newPwd">
                     <FormItem>
-                        <FormLabel>新密码</FormLabel>
+                        <FormLabel>{{ t('user.profile.password.fields.newPwd') }}</FormLabel>
                         <FormControl>
-                            <Input type="password" v-bind="componentField" placeholder="请输入新密码" />
+                            <Input type="password" v-bind="componentField" :placeholder="t('user.profile.password.placeholder.newPwd')" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 </FormField>
                 <FormField v-slot="{ componentField }" name="confirmPwd">
                     <FormItem>
-                        <FormLabel>确认新密码</FormLabel>
+                        <FormLabel>{{ t('user.profile.password.fields.confirmPwd') }}</FormLabel>
                         <FormControl>
-                            <Input type="password" v-bind="componentField" placeholder="请再次输入新密码" />
+                            <Input type="password" v-bind="componentField" :placeholder="t('user.profile.password.placeholder.confirmPwd')" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 </FormField>
             </form>
             <DialogFooter>
-                <Button type="submit" @click="onSubmit">保存</Button>
+                <Button type="submit" @click="onSubmit">{{ t('common.operation.save') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>
@@ -66,6 +66,9 @@ import { Input } from '@/components/ui/input';
 import { putPassword } from '@/api/admin/user';
 import { useUserStore } from '@/store/user';
 import { toast } from 'vue-sonner';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     open: boolean;
@@ -76,11 +79,11 @@ const emit = defineEmits(['update:open']);
 const userStore = useUserStore();
 
 const formSchema = toTypedSchema(z.object({
-    oldPwd: z.string().min(1, '旧密码不能为空。'),
-    newPwd: z.string().min(6, '新密码至少需要 6 个字符。'),
-    confirmPwd: z.string().min(1, '请再次输入新密码。'),
+    oldPwd: z.string().min(1, t('user.profile.password.valid.oldBlank')),
+    newPwd: z.string().min(6, t('user.profile.password.valid.newPwdLength')),
+    confirmPwd: z.string().min(1, t('user.profile.password.valid.confirmPwd')),
 }).refine(data => data.newPwd === data.confirmPwd, {
-    message: '两次输入的密码不一致。',
+    message: t('user.profile.password.valid.notSame'),
     path: ['confirmPwd'],
 }));
 

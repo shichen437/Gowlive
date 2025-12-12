@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gtime"
@@ -36,11 +35,11 @@ func (s *sFileManage) List(ctx context.Context, req *v1.GetFileListReq) (res *v1
 	res = &v1.GetFileListRes{}
 	absPath, err := utils.FileAbsPath(req.Path, "")
 	if err != nil {
-		return nil, gerror.New("获取系统目录路径失败")
+		return nil, utils.TError(ctx, "media.manage.error.SystemPath")
 	}
 	files, err := os.ReadDir(absPath)
 	if err != nil {
-		return nil, gerror.New("获取目录列表失败")
+		return nil, utils.TError(ctx, "media.manage.error.DirList")
 	}
 	if len(files) == 0 {
 		return
@@ -72,11 +71,11 @@ func (s *sFileManage) Delete(ctx context.Context, req *v1.DeleteFileReq) (res *v
 	}
 	absPath, err := utils.FileAbsPath(req.Path, "")
 	if err != nil {
-		return nil, gerror.New("获取系统目录路径失败")
+		return nil, utils.TError(ctx, "media.manage.error.SystemPath")
 	}
 	err = os.RemoveAll(filepath.Join(absPath, req.Filename))
 	if err != nil {
-		return nil, gerror.New("删除文件失败")
+		return nil, utils.TError(ctx, "media.manage.error.FileDelete")
 	}
 	return
 }
@@ -85,7 +84,7 @@ func (s *sFileManage) Empty(ctx context.Context, req *v1.GetEmptyFolderReq) (res
 	res = &v1.GetEmptyFolderRes{}
 	absPath, err := utils.FileAbsPath(req.Path, "")
 	if err != nil {
-		return nil, gerror.New("获取系统目录路径失败")
+		return nil, utils.TError(ctx, "media.manage.error.SystemPath")
 	}
 	res.IsEmpty = !utils.HasAnyFile(absPath)
 	return
@@ -118,7 +117,7 @@ func (s *sFileManage) AnchorFilePath(ctx context.Context, req *v1.GetAnchorFileP
 func (s *sFileManage) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1.GetFilePlayRes, err error) {
 	r := ghttp.RequestFromCtx(ctx)
 	if r == nil {
-		return nil, gerror.New("invalid request context")
+		return nil, utils.TError(ctx, "media.manage.error.InvalidRequest")
 	}
 	res = &v1.GetFilePlayRes{}
 
@@ -130,39 +129,39 @@ func (s *sFileManage) Play(ctx context.Context, req *v1.GetFilePlayReq) (res *v1
 
 	path := strings.TrimSpace(req.Path)
 	if path == "" {
-		writeErrorPlain(r, http.StatusBadRequest, "文件路径不能为空")
+		writeErrorPlain(r, http.StatusBadRequest, utils.T(ctx, "media.manage.error.FilePathBlank"))
 		return
 	}
 
 	abs, errAbsJoin := utils.FileAbsPath(path, "")
 	if errAbsJoin != nil {
-		writeErrorPlain(r, http.StatusBadRequest, "非法文件路径")
+		writeErrorPlain(r, http.StatusBadRequest, utils.T(ctx, "media.manage.error.FilePathInvalid"))
 		return
 	}
 
 	fi, statErr := os.Stat(abs)
 	if statErr != nil {
 		if os.IsNotExist(statErr) {
-			writeErrorPlain(r, http.StatusNotFound, "文件不存在")
+			writeErrorPlain(r, http.StatusNotFound, utils.T(ctx, "media.manage.error.FileNotExist"))
 		} else {
-			writeErrorPlain(r, http.StatusInternalServerError, "无法访问文件")
+			writeErrorPlain(r, http.StatusInternalServerError, utils.T(ctx, "media.manage.error.FileAuth"))
 		}
 		return
 	}
 	if fi.IsDir() {
-		writeErrorPlain(r, http.StatusBadRequest, "路径为目录，无法播放")
+		writeErrorPlain(r, http.StatusBadRequest, utils.T(ctx, "media.manage.error.FilePlayDir"))
 		return
 	}
 
 	ctype := detectContentType(abs)
 	if !isSupportedMedia(ctype) {
-		writeErrorPlain(r, http.StatusUnsupportedMediaType, fmt.Sprintf("不支持的媒体类型: %s", ctype))
+		writeErrorPlain(r, http.StatusUnsupportedMediaType, utils.Tf(ctx, "media.manage.error.FileTypeInvalid", ctype))
 		return
 	}
 
 	f, openErr := os.Open(abs)
 	if openErr != nil {
-		writeErrorPlain(r, http.StatusInternalServerError, "文件打开失败")
+		writeErrorPlain(r, http.StatusInternalServerError, utils.T(ctx, "media.manage.error.FileOpen"))
 		return
 	}
 	defer f.Close()
@@ -188,7 +187,7 @@ func (s *sFileManage) Clip(ctx context.Context, req *v1.PostFileClipReq) (res *v
 	// 1. 获取原文件绝对路径
 	absPath, err := utils.FileAbsPath(req.Path, req.Filename)
 	if err != nil {
-		return nil, gerror.New("获取文件路径失败")
+		return nil, utils.TError(ctx, "media.manage.error.FilePath")
 	}
 
 	// 2. 生成输出文件名 (例如: original_clip_123456.mp4)
@@ -211,7 +210,7 @@ func (s *sFileManage) Clip(ctx context.Context, req *v1.PostFileClipReq) (res *v
 	_, err = fb.Execute(ctx)
 	if err != nil {
 		g.Log().Error(ctx, "视频剪辑失败:", err)
-		return nil, gerror.New("视频剪辑失败")
+		return nil, utils.TError(ctx, "media.manage.error.FileClip")
 	}
 
 	return res, nil

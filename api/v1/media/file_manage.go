@@ -28,7 +28,7 @@ type GetAnchorFilePathRes struct {
 
 type DeleteFileReq struct {
 	g.Meta   `path:"/media/file" method:"delete" tags:"文件管理" summary:"删除文件"`
-	Filename string `json:"filename" v:"required-with:Path#路径为空时文件名必选"`
+	Filename string `json:"filename" v:"required-with:Path#media.manage.valid.FilenameOptionalRequired"`
 	Path     string `json:"path"`
 }
 
@@ -38,7 +38,7 @@ type DeleteFileRes struct {
 
 type GetEmptyFolderReq struct {
 	g.Meta `path:"/media/file/empty" method:"get" tags:"文件管理" summary:"是否空文件夹"`
-	Path   string `json:"path" v:"required#路径不能为空"`
+	Path   string `json:"path" v:"required#media.manage.valid.PathRequired"`
 }
 
 type GetEmptyFolderRes struct {
@@ -48,7 +48,7 @@ type GetEmptyFolderRes struct {
 
 type GetFilePlayReq struct {
 	g.Meta `path:"/media/file/play" method:"get,post,head,options,trace" tags:"文件管理" summary:"媒体文件流式传输"`
-	Path   string `p:"path" v:"required#文件路径不能为空"`
+	Path   string `p:"path" v:"required#media.manage.valid.FilepathRequired"`
 }
 
 type GetFilePlayRes struct {
@@ -57,10 +57,10 @@ type GetFilePlayRes struct {
 
 type PostFileClipReq struct {
 	g.Meta    `path:"/media/file/clip" method:"post" tags:"文件管理" summary:"视频切片"`
-	Path      string `json:"path" v:"required#文件路径不能为空"`
-	Filename  string `json:"filename" v:"required#文件名不能为空"`
-	StartTime string `json:"startTime" v:"required#开始时间不能为空"`
-	EndTime   string `json:"endTime" v:"required#结束时间不能为空"`
+	Path      string `json:"path" v:"required#media.manage.valid.FilepathRequired"`
+	Filename  string `json:"filename" v:"required#media.manage.valid.FilenameRequired"`
+	StartTime string `json:"startTime" v:"required#media.manage.valid.ClipStartTimeRequired"`
+	EndTime   string `json:"endTime" v:"required#media.manage.valid.ClipEndTimeRequired"`
 }
 
 type PostFileClipRes struct {

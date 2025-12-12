@@ -9,22 +9,22 @@
             <DropdownMenuItem @click="handleSortChange('')"
                 :class="{ 'text-accent-foreground bg-accent': sort === '' }">
                 <CalendarArrowDown class="w-4 h-4" />
-                <span>添加时间</span>
+                <span>{{ t('stream.rooms.fields.createTime') }}</span>
             </DropdownMenuItem>
             <DropdownMenuItem @click="handleSortChange('id:asc')"
                 :class="{ 'text-accent-foreground bg-accent': sort === 'id:asc' }">
                 <CalendarArrowUp class="w-4 h-4" />
-                <span>添加时间</span>
+                <span>{{ t('stream.rooms.fields.createTime') }}</span>
             </DropdownMenuItem>
             <DropdownMenuItem @click="handleSortChange('status:desc')"
                 :class="{ 'text-accent-foreground bg-accent': sort === 'status:desc' }">
                 <ArrowDownWideNarrow class="w-4 h-4" />
-                <span>监控状态</span>
+                <span>{{ t('stream.rooms.fields.monitorStatus.title') }}</span>
             </DropdownMenuItem>
             <DropdownMenuItem @click="handleSortChange('status:asc')"
                 :class="{ 'text-accent-foreground bg-accent': sort === 'status:asc' }">
                 <ArrowUpNarrowWide class="w-4 h-4" />
-                <span>监控状态</span>
+                <span>{{ t('stream.rooms.fields.monitorStatus.title') }}</span>
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
@@ -39,6 +39,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { ArrowUpDown, CalendarArrowDown, CalendarArrowUp, ArrowDownWideNarrow, ArrowUpNarrowWide } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 defineProps<{
     sort: string

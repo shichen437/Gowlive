@@ -7,10 +7,10 @@
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
             <DropdownMenuItem @click="handleExport(0)">
-                导出为 TXT
+                {{ t('stream.rooms.fields.export') }} TXT
             </DropdownMenuItem>
             <DropdownMenuItem @click="handleExport(1)">
-                导出为 Excel
+                {{ t('stream.rooms.fields.export') }} Excel
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
@@ -25,6 +25,9 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Download } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const emit = defineEmits(['export']);
 

@@ -15,6 +15,9 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface MessageTypeOption {
     value: number
@@ -30,13 +33,13 @@ const props = defineProps<{
 const messageTypePlaceholder = computed(() => {
     switch (props.platform) {
         case 'lark':
-            return '选择飞书消息类型'
+            return t('system.channel.placeholder.larkMsgType')
         case 'dingTalk':
-            return '选择钉钉消息类型'
+            return t('system.channel.placeholder.dingMsgType')
         case 'weCom':
-            return '选择企业微信消息类型'
+            return t('system.channel.placeholder.weComMsgType')
         default:
-            return '选择消息类型'
+            return t('system.channel.placeholder.msgType')
     }
 })
 </script>
@@ -55,7 +58,7 @@ const messageTypePlaceholder = computed(() => {
 
         <FormField name="webhook.messageType" v-slot="{ componentField }">
             <FormItem>
-                <FormLabel>消息类型</FormLabel>
+                <FormLabel>{{ t('system.channel.fields.messageType') }}</FormLabel>
                 <Select v-bind="componentField">
                     <FormControl>
                         <SelectTrigger class="w-full">
@@ -64,7 +67,7 @@ const messageTypePlaceholder = computed(() => {
                     </FormControl>
                     <SelectContent class="w-[--radix-select-trigger-width]">
                         <SelectItem v-for="opt in messageTypeOptions" :key="opt.value" :value="opt.value">
-                            {{ opt.label }}
+                            {{ opt.label === '文本' ? t('system.channel.fields.text') : opt.label === '富文本' ? t('system.channel.fields.richtext') : opt.label === '卡片' ? t('system.channel.fields.card') : opt.label }}
                         </SelectItem>
                     </SelectContent>
                 </Select>
@@ -74,7 +77,7 @@ const messageTypePlaceholder = computed(() => {
 
         <FormField v-if="showSign" name="webhook.sign" v-slot="{ componentField }">
             <FormItem>
-                <FormLabel>签名</FormLabel>
+                <FormLabel>{{ t('system.channel.fields.sign') }}</FormLabel>
                 <FormControl>
                     <Input type="password" v-bind="componentField" />
                 </FormControl>

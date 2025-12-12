@@ -1,0 +1,87 @@
+{
+  "file": {
+    "confirmCheck": {
+      "title": "Confirm Check",
+      "desc": "Are you sure you want to create a check task for this file?"
+    },
+    "fields": {
+      "filesize": "File Size",
+      "lastModified": "Last Modified",
+      "systemDir": "System Directory"
+    },
+    "delete": {
+      "file": "Are you sure you want to delete this file? This action cannot be undone.",
+      "folder": "Are you sure you want to delete this empty folder? This action cannot be undone.",
+      "folderNotEmpty": "The folder is not empty. Are you sure you want to delete this folder and all its contents? This action cannot be undone."
+    },
+    "toast": {
+      "list": "Failed to fetch file list",
+      "createcCheck": "Failed to create task",
+      "folderStatus": "Failed to check folder status"
+    },
+    "createcCheckSuccess": "Task created successfully"
+  },
+  "check": {
+    "fields": {
+      "status": {
+        "title": "File Status",
+        "pending": "Pending",
+        "normal": "Normal",
+        "bad": "Suspected damaged",
+        "notExist": "File does not exist",
+        "unknown": "Unknown"
+      },
+      "progress": {
+        "title": "Progress",
+        "pending": "Waiting to start",
+        "qcing": "Quick check in progress...",
+        "qcerr": "Quick check error",
+        "acing": "Full check in progress...",
+        "acerr": "Full check error",
+        "success": "Check completed"
+      },
+      "duration": "Duration",
+      "finishTime": "Finish Time"
+    },
+    "deleteConfirmDesc": "Are you sure you want to delete this task? This action cannot be undone.",
+    "clear": {
+      "button": "Clear Records",
+      "title": "Confirm Clear",
+      "desc": "Are you sure you want to clear all records? This action cannot be undone.",
+      "success": "Cleared successfully"
+    },
+    "toast": {
+      "listErr": "Failed to fetch list",
+      "clearErr": "Clear failed"
+    }
+  },
+  "play": {
+    "playlist": "Playlist",
+    "clip": {
+      "fields": {
+        "startTime": "Start Time",
+        "setStartTime": "Set to current playback time",
+        "endTime": "End Time",
+        "setEndTime": "Set to current playback time"
+      },
+      "button": "Video Clip",
+      "clipping": "Clipping...",
+      "startClip": "Start Clipping",
+      "success": "Clip succeeded, file saved",
+      "desc": "Choose start and end times to create a highlight. The original file will be preserved.",
+      "tooltip": "Tip: For faster processing, clipping uses lossless mode (Copy). Time positioning may have slight keyframe-level deviation."
+    },
+    "toast": {
+      "clipErr": "Clipping failed",
+      "endBeforeStart": "End time must be greater than start time",
+      "listErr": "Failed to fetch file list",
+      "loadVideoErr": "Unable to load video: missing address or parameters.",
+      "requestFailed": "Request failed"
+    }
+  },
+  "common": {
+    "fields": {
+      "filename": "Filename"
+    }
+  }
+}

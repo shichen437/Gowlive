@@ -1,0 +1,167 @@
+{
+  "anchor": {
+    "add": {
+      "button": "Add Anchor"
+    },
+    "fields": {
+      "sign": "Signature",
+      "homeUrl": "Home URL",
+      "following": "Following",
+      "followers": "Followers",
+      "videos": "Videos",
+      "likes": "Likes"
+    },
+    "deleteDesc": "Are you sure you want to delete this anchor? This action cannot be undone.",
+    "toast": {
+      "statErr": "Failed to fetch statistics"
+    }
+  },
+  "cookie": {
+    "add": {
+      "title": "Add Cookie",
+      "desc": "Add a Cookie to the list."
+    },
+    "edit": {
+      "title": "Edit Cookie",
+      "desc": "Update Cookie details."
+    },
+    "deleteDesc": "Are you sure you want to delete this Cookie? This action cannot be undone.",
+    "placeholder": {
+      "platform": "Select platform"
+    },
+    "toast": {
+      "listErr": "Failed to fetch Cookie list"
+    }
+  },
+  "history": {
+    "fields": {
+      "duration": "Live Duration",
+      "startTime": "Live Start Time",
+      "endTime": "Live End Time"
+    },
+    "clear": {
+      "button": "Clear History",
+      "title": "Confirm Clear",
+      "desc": "Are you sure you want to clear all history? This action cannot be undone.",
+      "success": "Cleared successfully",
+      "failed": "Clear failed"
+    },
+    "deleteDesc": "Are you sure you want to delete this history record? This action cannot be undone.",
+    "toast": {
+      "listErr": "Failed to fetch list"
+    }
+  },
+  "metrics": {
+    "emptyDesc": "No live monitoring data currently.",
+    "every5Min": "Every five minutes",
+    "totalReqCount": "Total Requests",
+    "totalFailedCount": "Total Failures",
+    "totalFailedRate": "Total Failure Rate",
+    "mainReqCount": "Mainline Requests",
+    "mainFailedCount": "Mainline Failures",
+    "mainFailedRate": "Mainline Failure Rate"
+  },
+  "rooms": {
+    "fields": {
+      "roomName": "Room Name",
+      "roomUrl": "Live URL",
+      "interval": "Interval (seconds)",
+      "format": "Recording Format",
+      "onlyAudio": "Audio Only",
+      "monitorStartTime": "Monitoring Start Time",
+      "monitorEndTime": "Monitoring End Time",
+      "segment": "Segment Duration",
+      "segmentNone": "No Segmentation",
+      "export": "Export as",
+      "createTime": "Create Time",
+      "monitorStatus": {
+        "title": "Monitoring Status",
+        "none": "Not Monitoring",
+        "cron": "Scheduled Monitoring",
+        "realtime": "Real-time Monitoring",
+        "intelligent": "Intelligent Monitoring",
+        "recording": "Recording"
+      },
+      "monitorType": {
+        "title": "Monitoring Type",
+        "stop": "Stop",
+        "cron": "Scheduled",
+        "cronTip": "Scheduled monitoring: Get live status at the set interval within the specified time window.",
+        "realtime": "Real-time",
+        "realTimeTip": "Real-time monitoring: Poll live status based on the configured interval.",
+        "intelligent": "Intelligent",
+        "intelligentTip": "Intelligent monitoring: Dynamically adjust the interval based on monitoring metrics and valid live history."
+      },
+      "quality": {
+        "title": "Quality",
+        "tooltip": "Only supported on Douyin.",
+        "original": "Original",
+        "super": "Super",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      }
+    },
+    "add": {
+      "title": "Add Room"
+    },
+    "edit": {
+      "title": "Edit Room"
+    },
+    "batch": {
+      "button": "Batch Add",
+      "title": "Batch Add Rooms"
+    },
+    "buttons": {
+      "openFolder": "Open Folder",
+      "top": "Pin to Top",
+      "unTop": "Unpin",
+      "cardView": "Switch to Card View",
+      "listView": "Switch to List View"
+    },
+    "deleteDesc": "Are you sure you want to delete this room? This action cannot be undone.",
+    "startMonitor": {
+      "title": "Confirm Start Monitoring",
+      "desc": "Are you sure you want to start monitoring this room?"
+    },
+    "stopMonitor": {
+      "title": "Confirm Stop Monitoring",
+      "desc": "Are you sure you want to stop monitoring this room?"
+    },
+    "toast": {
+      "topErr": "Pin failed",
+      "topSuccess": "Pinned successfully",
+      "unTopErr": "Unpin failed",
+      "unTopSuccess": "Unpinned successfully",
+      "startMonitor": "Monitoring started",
+      "stopMonitor": "Monitoring stopped",
+      "exportErr": "Export failed",
+      "detailErr": "Failed to fetch room details",
+      "batchSuccess": "Added successfully, please check later"
+    },
+    "placeholder": {
+      "roomUrl": "Please enter the live URL",
+      "anchorName": "Please enter the anchor name",
+      "format": "Select recording format",
+      "quality": "Select quality",
+      "segment": "Select segment duration",
+      "remark": "Please enter a remark",
+      "batchUrls": "Enter live URLs, separated by commas or new lines, up to 30"
+    },
+    "valid": {
+      "validUrl": "Please enter a valid URL",
+      "intervalMin": "Minimum interval is 30 seconds",
+      "intervalMax": "Maximum interval is 600 seconds",
+      "timeFormat": "Time format must be HH:mm",
+      "remarkLength": "Remark can be at most 45 characters",
+      "cronTime": "Scheduled monitoring requires start and end times",
+      "batchUrlsNum": "Up to 30 live URLs are supported",
+      "batchUrlInvalid": "Invalid URL format: "
+    }
+  },
+  "common": {
+    "fields": {
+      "anchorName": "Anchor Name"
+    }
+  }
+}

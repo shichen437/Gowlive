@@ -14,6 +14,7 @@ import (
 type (
 	ISystemOverview interface {
 		Overview(ctx context.Context, req *v1.GetOverviewReq) (res *v1.GetOverviewRes, err error)
+		GetLang(ctx context.Context, req *v1.GetLangReq) (res *v1.GetLangRes, err error)
 	}
 )
 

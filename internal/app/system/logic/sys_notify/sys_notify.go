@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	v1 "github.com/shichen437/gowlive/api/v1/system"
 	"github.com/shichen437/gowlive/internal/app/system/dao"
@@ -31,7 +30,7 @@ func (s *sSysNotify) List(ctx context.Context, req *v1.GetNotifyListReq) (res *v
 	}
 	res.Total, err = m.Count()
 	if err != nil {
-		return nil, gerror.New("获取通知列表失败")
+		return nil, utils.TError(ctx, "system.push.error.GetList")
 	}
 	if res.Total <= 0 {
 		return
@@ -39,7 +38,7 @@ func (s *sSysNotify) List(ctx context.Context, req *v1.GetNotifyListReq) (res *v
 	m = m.OrderAsc(dao.SysNotify.Columns().Status).OrderDesc(dao.SysNotify.Columns().Id)
 	err = m.Page(req.PageNum, req.PageSize).Scan(&res.Rows)
 	if err != nil {
-		return nil, gerror.New("获取通知列表失败")
+		return nil, utils.TError(ctx, "system.push.error.GetList")
 	}
 	return
 }
@@ -51,7 +50,7 @@ func (s *sSysNotify) MarkRead(ctx context.Context, req *v1.PutMarkNotifyReadReq)
 	})
 	if err != nil {
 		g.Log().Error(ctx, err)
-		err = gerror.New("标记通知失败")
+		err = utils.TError(ctx, "system.push.error.Mark")
 	}
 	return
 }
@@ -63,7 +62,7 @@ func (s *sSysNotify) MarkAll(ctx context.Context, req *v1.PutMarkNotifyAllReadRe
 	})
 	if err != nil {
 		g.Log().Error(ctx, err)
-		err = gerror.New("标记全部通知失败")
+		err = utils.TError(ctx, "system.push.error.MarkAll")
 	}
 	return
 }
@@ -72,7 +71,7 @@ func (s *sSysNotify) Delete(ctx context.Context, req *v1.DeleteNotifyReq) (res *
 	_, err = dao.SysNotify.Ctx(ctx).WherePri(req.Id).Delete()
 	if err != nil {
 		g.Log().Error(ctx, err)
-		err = gerror.New("删除通知失败")
+		err = utils.TError(ctx, "system.push.error.Delete")
 	}
 	return
 }
@@ -81,7 +80,7 @@ func (s *sSysNotify) DeleteAll(ctx context.Context, req *v1.DeleteAllNotifyReq) 
 	_, err = dao.SysNotify.Ctx(ctx).WhereGT(dao.SysLogs.Columns().Id, 0).Delete()
 	if err != nil {
 		g.Log().Error(ctx, err)
-		err = gerror.New("删除通知失败")
+		err = utils.TError(ctx, "system.push.error.DeleteAll")
 	}
 	return
 }

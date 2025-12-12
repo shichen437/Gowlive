@@ -1,0 +1,82 @@
+{
+  "profile": {
+    "title": "Account",
+    "fileds": {
+      "username": "Username",
+      "nickname": "Nickname",
+      "gender": "Gender",
+      "status": "Status",
+      "active": "Active",
+      "disabled": "Disabled",
+      "male": "Male",
+      "female": "Female"
+    },
+    "edit": {
+      "button": "Edit",
+      "title": "Edit Information",
+      "desc": "Edit your nickname and gender.",
+      "placeholder": {
+        "sex": "Please select gender"
+      },
+      "valid": {
+        "nickname": "Nickname must be at least 2 characters."
+      }
+    },
+    "password": {
+      "button": "Password",
+      "title": "Change Password",
+      "desc": "Enter your old and new password. You will be logged out after a successful change.",
+      "fields": {
+        "oldPwd": "Old Password",
+        "newPwd": "New Password",
+        "confirmPwd": "Confirm New Password"
+      },
+      "placeholder": {
+        "oldPwd": "Please enter the old password",
+        "newPwd": "Please enter the new password",
+        "confirmPwd": "Please enter the new password again"
+      },
+      "valid": {
+        "oldBlank": "Old password cannot be empty.",
+        "newPwdLength": "New password must be at least 6 characters.",
+        "confirmPwd": "Please enter the new password again.",
+        "notSame": "The two passwords do not match."
+      }
+    }
+  },
+  "liveSettings": {
+    "title": "Live Settings",
+    "desc": "Adjust your live-related settings here.",
+    "archive": {
+      "title": "Archive Strategy",
+      "placeholder": "Select archive strategy",
+      "values": {
+        "monthly": "Month",
+        "daily": "Day",
+        "monthlyAndDaily": "Month + Day",
+        "none": "No Archive"
+      }
+    },
+    "filenameTemplate": {
+      "title": "Filename Template",
+      "placeholder": "Select filename template"
+    },
+    "diskProtected": {
+      "title": "Disk Space Protection",
+      "tooltip": "Stop recording when disk space is below the specified threshold. Recording will resume automatically when space recovers.",
+      "placeholder": "Select minimum available space threshold"
+    },
+    "autoCleanLittleFile": {
+      "title": "Auto Clean Small Files",
+      "placeholder": "Select small file threshold"
+    },
+    "fixedResolution": {
+      "title": "Fixed Resolution",
+      "tooltip": "Only for YY live recording in MKV format to address screen artifacts when resolution changes."
+    },
+    "liveCloseNotice": "End-of-Live Notification",
+    "toast": {
+      "updateErr": "Failed to update settings"
+    }
+  }
+}

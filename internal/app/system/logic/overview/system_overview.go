@@ -10,6 +10,7 @@ import (
 	"github.com/shichen437/gowlive/internal/app/system/model"
 	"github.com/shichen437/gowlive/internal/app/system/service"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
+	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
 type sSystemOverview struct {
@@ -30,6 +31,12 @@ func (s *sSystemOverview) Overview(ctx context.Context, req *v1.GetOverviewReq) 
 	genRecordingTime(ctx, data)
 	genUnreadNotify(ctx, data)
 	res.Data = data
+	return
+}
+
+func (s *sSystemOverview) GetLang(ctx context.Context, req *v1.GetLangReq) (res *v1.GetLangRes, err error) {
+	res = &v1.GetLangRes{}
+	res.Lang = utils.GetDefaultLang()
 	return
 }
 

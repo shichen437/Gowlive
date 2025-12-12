@@ -1,0 +1,25 @@
+"user.login.banned" = "User has been banned"
+"user.login.blank" = "Username or password cannot be empty"
+"user.login.error" = "Incorrect username or password"
+"user.login.exit" = "User logged out"
+"user.login.success" = "User logged in successfully"
+"user.login.unauthorized" = "Unauthorized"
+
+"user.profile.valid.NewPwdRequired" = "Please enter new password"
+"user.profile.valid.NewPwdLength" = "New password length must be 6-20 characters"
+"user.profile.valid.NewPwdSame" = "New password cannot be the same as old password"
+"user.profile.valid.NicknameLength" = "Nickname length must be 2-12 characters"
+"user.profile.valid.NicknameRequired" = "Please enter a nickname"
+"user.profile.valid.OldPwdLength" = "Old password length must be 6-20 characters"
+"user.profile.valid.OldPwdRequired" = "Please enter old password"
+"user.profile.valid.SexRequired" = "Please select gender"
+
+"user.profile.error.Update" = "Failed to modify user profile"
+
+"user.profile.success.Update" = "User profile modified successfully"
+
+"user.password.error.Encrypt" = "Password encryption failed"
+"user.password.error.OldPwd" = "Incorrect old password"
+
+"user.password.error.Update" = "Failed to modify user password"
+"user.password.success.Update" = "User password modified successfully"

@@ -9,6 +9,9 @@ import {
 } from "@/components/ui/dialog";
 import type { PropType } from 'vue';
 import { Button } from "@/components/ui/button";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
     open: {
@@ -17,11 +20,11 @@ const props = defineProps({
     },
     onOpenChange: {
         type: Function as PropType<(open: boolean) => void>,
-        default: () => {},
+        default: () => { },
     },
     onConfirm: {
         type: Function as PropType<() => void>,
-        default: () => {},
+        default: () => { },
     },
     title: {
         type: String,
@@ -49,8 +52,8 @@ const handleConfirm = () => {
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-                <Button variant="outline" @click="onOpenChange(false)">取消</Button>
-                <Button @click="handleConfirm">确定</Button>
+                <Button variant="outline" @click="onOpenChange(false)">{{ t('common.operation.cancel') }}</Button>
+                <Button @click="handleConfirm">{{ t('common.operation.confirm') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>

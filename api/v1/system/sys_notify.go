@@ -20,7 +20,7 @@ type GetNotifyListRes struct {
 
 type PutMarkNotifyReadReq struct {
 	g.Meta `path:"/system/notify/{id}" method:"put" tags:"通知管理" summary:"标记已读"`
-	Id     *int `json:"id" v:"required#通知ID不能为空"`
+	Id     *int `json:"id" v:"required#system.notify.valid.IDBlank"`
 }
 type PutMarkNotifyReadRes struct {
 	g.Meta `mime:"application/json"`
@@ -35,7 +35,7 @@ type PutMarkNotifyAllReadRes struct {
 
 type DeleteNotifyReq struct {
 	g.Meta `path:"/system/notify/{id}" method:"delete" tags:"通知管理" summary:"删除通知"`
-	Id     *int `json:"id" v:"required#通知ID不能为空"`
+	Id     *int `json:"id" v:"required#system.notify.valid.IDBlank"`
 }
 type DeleteNotifyRes struct {
 	g.Meta `mime:"application/json"`

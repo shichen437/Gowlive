@@ -7,10 +7,10 @@
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" class="w-64 p-4 space-y-4">
             <div class="space-y-2">
-                <Label for="type">类型</Label>
+                <Label for="type">{{ t('system.logs.fields.type') }}</Label>
                 <Select v-model="localFilter.type">
                     <SelectTrigger class="w-full">
-                        <SelectValue placeholder="选择类型" />
+                        <SelectValue :placeholder="t('system.logs.placeholders.type')" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem v-for="item in typeOptions" :key="item.value" :value="String(item.value)">
@@ -20,10 +20,10 @@
                 </Select>
             </div>
             <div class="space-y-2">
-                <Label for="status">状态</Label>
+                <Label for="status">{{ t('system.logs.fields.status') }}</Label>
                 <Select v-model="localFilter.status">
                     <SelectTrigger class="w-full">
-                        <SelectValue placeholder="选择状态" />
+                        <SelectValue :placeholder="t('system.logs.placeholders.status')" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem v-for="item in statusOptions" :key="item.value" :value="String(item.value)">
@@ -33,8 +33,8 @@
                 </Select>
             </div>
             <div class="flex justify-end space-x-2">
-                <Button variant="outline" @click="handleReset">重置</Button>
-                <Button @click="handleApply">确定</Button>
+                <Button variant="outline" @click="handleReset">{{ t('common.operation.reset') }}</Button>
+                <Button @click="handleApply">{{ t('common.operation.confirm') }}</Button>
             </div>
         </DropdownMenuContent>
     </DropdownMenu>
@@ -57,6 +57,9 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { ListFilter } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Filter {
     type: string

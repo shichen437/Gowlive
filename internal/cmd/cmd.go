@@ -88,7 +88,7 @@ var (
 func GetGtoken(ctx context.Context) (gfToken *gtoken.GfToken, err error) {
 	gfToken = &gtoken.GfToken{
 		AuthAfterFunc:    AuthAfterFunc,
-		AuthExcludePaths: g.SliceStr{"/logout"},
+		AuthExcludePaths: g.SliceStr{"/logout", "/system/lang"},
 		AuthPaths:        g.SliceStr{"/*"},
 		CacheMode:        3,
 		Timeout:          30 * 86400 * 1000,
@@ -103,12 +103,12 @@ func GetGtoken(ctx context.Context) (gfToken *gtoken.GfToken, err error) {
 	return
 }
 
-func LoginFunc(r *ghttp.Request) (string, interface{}) {
+func LoginFunc(r *ghttp.Request) (string, any) {
 	ctx := context.TODO()
 	username := r.Get("username").String()
 	password := r.Get("password").String()
 	if username == "" || password == "" {
-		r.Response.WriteJson(gtoken.Fail("用户名或密码不能为空"))
+		r.Response.WriteJson(gtoken.Fail(utils.T(r.Context(), "user.login.blank")))
 		r.ExitAll()
 	}
 	var users *entity.SysUser
@@ -118,21 +118,21 @@ func LoginFunc(r *ghttp.Request) (string, interface{}) {
 		Password: enc,
 	}).Scan(&users)
 	if err != nil || users == nil {
-		manager.GetLogManager().AddErrorLog(consts.LogTypeUser, "用户名或密码错误")
-		r.Response.WriteJson(gtoken.Fail("用户名或密码错误"))
+		manager.GetLogManager().AddErrorLog(consts.LogTypeUser, utils.T(r.Context(), "user.login.error"))
+		r.Response.WriteJson(gtoken.Fail(utils.T(r.Context(), "user.login.error")))
 		r.ExitAll()
 	}
 	if users.Status == consts.StatusDisable {
-		r.Response.WriteJson(gtoken.Fail("用户已被禁用"))
+		r.Response.WriteJson(gtoken.Fail(utils.T(r.Context(), "user.login.banned")))
 		r.ExitAll()
 	}
-	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, "用户登录成功")
+	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, utils.T(r.Context(), "user.login.success"))
 	return fmt.Sprintf("%s%d", consts.GTokenAdminPrefix, users.Id), users
 }
 
 func LogoutAfterFunc(r *ghttp.Request, respData gtoken.Resp) {
 	service.Session().RemoveUser(r.Context())
-	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, "用户退出登录")
+	manager.GetLogManager().AddSuccessLog(consts.LogTypeUser, utils.T(r.Context(), "user.login.exit"))
 	r.Middleware.Next()
 }
 
@@ -140,7 +140,7 @@ func AuthAfterFunc(r *ghttp.Request, respData gtoken.Resp) {
 	var users entity.SysUser
 	err := gconv.Struct(respData.GetString("data"), &users)
 	if err != nil {
-		r.Response.WriteJson(gtoken.Unauthorized("未授权", nil))
+		r.Response.WriteJson(gtoken.Unauthorized(utils.T(r.Context(), "user.login.unauthorized"), nil))
 		r.ExitAll()
 	}
 	service.Session().SetUser(r.Context(), &users)

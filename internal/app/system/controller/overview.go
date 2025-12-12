@@ -15,3 +15,7 @@ var SystemOverview = systemOverviewController{}
 func (s *systemOverviewController) Overview(ctx context.Context, req *v1.GetOverviewReq) (res *v1.GetOverviewRes, err error) {
 	return service.SystemOverview().Overview(ctx, req)
 }
+
+func (s *systemOverviewController) GetLang(ctx context.Context, req *v1.GetLangReq) (res *v1.GetLangRes, err error) {
+	return service.SystemOverview().GetLang(ctx, req)
+}

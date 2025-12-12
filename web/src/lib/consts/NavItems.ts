@@ -10,45 +10,45 @@ import {
 
 export const configurableMenu = ref([
   {
-    title: "直播管理",
+    title: "project.router.liveManagement",
     icon: TvMinimal,
     children: [
-      { title: "房间列表", to: "/stream/index" },
-      { title: "直播历史", to: "/stream/history" },
-      { title: "主播数据", to: "/stream/author" },
-      { title: "监控指标", to: "/stream/metrics" },
-      { title: "Cookie", to: "/stream/cookie" },
+      { title: "project.router.roomList", to: "/stream/index" },
+      { title: "project.router.liveHistory", to: "/stream/history" },
+      { title: "project.router.anchorData", to: "/stream/author" },
+      { title: "project.router.monitoringMetrics", to: "/stream/metrics" },
+      { title: "project.router.cookie", to: "/stream/cookie" },
     ],
   },
   {
-    title: "媒体中心",
+    title: "project.router.mediaCenter",
     icon: Disc3,
     children: [
-      { title: "文件管理", to: "/media/file" },
-      { title: "文件检测", to: "/media/check" },
+      { title: "project.router.fileManagement", to: "/media/file" },
+      { title: "project.router.fileDetection", to: "/media/check" },
     ],
   },
   {
-    title: "系统管理",
+    title: "project.router.systemManagement",
     icon: Infinity,
     children: [
-      { title: "日志中心", to: "/system/logs" },
-      { title: "推送渠道", to: "/system/channel" },
-      { title: "通知中心", to: "/system/notify" },
+      { title: "project.router.logCenter", to: "/system/logs" },
+      { title: "project.router.pushChannel", to: "/system/channel" },
+      { title: "project.router.notificationCenter", to: "/system/notify" },
     ],
   },
   {
-    title: "常见问题",
+    title: "project.router.commonQuestions",
     icon: CircleQuestionMark,
     to: "/help/index",
   },
   {
-    title: "个人中心",
+    title: "project.router.personalCenter",
     icon: CircleUserRound,
     to: "/user/index",
   },
   {
-    title: "关于",
+    title: "project.router.about",
     icon: Info,
     to: "/about/index",
   },
