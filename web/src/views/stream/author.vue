@@ -43,9 +43,11 @@
                                     </Tooltip>
                                 </TooltipProvider>
                             </TableCell>
-                            <TableCell class="text-center">{{ formatBigNumber(anchor.followingCount) }}</TableCell>
-                            <TableCell class="text-center">{{ formatBigNumber(anchor.followerCount) }}</TableCell>
-                            <TableCell class="text-center">{{ formatBigNumber(anchor.likeCount) }}</TableCell>
+                            <TableCell class="text-center">{{ formatBigNumber(anchor.followingCount, locale) }}
+                            </TableCell>
+                            <TableCell class="text-center">{{ formatBigNumber(anchor.followerCount, locale) }}
+                            </TableCell>
+                            <TableCell class="text-center">{{ formatBigNumber(anchor.likeCount, locale) }}</TableCell>
                             <TableCell class="text-center">{{ anchor.videoCount }}</TableCell>
                             <TableCell class="text-center space-x-2">
                                 <Button variant="ghost" size="icon" @click="openStatModal(anchor.id)">
@@ -90,7 +92,8 @@
     </div>
     <AuthorModal ref="authorModal" @refresh="getAnchors" />
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="handleDeleteAnchor" :title="t('common.operation.deleteConfirm')" :description="t('stream.anchor.deleteDesc')" />
+        :onConfirm="handleDeleteAnchor" :title="t('common.operation.deleteConfirm')"
+        :description="t('stream.anchor.deleteDesc')" />
     <AnchorStatInfoModal ref="statModal" />
 </template>
 
@@ -132,7 +135,7 @@ import { Badge } from "@/components/ui/badge";
 import { useDict } from "@/utils/useDict";
 import { formatBigNumber } from "@/utils/convert";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const showConfirmModal = ref(false);
 const anchors = ref<AnchorInfo[]>([]);
 const pageNum = ref(1);

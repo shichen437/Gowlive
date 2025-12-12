@@ -14,6 +14,13 @@
     "deleteDesc": "你確定要刪除該主播嗎？此操作無法撤銷。",
     "toast": {
       "statErr": "獲取統計資訊失敗"
+    },
+    "stat": {
+      "title": "歷史統計",
+      "weekFansIncr": "週漲粉",
+      "monthFansIncr": "月漲粉",
+      "weekLikeIncr": "週按讚",
+      "fansTrend": "粉絲趨勢"
     }
   },
   "cookie": {

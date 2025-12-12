@@ -33,6 +33,12 @@ func init() {
 			DictValue: "yy",
 			DictSort:  3,
 		},
+		{
+			DictType:  LivePlatform,
+			DictLabel: "Bigo",
+			DictValue: "bigo",
+			DictSort:  4,
+		},
 	})
 	addDictData(ChannelType, []InternalDict{
 		{

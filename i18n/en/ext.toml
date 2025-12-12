@@ -9,3 +9,8 @@
 "ext.live.add.session.success" = "Live session created successfully: "
 "ext.live.remove.session.success" = "Live session deleted successfully"
 "ext.live.parse.api.error" = "Failed to parse API: "
+
+"ext.anchor.domain.invalid" = "Invalid URL format: %s"
+"ext.anchor.api.build.failed" = "Failed to build anchor instance: %s"
+
+"ext.domain.not.supported" = "Unsupported domain or platform: %s"

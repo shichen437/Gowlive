@@ -7,10 +7,12 @@ import (
 	_ "github.com/shichen437/gowlive/internal/app/stream/logic"
 	_ "github.com/shichen437/gowlive/internal/app/system/logic"
 
+	_ "github.com/shichen437/gowlive/internal/pkg/lives/bigo"
 	_ "github.com/shichen437/gowlive/internal/pkg/lives/bilibili"
 	_ "github.com/shichen437/gowlive/internal/pkg/lives/douyin"
 	_ "github.com/shichen437/gowlive/internal/pkg/lives/yy"
 
+	_ "github.com/shichen437/gowlive/internal/pkg/anchor/bigo"
 	_ "github.com/shichen437/gowlive/internal/pkg/anchor/bilibili"
 	_ "github.com/shichen437/gowlive/internal/pkg/anchor/douyin"
 	_ "github.com/shichen437/gowlive/internal/pkg/anchor/yy"

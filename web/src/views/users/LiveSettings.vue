@@ -16,9 +16,11 @@
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem :value=0>{{ t('user.liveSettings.archive.values.monthly') }}</SelectItem>
+                                    <SelectItem :value=0>{{ t('user.liveSettings.archive.values.monthly') }}
+                                    </SelectItem>
                                     <SelectItem :value=1>{{ t('user.liveSettings.archive.values.daily') }}</SelectItem>
-                                    <SelectItem :value=2>{{ t('user.liveSettings.archive.values.monthlyAndDaily') }}</SelectItem>
+                                    <SelectItem :value=2>{{ t('user.liveSettings.archive.values.monthlyAndDaily') }}
+                                    </SelectItem>
                                     <SelectItem :value=3>{{ t('user.liveSettings.archive.values.none') }}</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
@@ -76,7 +78,7 @@
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem :value=0>禁用</SelectItem>
+                                    <SelectItem :value=0>{{ t('user.profile.fileds.disabled') }}</SelectItem>
                                     <SelectItem :value=5>5GB</SelectItem>
                                     <SelectItem :value=10>10GB</SelectItem>
                                     <SelectItem :value=20>20GB</SelectItem>
@@ -98,7 +100,7 @@
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem :value=0>禁用</SelectItem>
+                                    <SelectItem :value=0>{{ t('user.profile.fileds.disabled') }}</SelectItem>
                                     <SelectItem :value=20>20MB</SelectItem>
                                     <SelectItem :value=50>50MB</SelectItem>
                                     <SelectItem :value=100>100MB</SelectItem>

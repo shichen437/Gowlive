@@ -1,9 +1,30 @@
-export function formatBigNumber(num: number): string {
-  if (num >= 100000000) {
-    return (num / 100000000).toFixed(1) + "亿";
+export function formatBigNumber(num: number, locale?: string): string {
+  if (locale === undefined || locale === "" || locale === "zh-CN") {
+    if (num >= 100000000) {
+      return (num / 100000000).toFixed(1) + "亿";
+    }
+    if (num >= 10000) {
+      return (num / 10000).toFixed(1) + "万";
+    }
+    return num.toString();
   }
-  if (num >= 10000) {
-    return (num / 10000).toFixed(1) + "万";
+  if (locale === "zh-TW") {
+    if (num >= 100000000) {
+      return (num / 100000000).toFixed(1) + "億";
+    }
+    if (num >= 10000) {
+      return (num / 10000).toFixed(1) + "萬";
+    }
+    return num.toString();
+  }
+  if (num >= 1000000000) {
+    return (num / 1000000000).toFixed(1) + "B";
+  }
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + "K";
   }
   return num.toString();
 }

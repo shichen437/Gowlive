@@ -69,6 +69,7 @@ type StreamUrlInfo struct {
 	Url                  *url.URL
 	Name                 string
 	Description          string
+	IsHls                bool
 	Resolution           int
 	Vbitrate             int
 	HeadersForDownloader map[string]string

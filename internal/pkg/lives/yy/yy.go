@@ -95,6 +95,7 @@ func (l *YY) getRoomWebPageResp(ctx context.Context, headers, cookieMap map[stri
 	c := g.Client()
 	c.SetHeaderMap(headers)
 	c.SetCookieMap(cookieMap)
+	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Request: "+l.Url.String())
 	resp, err := c.Get(ctx, l.Url.String())
 	if err != nil {
 		return "", err

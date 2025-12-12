@@ -9,3 +9,8 @@
 "ext.live.add.session.success" = "创建直播会话成功："
 "ext.live.remove.session.success" = "删除直播会话成功"
 "ext.live.parse.api.error" = "解析 Api 失败: "
+
+"ext.anchor.domain.invalid" = "URL格式不正确: %s"
+"ext.anchor.api.build.failed" = "构建主播实例失败: %s"
+
+"ext.domain.not.supported" = "不支持的域名或平台: %s"

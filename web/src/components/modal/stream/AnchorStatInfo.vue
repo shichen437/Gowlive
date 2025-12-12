@@ -2,28 +2,32 @@
     <Dialog :open="isOpen" @update:open="isOpen = $event">
         <DialogContent class="sm:max-w-[750px]">
             <DialogHeader>
-                <DialogTitle>历史统计</DialogTitle>
+                <DialogTitle>{{ t('stream.anchor.stat.title') }}</DialogTitle>
             </DialogHeader>
             <div v-if="statInfo" class="grid gap-4 py-4">
                 <div class="grid grid-cols-3 gap-2">
                     <div class="p-4 border rounded-md">
-                        <h3 class="text-sm font-medium text-muted-foreground">周点赞</h3>
+                        <h3 class="text-sm font-medium text-muted-foreground">{{ t('stream.anchor.stat.weekLikeIncr') }}
+                        </h3>
                         <p class="text-2xl font-bold">{{ statInfo.weekLikeNumIncr }}</p>
                     </div>
                     <div class="p-4 border rounded-md">
-                        <h3 class="text-sm font-medium text-muted-foreground">周涨粉</h3>
+                        <h3 class="text-sm font-medium text-muted-foreground">{{ t('stream.anchor.stat.weekFansIncr') }}
+                        </h3>
                         <p class="text-2xl font-bold">{{ statInfo.weekFollowersIncr }}</p>
                     </div>
                     <div class="p-4 border rounded-md">
-                        <h3 class="text-sm font-medium text-muted-foreground">月涨粉</h3>
+                        <h3 class="text-sm font-medium text-muted-foreground">{{ t('stream.anchor.stat.monthFansIncr')
+                            }}</h3>
                         <p class="text-2xl font-bold">{{ statInfo.monthFollowersIncr }}</p>
                     </div>
                 </div>
                 <div v-if="chartData.length > 0">
-                    <h3 class="text-s mb-2">粉丝趋势</h3>
+                    <h3 class="text-s mb-2">{{ t('stream.anchor.stat.fansTrend') }}</h3>
                     <div class="border rounded-md p-4">
-                        <LineChart :data="chartData" :categories="[t('stream.anchor.fields.followers'), t('stream.anchor.fields.likes')]" index="date" :show-legend="true"
-                            :margin="{ left: 60, right: 20, top: 20, bottom: 50 }" :curve-type="CurveType.Linear" />
+                        <LineChart :data="chartData" :categories="[t('stream.anchor.fields.followers')]" index="date"
+                            :show-legend="true" :margin="{ left: 60, right: 20, top: 20, bottom: 50 }"
+                            :curve-type="CurveType.Linear" />
                     </div>
                 </div>
             </div>
@@ -71,7 +75,6 @@ const chartData = computed<ChartDataItem[]>(() => {
     return displayData.map((item, _) => ({
         date: item.recordDate,
         [t('stream.anchor.fields.followers')]: item.followers,
-        [t('stream.anchor.fields.likes')]: item.likeCount
     }));
 });
 

@@ -1,10 +1,12 @@
 package lives
 
 import (
+	"context"
 	"net/url"
 	"sync"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
 var (
@@ -34,15 +36,15 @@ func getBuilder(domain string) (Builder, error) {
 func New(sUrl string) (liveApi LiveApi, err error) {
 	url, err := url.Parse(sUrl)
 	if err != nil {
-		return nil, gerror.New("不支持的域名或平台: " + sUrl)
+		return nil, utils.TfError(context.TODO(), "ext.domain.not.supported", sUrl)
 	}
 	builder, err := getBuilder(url.Hostname())
 	if err != nil {
-		return nil, gerror.New("不支持的域名或平台: " + url.Hostname())
+		return nil, utils.TfError(context.TODO(), "ext.domain.not.supported", url.Hostname())
 	}
 	liveApi, err = builder.Build(url)
 	if err != nil {
-		return nil, gerror.New("不支持的域名或平台: " + url.Hostname())
+		return nil, utils.TfError(context.TODO(), "ext.domain.not.supported", url.Hostname())
 	}
 	return
 }

@@ -1,6 +1,5 @@
 <template>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- Left Navigation -->
         <div class="md:col-span-1">
             <nav class="space-y-1 py-4">
                 <Button variant="ghost" class="w-full justify-start"
@@ -16,44 +15,45 @@
             </nav>
         </div>
 
-        <!-- Right Content -->
         <div class="md:col-span-3">
             <div v-if="activeView === 'account'">
                 <Card>
-                    <!-- 右侧内容区卡片：互换左右列 -->
                     <CardHeader class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                        <!-- 原右列（头像/按钮）改为左列 -->
                         <div class="md:col-span-1 flex flex-col items-center justify-center space-y-4">
                             <Avatar class="h-24 w-24 text-3xl">
                                 <AvatarFallback>{{ userInfo?.nickname?.charAt(0)?.toUpperCase() }}</AvatarFallback>
                             </Avatar>
                             <div class="flex gap-4 justify-center">
                                 <Button @click="showProfileModal = true">{{ t('user.profile.edit.button') }}</Button>
-                                <Button variant="outline" @click="showPwdModal = true">{{ t('user.profile.password.button') }}</Button>
+                                <Button variant="outline" @click="showPwdModal = true">{{
+                                    t('user.profile.password.button') }}</Button>
                             </div>
                         </div>
 
-                        <!-- 原左列（信息列表）改为右列 -->
                         <div class="md:col-span-3 space-y-4">
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.username') }}</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.username')
+                                }}</span>
                                 <div class="ml-auto text-right">
                                     <p class="text-muted-foreground text-right">{{ userInfo?.username }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.nickname') }}</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.nickname')
+                                }}</span>
                                 <p class="ml-auto">{{ userInfo?.nickname }}</p>
                             </div>
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.gender') }}</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.gender')
+                                }}</span>
                                 <div class="ml-auto text-right">
                                     <Mars v-if="userInfo?.sex === 1" class="h-5 w-5 text-blue-500 inline-block" />
                                     <Venus v-else class="h-5 w-5 text-pink-500 inline-block" />
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.status') }}</span>
+                                <span class="w-20 text-sm text-muted-foreground">{{ t('user.profile.fileds.status')
+                                }}</span>
                                 <Badge class="ml-auto" :variant="userInfo?.status === 1 ? 'default' : 'destructive'">
                                     {{ formattedStatus }}
                                 </Badge>

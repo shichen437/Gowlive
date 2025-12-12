@@ -9,3 +9,8 @@
 "ext.live.add.session.success" = "建立直播工作階段成功："
 "ext.live.remove.session.success" = "刪除直播工作階段成功"
 "ext.live.parse.api.error" = "解析 API 失敗："
+
+"ext.anchor.domain.invalid" = "URL 格式不正確：%s"
+"ext.anchor.api.build.failed" = "建置主播實例失敗: %s"
+
+"ext.domain.not.supported" = "不支援的網域或平台：%s"

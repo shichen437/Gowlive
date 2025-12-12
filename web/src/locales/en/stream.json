@@ -14,6 +14,13 @@
     "deleteDesc": "Are you sure you want to delete this anchor? This action cannot be undone.",
     "toast": {
       "statErr": "Failed to fetch statistics"
+    },
+    "stat": {
+      "title": "Historical Statistics",
+      "weekFansIncr": "Weekly Fans Growth",
+      "monthFansIncr": "Monthly Fans Growth",
+      "weekLikeIncr": "Weekly Likes Growth",
+      "fansTrend": "Fans Trend"
     }
   },
   "cookie": {
