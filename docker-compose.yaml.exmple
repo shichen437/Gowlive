@@ -9,3 +9,4 @@ services:
       - your-data-path:/gowlive/resources/data
     environment:
       - PROJECT_SM4KEY=abcdefghijklmnopqrstuvwxyz123456 # SM4加密密钥, 32位字符, 可选
+      - PROJECT_LANG=zh-CN # 语言，可选 en, zh-TW

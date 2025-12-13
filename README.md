@@ -1,7 +1,7 @@
 <div align="center">
   <img src="resources/assets/logo.png" alt="Gowlive Logo" width="80"/>
   <h1>Gowlive</h1>
-  <p><a href="./CHANGELOG.md">更新日志</a></p>
+  <p><a href="./CHANGELOG.md">更新日志</a> | <a href="./README_EN.md">English</a></p>
   <p>
     <strong>一个基于 GoFrame 和 Vue3 构建的直播录制平台</strong>
   </p>
@@ -49,8 +49,9 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 ## 📺 支持平台
 
 - 抖音
-- Bilibili
+- 哔哩哔哩
 - YY直播
+- Bigo Live
 
 ## 📸 预览
 
@@ -116,6 +117,7 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 | :--------------- | :------------------------ | :--------------------------------- | :------- |
 | `PROJECT_SM4KEY` | SM4 加密密钥 (32位字符串) | `abcdefghijklmnopqrstuvwxyz123456` | 是       |
 | `TZ`             | 时区                      | `Asia/Shanghai`                    | 否       |
+| `PROJECT_LANG`   | 语言                      | `zh-CN` (`en`, `zh-TW`)            | 否       |
 
 3.  启动服务:
     ```bash
@@ -123,63 +125,9 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
     ```
 4.  访问 `http://<YOUR_IP>:12580` 查看应用。
 
-## 🛠️ 快速开发
-
-### 1. 环境准备
-
-- [Go](https://go.dev/) (版本 >= 1.24)
-- [mise](https://mise.jdx.dev/getting-started.html)
-- [Node.js](https://nodejs.org/) (版本 >= 24)
-- [Yarn](https://yarnpkg.com/)
-
-### 2. 克隆项目
-
-```bash
-git clone https://github.com/shichen437/Gowlive.git
-cd Gowlive
-```
-
-### 3. 后端启动
-
-```bash
-# 复制配置文件
-cp manifest/config/config.yaml.example manifest/config/config.yaml
-
-# 统一开发环境（需要安装 mise,可选）
-mise trust
-mise install
-
-# 安装 Go 依赖
-go mod tidy
-
-# 启动后端服务 (使用 GoFrame CLI 工具可实现热更新)
-# 首次运行需要安装 CLI
-mise run cli.install
-
-# 启动！
-go run main.go # 热更新使用：gf run main.go
-```
-
-### 4. 前端启动
-
-```bash
-# 进入前端目录
-cd web
-
-# 统一开发环境（需要安装 mise,可选）
-mise trust
-mise install
-
-# 安装 Node.js 依赖
-npm install
-
-# 启动前端开发服务
-npm run dev # 或 yarn dev
-```
-
 ## 🤝 感谢贡献
 
-衷心感谢每位贡献者对 Gowlive 的支持与付出，致以诚挚的敬意。
+衷心感谢每位贡献者对 Gowlive 的支持与付出，致以诚挚的敬意。(<a href="./.github/docs/CONTRIBUTING.md">贡献指南</a>)
 
 <a href="https://github.com/shichen437/Gowlive/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=shichen437/Gowlive" />

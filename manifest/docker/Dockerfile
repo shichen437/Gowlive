@@ -56,9 +56,11 @@ COPY --from=vue-builder /app/dist /usr/share/nginx/html
 COPY manifest/config/config.yaml.example $WORKDIR/config.yaml
 COPY manifest/migrate $WORKDIR/manifest/migrate
 COPY manifest/docker/entrypoint.sh /entrypoint.sh
+COPY i18n $WORKDIR/i18n
 COPY --from=builder /gowlive/main $WORKDIR/main
 
 ENV PROJECT_SM4KEY="abcdefghijklmnopqrstuvwxyz123456"
+ENV PROJECT_LANG="zh-CN"
 VOLUME $PROJECT_DATA
 EXPOSE 12580
 

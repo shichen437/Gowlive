@@ -1,0 +1,38 @@
+name: Mark stale issues and pull requests
+
+on:
+  schedule:
+    - cron: "25 2 * * *" # 每天 02:25 UTC 运行（北京时间为每天 10:25）
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          stale-issue-message: >
+            由于长时间没有活动，此 Issue 将被标记为过期。
+            如果仍然有效，请在 7 天内回复或更新，我们会继续跟进。谢谢！
+          stale-pr-message: >
+            由于长时间没有活动，此 Pull Request 将被标记为过期。
+            如仍计划推进，请在 7 天内回复或更新。谢谢！
+          stale-issue-label: "no-issue-activity"
+          stale-pr-label: "no-pr-activity"
+
+          days-before-stale: 45
+          days-before-close: 7
+
+          # 例外情况：带这些标签的不会被标记或关闭
+          exempt-issue-labels: "pinned,security,help wanted"
+          exempt-pr-labels: "work-in-progress,do-not-close"
+
+          # 不要关闭有 Assignee 的条目（可选）
+          close-issue-reason: "not_planned" # 关闭 Issue 的原因（GitHub 原生字段）
+          only-labels: "" # 留空表示不限定标签；如需仅处理某些标签可填写逗号分隔
+
+          ignore-pr-updates: true

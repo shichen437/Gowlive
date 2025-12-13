@@ -1,0 +1,38 @@
+name: Greetings
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: >
+            👋 感谢提交第一个 Issue！
+            请尽量提供：
+            - 复现步骤与最小复现
+            - 环境信息（操作系统/版本）
+            - 期望行为与实际行为
+            我们会尽快跟进，感谢你的贡献！
+
+            ---
+            👋 Welcome to your first Issue!
+            Please include:
+            - Reproduction steps and a minimal repro
+            - Environment info (OS/version)
+            - Expected vs actual behavior
+            Thanks for contributing!
+          pr-message: >
+            🎉 感谢提交第一个 Pull Request！
+
+            ---
+            🎉 Congrats on your first Pull Request!

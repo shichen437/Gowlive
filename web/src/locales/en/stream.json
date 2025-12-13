@@ -83,10 +83,10 @@
       "createTime": "Create Time",
       "monitorStatus": {
         "title": "Monitoring Status",
-        "none": "Not Monitoring",
-        "cron": "Scheduled Monitoring",
-        "realtime": "Real-time Monitoring",
-        "intelligent": "Intelligent Monitoring",
+        "none": "Off",
+        "cron": "Scheduled",
+        "realtime": "Real-time",
+        "intelligent": "Intelligent",
         "recording": "Recording"
       },
       "monitorType": {

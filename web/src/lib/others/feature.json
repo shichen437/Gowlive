@@ -1,10 +1,17 @@
 {
-  "version": "0.1.3",
-  "date": "2025-12-12",
+  "version": "0.2.0",
+  "date": "2025-12-13",
   "info": {
     "feature": {
       "name": "功能",
-      "items": []
+      "items": [
+        {
+          "desc": "新增多语言支持"
+        },
+        {
+          "desc": "新增支持 Bigo Live"
+        }
+      ]
     },
     "enhance": {
       "name": "优化",
