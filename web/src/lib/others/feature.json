@@ -1,28 +1,18 @@
 {
-  "version": "0.2.0",
-  "date": "2025-12-13",
+  "version": "0.2.1",
+  "date": "2025-12-20",
   "info": {
     "feature": {
       "name": "功能",
       "items": [
         {
-          "desc": "新增多语言支持"
-        },
-        {
-          "desc": "新增支持 Bigo Live"
+          "desc": "新增支持直播预览"
         }
       ]
     },
     "enhance": {
       "name": "优化",
-      "items": [
-        {
-          "desc": "启动时按平台初始化"
-        },
-        {
-          "desc": "优化ffmpeg退出逻辑"
-        }
-      ]
+      "items": []
     },
     "fix": {
       "name": "修复",

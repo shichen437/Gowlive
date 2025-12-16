@@ -124,3 +124,31 @@ type ExportRoomInfoReq struct {
 type ExportRoomInfoRes struct {
 	g.Meta `mime:"application/json"`
 }
+
+type PreviewRoomReq struct {
+	g.Meta `path:"/live/room/preview/{id}" method:"get" tags:"直播管理" summary:"预览直播间"`
+	Id     int `json:"id" dc:"直播房间ID" v:"min:1#stream.live.valid.RoomIDRequired"`
+}
+
+type PreviewRoomRes struct {
+	g.Meta      `mime:"application/json"`
+	PreviewInfo *PreviewInfo `json:"previewInfo"`
+}
+
+type PreviewRoomListReq struct {
+	g.Meta `path:"/live/room/preview/list" method:"get" tags:"直播管理" summary:"直播预览列表"`
+}
+
+type PreviewRoomListRes struct {
+	g.Meta      `mime:"application/json"`
+	PreviewList []*PreviewInfo `json:"previewList"`
+}
+
+type PreviewInfo struct {
+	Id       int               `json:"id"`
+	Anchor   string            `json:"anchor"`
+	RoomName string            `json:"roomName"`
+	Platform string            `json:"platform"`
+	Url      string            `json:"url"`
+	Headers  map[string]string `json:"headers"`
+}

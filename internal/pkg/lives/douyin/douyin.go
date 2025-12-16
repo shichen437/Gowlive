@@ -44,7 +44,7 @@ func (l *Douyin) GetInfo() (info *lives.LiveState, err error) {
 		err = gerror.New("抖音直播间获取令牌失败")
 		return
 	}
-	body, err := l.getRoomWebPageResp()
+	body, err := l.requestWebPage()
 	if err != nil {
 		err = gerror.New("访问抖音直播间页面失败")
 		return
@@ -68,7 +68,7 @@ func (l *Douyin) GetInfo() (info *lives.LiveState, err error) {
 	return
 }
 
-func (l *Douyin) getRoomWebPageResp() (body string, err error) {
+func (l *Douyin) requestWebPage() (body string, err error) {
 	c := g.Client()
 	cookieMap := l.assembleCookieMap()
 	c.SetCookieMap(cookieMap)

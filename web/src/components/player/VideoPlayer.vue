@@ -9,12 +9,13 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import Artplayer from 'artplayer';
 import mpegts from 'mpegts.js';
 
-type MediaFormat = 'flv' | 'mp4' | 'mp3' | 'mkv' | 'ts';
+type MediaFormat = 'flv' | 'mp4' | 'mp3' | 'mkv' | 'ts' | 'm3u8';
 
 const props = defineProps<{
     url: string;
     format: MediaFormat;
     isLive: boolean;
+    headers?: Record<string, string>;
 }>();
 
 const playerContainer = ref<HTMLElement | null>(null);
@@ -47,6 +48,19 @@ function initializePlayer() {
     if (props.format === 'flv') {
         options.type = 'flv';
         options.customType = createFlvCustomType();
+    } else if (props.format === 'm3u8') {
+        options.type = 'm3u8';
+        if (props.headers) {
+            options.hlsOption = {
+                xhrSetup: function (xhr: XMLHttpRequest) {
+                    for (const key in props.headers) {
+                        if (Object.prototype.hasOwnProperty.call(props.headers, key)) {
+                            xhr.setRequestHeader(key, props.headers[key]);
+                        }
+                    }
+                }
+            };
+        }
     } else {
         options.id = options.url
         options.autoPlayback = true
@@ -76,7 +90,10 @@ function createTsCustomType() {
                 art.notice.show = ('当前环境不支持 TS 播放');
                 return;
             }
-            const mediaDataSource = { type: 'mpegts', url, isLive: props.isLive };
+            const mediaDataSource: mpegts.MediaDataSource = { type: 'mpegts', url, isLive: props.isLive };
+            if (props.headers) {
+                mediaDataSource.headers = props.headers;
+            }
             const config: mpegts.Config = {
                 isLive: props.isLive,
                 enableStashBuffer: !props.isLive,
@@ -107,8 +124,11 @@ function createFlvCustomType() {
             const mediaDataSource: mpegts.MediaDataSource = {
                 type: 'flv',
                 url,
-                isLive: props.isLive
+                isLive: props.isLive,
             };
+            if (props.headers) {
+                mediaDataSource.headers = props.headers;
+            }
 
             const config: mpegts.Config = {
                 isLive: props.isLive,
@@ -207,7 +227,7 @@ function getBasicOptions(container: HTMLElement | null) {
         airplay: true,
         aspectRatio: true,
         autoOrientation: true,
-        autoplay: false,
+        autoplay: props.isLive,
         container,
         customType: {},
         flip: true,
@@ -239,12 +259,13 @@ onBeforeUnmount(() => {
 });
 
 watch(
-    () => [props.url, props.format],
-    ([newUrl, newFormat, newIsLive], [oldUrl, oldFormat, oldIsLive]) => {
+    () => [props.url, props.format, props.isLive, props.headers],
+    ([newUrl, newFormat, newIsLive, newHeaders], [oldUrl, oldFormat, oldIsLive, oldHeaders]) => {
         if (
             newUrl !== oldUrl ||
             newFormat !== oldFormat ||
-            newIsLive !== oldIsLive
+            newIsLive !== oldIsLive ||
+            JSON.stringify(newHeaders) !== JSON.stringify(oldHeaders)
         ) {
             initializePlayer();
         }

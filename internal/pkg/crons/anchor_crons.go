@@ -38,7 +38,7 @@ func AnchorInfoCron(ctx context.Context) {
 			continue
 		}
 		info, err := api.ParseAnchorInfo(ctx)
-		if err != nil {
+		if err != nil || info.AnchorName == "" {
 			g.Log().Errorf(ctx, "AIC parse anchor info error: %v", err)
 			continue
 		}

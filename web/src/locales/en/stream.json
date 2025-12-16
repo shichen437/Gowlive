@@ -123,6 +123,7 @@
       "openFolder": "Open Folder",
       "top": "Pin to Top",
       "unTop": "Unpin",
+      "preview": "Preview",
       "cardView": "Switch to Card View",
       "listView": "Switch to List View"
     },
@@ -169,6 +170,14 @@
   "common": {
     "fields": {
       "anchorName": "Anchor Name"
+    }
+  },
+  "preview": {
+    "title": "Live Preview",
+    "list": "Live List",
+    "toast": {
+      "noId": "Live room ID is missing",
+      "loadErr": "Failed to load live stream info"
     }
   }
 }

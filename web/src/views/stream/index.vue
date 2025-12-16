@@ -72,32 +72,9 @@
                                     <Pencil class="w-4 h-4" />
                                 </Button>
 
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger as-child>
-                                        <Button variant="ghost" size="icon">
-                                            <MoreHorizontal class="w-4 h-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem v-if="!room.isTop" @click="handleTopRoom(room.liveId)">
-                                            <Pin class="w-4 h-4 mr-2" />
-                                            <span>{{ t('stream.rooms.buttons.top') }}</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem v-else @click="handleUnTopRoom(room.liveId)">
-                                            <PinOff class="w-4 h-4 mr-2" />
-                                            <span>{{ t('stream.rooms.buttons.unTop') }}</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem @click="handleGoToRoomFolder(room)">
-                                            <Folder class="w-4 h-4 mr-2" />
-                                            <span>{{ t('stream.rooms.buttons.openFolder') }}</span>
-                                        </DropdownMenuItem>
-                                        <Separator class="my-1" />
-                                        <DropdownMenuItem @click="openConfirmModal(room.liveId)" variant="destructive">
-                                            <Trash2 class="w-4 h-4 mr-2" />
-                                            <span>{{ t('common.operation.delete') }}</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <RoomActionDropdownMenu :room="room" @top-room="handleTopRoom"
+                                    @un-top-room="handleUnTopRoom" @go-to-folder="handleGoToRoomFolder"
+                                    @delete-room="openConfirmModal" @stream-preview="handlePreview" />
                             </TableCell>
                         </TableRow>
                     </template>
@@ -146,32 +123,9 @@
                                 <Pencil class="w-4 h-4" />
                             </Button>
 
-                            <DropdownMenu>
-                                <DropdownMenuTrigger as-child>
-                                    <Button variant="ghost" size="icon">
-                                        <MoreHorizontal class="w-4 h-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuItem v-if="!room.isTop" @click="handleTopRoom(room.liveId)">
-                                        <Pin class="w-4 h-4 mr-2" />
-                                        <span>{{ t('stream.rooms.buttons.top') }}</span>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem v-else @click="handleUnTopRoom(room.liveId)">
-                                        <PinOff class="w-4 h-4 mr-2" />
-                                        <span>{{ t('stream.rooms.buttons.unTop') }}</span>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem @click="handleGoToRoomFolder(room)">
-                                        <Folder class="w-4 h-4 mr-2" />
-                                        <span>{{ t('stream.rooms.buttons.openFolder') }}</span>
-                                    </DropdownMenuItem>
-                                    <Separator class="my-1" />
-                                    <DropdownMenuItem @click="openConfirmModal(room.liveId)" variant="destructive">
-                                        <Trash2 class="w-4 h-4 mr-2" />
-                                        <span>{{ t('common.operation.delete') }}</span>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <RoomActionDropdownMenu :room="room" @top-room="handleTopRoom"
+                                @un-top-room="handleUnTopRoom" @go-to-folder="handleGoToRoomFolder"
+                                @delete-room="openConfirmModal" @stream-preview="handlePreview" />
                         </div>
                     </CardFooter>
                 </Card>
@@ -210,11 +164,14 @@
     <RoomModal ref="roomModal" @refresh="getRooms" />
     <BatchAddRoomModal ref="batchAddRoomModal" @refresh="getRooms" />
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => (showConfirmModal = open)"
-        :onConfirm="handleDeleteRoom" :title="t('common.operation.deleteConfirm')" :description="t('stream.rooms.deleteDesc')" />
+        :onConfirm="handleDeleteRoom" :title="t('common.operation.deleteConfirm')"
+        :description="t('stream.rooms.deleteDesc')" />
     <ConfirmModal :open="showStartConfirmModal" :onOpenChange="(open: any) => (showStartConfirmModal = open)"
-        :onConfirm="handleStartRoom" :title="t('stream.rooms.startMonitor.title')" :description="t('stream.rooms.startMonitor.desc')" />
+        :onConfirm="handleStartRoom" :title="t('stream.rooms.startMonitor.title')"
+        :description="t('stream.rooms.startMonitor.desc')" />
     <ConfirmModal :open="showStopConfirmModal" :onOpenChange="(open: any) => (showStopConfirmModal = open)"
-        :onConfirm="handleStopRoom" :title="t('stream.rooms.stopMonitor.title')" :description="t('stream.rooms.stopMonitor.desc')" />
+        :onConfirm="handleStopRoom" :title="t('stream.rooms.stopMonitor.title')"
+        :description="t('stream.rooms.stopMonitor.desc')" />
 </template>
 
 <script setup lang="ts">
@@ -239,6 +196,7 @@ import BatchAddRoomModal from "@/components/modal/stream/BatchAddRoomModal.vue";
 import SortRoomDropDownMenu from "@/components/dropdownmenu/stream/SortRoomDropDownMenu.vue";
 import FilterRoomDropDownMenu from "@/components/dropdownmenu/stream/FilterRoomDropDownMenu.vue";
 import ExportRoomDropDownMenu from "@/components/dropdownmenu/stream/ExportRoomDropDownMenu.vue";
+import RoomActionDropdownMenu from "@/components/dropdownmenu/stream/RoomActionDropdownMenu.vue";
 import {
     Table,
     TableBody,
@@ -411,6 +369,16 @@ const handleGoToRoomFolder = async (room: RoomInfo) => {
     } finally {
         router.push({ path: "/media/file", query: { path } });
     }
+};
+
+const handlePreview = (liveId: number) => {
+    const routeData = router.resolve({
+        name: 'StreamPreview',
+        query: {
+            id: liveId,
+        }
+    });
+    window.open(routeData.href, '_blank');
 };
 
 async function handleDeleteRoom() {

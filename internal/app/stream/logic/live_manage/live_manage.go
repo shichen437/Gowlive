@@ -13,6 +13,7 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/util/gconv"
 	v1 "github.com/shichen437/gowlive/api/v1/stream"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
 	"github.com/shichen437/gowlive/internal/app/stream/model"
@@ -339,6 +340,26 @@ func (s *sLiveManage) Export(ctx context.Context, req *v1.ExportRoomInfoReq) (re
 	default:
 		exportTxt(r, ustr, list)
 	}
+	return
+}
+
+func (s *sLiveManage) Preview(ctx context.Context, req *v1.PreviewRoomReq) (res *v1.PreviewRoomRes, err error) {
+	res = &v1.PreviewRoomRes{}
+	info := registry.Get().GetPreviewInfo(req.Id)
+	if info == nil {
+		return nil, utils.TError(ctx, "stream.live.error.Preview")
+	}
+	gconv.Struct(info, &res.PreviewInfo)
+	return
+}
+
+func (s *sLiveManage) PreviewList(ctx context.Context, req *v1.PreviewRoomListReq) (res *v1.PreviewRoomListRes, err error) {
+	res = &v1.PreviewRoomListRes{}
+	list := registry.Get().GetPreviewList()
+	if list == nil {
+		return
+	}
+	gconv.Struct(list, &res.PreviewList)
 	return
 }
 

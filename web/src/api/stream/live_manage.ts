@@ -83,3 +83,17 @@ export async function exportRoomInfo(params: any) {
     responseType: "blob",
   });
 }
+
+export async function previewRoom(id: number) {
+  return request({
+    url: "/live/room/preview/" + id,
+    method: "get",
+  });
+}
+
+export async function previewList() {
+  return request({
+    url: "/live/room/preview/list",
+    method: "get",
+  });
+}

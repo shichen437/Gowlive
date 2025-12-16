@@ -40,7 +40,7 @@ func (l *Bilibili) GetInfo() (info *lives.LiveState, err error) {
 		err = gerror.New("B站直播间获取令牌失败")
 		return
 	}
-	info, err = l.getRoomInfo()
+	info, err = l.requestWebApi()
 	if err != nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
 		return nil, err
@@ -53,7 +53,7 @@ func (l *Bilibili) GetInfo() (info *lives.LiveState, err error) {
 	}
 	metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, true, false)
 	if info.IsLive {
-		streamInfos, err := l.getStreamInfo()
+		streamInfos, err := l.requestStreamInfoApi()
 		if err != nil || len(streamInfos) == 0 {
 			metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
 			return nil, gerror.New(l.Platform + "获取直播流数据失败")
@@ -64,7 +64,7 @@ func (l *Bilibili) GetInfo() (info *lives.LiveState, err error) {
 	return info, nil
 }
 
-func (l *Bilibili) getStreamInfo() (infos []*lives.StreamUrlInfo, err error) {
+func (l *Bilibili) requestStreamInfoApi() (infos []*lives.StreamUrlInfo, err error) {
 	c := g.Client()
 	c.SetAgent(userAgent)
 	c.SetCookieMap(l.assembleCookieMap())
@@ -114,7 +114,7 @@ func (l *Bilibili) getUserInfo(info *lives.LiveState) error {
 	return nil
 }
 
-func (l *Bilibili) getRoomInfo() (*lives.LiveState, error) {
+func (l *Bilibili) requestWebApi() (*lives.LiveState, error) {
 	c := g.Client()
 	c.SetAgent(userAgent)
 	c.SetCookieMap(l.assembleCookieMap())

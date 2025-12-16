@@ -1,4 +1,4 @@
-name: Mark stale issues and pull requests
+name: Stale
 
 on:
   schedule:
@@ -24,7 +24,7 @@ jobs:
           stale-issue-label: "no-issue-activity"
           stale-pr-label: "no-pr-activity"
 
-          days-before-stale: 45
+          days-before-stale: 30
           days-before-close: 7
 
           # 例外情况：带这些标签的不会被标记或关闭

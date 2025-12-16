@@ -55,3 +55,11 @@ func (c *liveManageController) UnTop(ctx context.Context, req *v1.PutLiveManageU
 func (c *liveManageController) Export(ctx context.Context, req *v1.ExportRoomInfoReq) (res *v1.ExportRoomInfoRes, err error) {
 	return service.LiveManage().Export(ctx, req)
 }
+
+func (c *liveManageController) Preview(ctx context.Context, req *v1.PreviewRoomReq) (res *v1.PreviewRoomRes, err error) {
+	return service.LiveManage().Preview(ctx, req)
+}
+
+func (c *liveManageController) PreviewList(ctx context.Context, req *v1.PreviewRoomListReq) (res *v1.PreviewRoomListRes, err error) {
+	return service.LiveManage().PreviewList(ctx, req)
+}

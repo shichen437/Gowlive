@@ -40,7 +40,7 @@ func (p *Parser) basicArgs(ffUserAgent, referer string, sUrl *url.URL) []string 
 		"-nostats",
 		"-progress", "-",
 		"-y", "-re",
-		"-fflags", "+genpts+igndts+discardcorrupt",
+		"-fflags", "+genpts+discardcorrupt",
 		"-err_detect", "ignore_err",
 		"-reconnect", "1",
 		"-reconnect_streamed", "1",
@@ -87,7 +87,7 @@ func (p *Parser) mp4Args(file string, args []string) []string {
 
 func (p *Parser) mkvArgs(file string, args []string) []string {
 	if p.fr {
-		args = append(args, "-vf", "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:black")
+		args = append(args, "-vf", "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black")
 		args = append(args, "-c:v", "libx264", "-preset", "fast", "-crf", "23")
 		args = append(args, "-c:a", "aac", "-b:a", "128k")
 	} else {

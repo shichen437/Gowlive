@@ -13,6 +13,7 @@ import StreamMetrics from "@/views/stream/metrics.vue";
 import StreamHistory from "@/views/stream/history.vue";
 import StreamCookie from "@/views/stream/cookie.vue";
 import StreamAuthor from "@/views/stream/author.vue";
+import StreamPreview from "@/views/stream/preview.vue";
 import SystemLogs from "@/views/system/logs.vue";
 import SystemNotify from "@/views/system/notify.vue";
 import SystemChannel from "@/views/system/channel.vue";
@@ -140,6 +141,12 @@ const routes = [
     name: "MediaPlay",
     component: MediaPlay,
     meta: { title: "project.router.mediaPlayer" },
+  },
+  {
+    path: "/stream/preview",
+    name: "StreamPreview",
+    component: StreamPreview,
+    meta: { title: "project.router.streamPreview" },
   },
   {
     path: "/login",

@@ -199,3 +199,55 @@ func (r *SessionRegistry) StopAll(ctx context.Context) {
 	wg.Wait()
 	g.Log().Info(ctx, "All live sessions stopped.")
 }
+
+func (r *SessionRegistry) GetPreviewInfo(sessionId int) *PreviewInfo {
+	if !r.Exists(sessionId) || !r.IsRecording(sessionId) {
+		return nil
+	}
+	session, ok := r.sessions[sessionId]
+	if !ok {
+		return nil
+	}
+	state := session.GetState()
+	if len(state.StreamInfos) == 0 {
+		return nil
+	}
+	return &PreviewInfo{
+		Id:       sessionId,
+		Anchor:   state.Anchor,
+		RoomName: state.RoomName,
+		Platform: state.Platform,
+		Url:      state.StreamInfos[0].Url.String(),
+		Headers:  state.StreamInfos[0].HeadersForDownloader,
+	}
+}
+
+func (r *SessionRegistry) GetPreviewList() []*PreviewInfo {
+	result := make([]*PreviewInfo, 0, len(r.sessions))
+	for id, session := range r.sessions {
+		if r.IsRecording(id) {
+			state := session.GetState()
+			if len(state.StreamInfos) == 0 {
+				continue
+			}
+			result = append(result, &PreviewInfo{
+				Id:       id,
+				Anchor:   state.Anchor,
+				RoomName: state.RoomName,
+				Platform: state.Platform,
+				Url:      state.StreamInfos[0].Url.String(),
+				Headers:  state.StreamInfos[0].HeadersForDownloader,
+			})
+		}
+	}
+	return result
+}
+
+type PreviewInfo struct {
+	Id       int               `json:"id"`
+	Anchor   string            `json:"anchor"`
+	RoomName string            `json:"roomName"`
+	Platform string            `json:"platform"`
+	Url      string            `json:"url"`
+	Headers  map[string]string `json:"headers"`
+}

@@ -50,7 +50,7 @@ func (l *Bigo) GetInfo() (info *lives.LiveState, err error) {
 		err = gerror.New("Bigo platform get token failed")
 		return
 	}
-	body, err := l.getWebRequestResp(ctx, uid)
+	body, err := l.requestWebApi(ctx, uid)
 	if err != nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
 		return
@@ -71,7 +71,7 @@ func (l *Bigo) GetInfo() (info *lives.LiveState, err error) {
 	return info, nil
 }
 
-func (l *Bigo) getWebRequestResp(ctx context.Context, uid string) (string, error) {
+func (l *Bigo) requestWebApi(ctx context.Context, uid string) (string, error) {
 	c := g.Client()
 	c.SetTimeout(time.Second * 10)
 	headers := g.MapStrStr{

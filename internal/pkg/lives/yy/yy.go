@@ -50,7 +50,7 @@ func (l *YY) GetInfo() (info *lives.LiveState, err error) {
 		"Accept-Language": consts.CommonLang,
 	}
 	cookieMap := l.assembleCookieMap()
-	body, err := l.getRoomWebPageResp(ctx, headers, cookieMap)
+	body, err := l.requestWebApi(ctx, headers, cookieMap)
 	if err != nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
 		return
@@ -65,7 +65,7 @@ func (l *YY) GetInfo() (info *lives.LiveState, err error) {
 		return nil, gerror.New("parse cid failed")
 	}
 	info.Anchor = anchorName
-	detailResp, err := getDetailInfoResp(ctx, cid, headers, cookieMap)
+	detailResp, err := requestWebDetailApi(ctx, cid, headers, cookieMap)
 	if err != nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
 		return
@@ -78,7 +78,7 @@ func (l *YY) GetInfo() (info *lives.LiveState, err error) {
 		return
 	}
 	info.RoomName = roomName
-	streamResp, err := postSteamInfoResp(ctx, cid, headers, cookieMap)
+	streamResp, err := requestWebStreamInfoApi(ctx, cid, headers, cookieMap)
 	if err != nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
 		return info, gerror.New("解析YY直播间流地址失败")
@@ -91,7 +91,7 @@ func (l *YY) GetInfo() (info *lives.LiveState, err error) {
 	return info, nil
 }
 
-func (l *YY) getRoomWebPageResp(ctx context.Context, headers, cookieMap map[string]string) (string, error) {
+func (l *YY) requestWebApi(ctx context.Context, headers, cookieMap map[string]string) (string, error) {
 	c := g.Client()
 	c.SetHeaderMap(headers)
 	c.SetCookieMap(cookieMap)
@@ -146,7 +146,7 @@ func (l *YY) parseStreamUrl(body string, info *lives.LiveState) error {
 	return nil
 }
 
-func postSteamInfoResp(ctx context.Context, cid string, headers, cookieMap map[string]string) (string, error) {
+func requestWebStreamInfoApi(ctx context.Context, cid string, headers, cookieMap map[string]string) (string, error) {
 	dataJSON := `{"head":{"seq":1701869217590,"appidstr":"0","bidstr":"121","cidstr":"` + cid + `","sidstr":"` + cid + `","uid64":0,"client_type":108,"client_ver":"5.17.0","stream_sys_ver":1,"app":"yylive_web","playersdk_ver":"5.17.0","thundersdk_ver":"0","streamsdk_ver":"5.17.0"},"client_attribute":{"client":"web","model":"web0","cpu":"","graphics_card":"","os":"chrome","osversion":"0","vsdk_version":"","app_identify":"","app_version":"","business":"","width":"1920","height":"1080","scale":"","client_type":8,"h265":0},"avp_parameter":{"version":1,"client_type":8,"service_type":0,"imsi":0,"send_time":1701869217,"line_seq":-1,"gear":4,"ssl":1,"stream_format":0}}`
 	q := url.Values{}
 	q.Set("uid", "0")
@@ -166,7 +166,7 @@ func postSteamInfoResp(ctx context.Context, cid string, headers, cookieMap map[s
 	return utils.Text(resp.Response)
 }
 
-func getDetailInfoResp(ctx context.Context, cid string, headers, cookieMap map[string]string) (string, error) {
+func requestWebDetailApi(ctx context.Context, cid string, headers, cookieMap map[string]string) (string, error) {
 	detailParams := url.Values{}
 	detailParams.Set("uid", "")
 	detailParams.Set("sid", cid)

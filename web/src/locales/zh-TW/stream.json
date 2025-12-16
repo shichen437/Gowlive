@@ -123,6 +123,7 @@
       "openFolder": "打開資料夾",
       "top": "置頂",
       "unTop": "取消置頂",
+      "preview": "預覽",
       "cardView": "切換到卡片視圖",
       "listView": "切換到列表視圖"
     },
@@ -169,6 +170,14 @@
   "common": {
     "fields": {
       "anchorName": "主播名稱"
+    }
+  },
+  "preview": {
+    "title": "直播預覽",
+    "list": "直播列表",
+    "toast": {
+      "noId": "直播間ID不存在",
+      "loadErr": "載入直播流資訊失敗"
     }
   }
 }
