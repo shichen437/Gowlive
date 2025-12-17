@@ -53,10 +53,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import VideoPlayer from '@/components/player/VideoPlayer.vue';
 import { previewRoom, previewList } from "@/api/stream/live_manage";
-import { useTheme } from "@/composables/useTheme";
 import { useDict } from "@/utils/useDict";
-
-useTheme();
 const { t } = useI18n();
 const route = useRoute();
 const { getLabel: getPlatformLabel } = useDict("live_platform");

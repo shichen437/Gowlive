@@ -39,13 +39,13 @@
                                 <span class="mr-2">{{ t('project.topbar.errRate') }}:</span>
                                 <span>{{
                                     healthInfo.errorPercent.toFixed(2)
-                                }}%</span>
+                                    }}%</span>
                             </p>
                             <p>
                                 <span class="mr-2">{{ t('project.topbar.diskUsage') }}:</span>
                                 <span>{{
                                     healthInfo.diskUsage.toFixed(2)
-                                }}%</span>
+                                    }}%</span>
                             </p>
                         </div>
                     </TooltipContent>
@@ -57,11 +57,25 @@
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                     <Button variant="ghost" size="icon">
+                        <Palette class="h-5 w-5" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem v-for="ct in themes" :key="ct.value" @click="setTheme(ct.value)"
+                        :class="{ 'bg-accent': theme === ct.value }">
+                        {{ t(ct.name) }}
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+                <DropdownMenuTrigger as-child>
+                    <Button variant="ghost" size="icon">
                         <Languages class="h-5 w-5" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem v-for="l in locales" :key="l.locale" @click="changeLocale(l.locale)">
+                    <DropdownMenuItem v-for="l in locales" :key="l.locale" @click="changeLocale(l.locale)"
+                        :class="{ 'bg-accent': locale === l.locale }">
                         {{ l.name }}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -165,6 +179,7 @@ import {
     Calendar,
     Frown,
     Languages,
+    Palette,
 } from "lucide-vue-next";
 import features from "@/lib/others/feature.json";
 
@@ -181,7 +196,7 @@ const changeLocale = (lang: string) => {
     localStorage.setItem('locale', lang);
 };
 
-const { mode, cycle } = useTheme();
+const { mode, cycle, theme, setTheme, themes } = useTheme();
 
 const userStore = useUserStore();
 const userInfo: Ref<UserInfo | null> = computed(() => userStore.userInfo);
@@ -224,24 +239,22 @@ onMounted(async () => {
     sseClient = createSSEConnection({
         channel: "global",
         onMessage: (msg) => {
-            if (msg.event === "global") {
-                if (msg.data.health) {
-                    healthInfo.errorPercent = msg.data.health.errorPercent;
-                    healthInfo.diskUsage = msg.data.health.diskUsage;
-                }
-                if (msg.data.notify) {
-                    if (msg.data.notify.level === 'info') {
-                        toast.info(msg.data.notify.title, { position: 'top-center', description: msg.data.notify.content });
-                    } else {
-                        toast.error(msg.data.notify.title, {
-                            position: 'top-center', duration: 7000, action: {
-                                label: t('project.topbar.detail'),
-                                onClick: () => {
-                                    router.push('/system/notify')
-                                }
+            if (msg.data.health) {
+                healthInfo.errorPercent = msg.data.health.errorPercent;
+                healthInfo.diskUsage = msg.data.health.diskUsage;
+            }
+            if (msg.data.notify) {
+                if (msg.data.notify.level === 'info') {
+                    toast.info(msg.data.notify.title, { position: 'top-center', description: msg.data.notify.content });
+                } else {
+                    toast.error(msg.data.notify.title, {
+                        position: 'top-center', duration: 7000, action: {
+                            label: t('project.topbar.detail'),
+                            onClick: () => {
+                                router.push('/system/notify')
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
         },

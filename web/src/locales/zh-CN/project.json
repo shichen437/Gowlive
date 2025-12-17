@@ -132,6 +132,13 @@
     "errRate": "请求错误率",
     "diskUsage": "磁盘使用率",
     "publish": "发布于",
-    "detail": "查看详情"
+    "detail": "查看详情",
+    "colorMode": {
+      "default": "极简默认",
+      "glacier": "冰川蓝调",
+      "zhuqing-ink": "竹影清墨",
+      "midnightviolet": "晨曦浅紫",
+      "neonpro": "赛博荧光"
+    }
   }
 }

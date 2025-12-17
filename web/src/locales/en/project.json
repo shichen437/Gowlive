@@ -132,6 +132,13 @@
     "errRate": "Request Error Rate",
     "diskUsage": "Disk Usage",
     "publish": "Published on",
-    "detail": "View Details"
+    "detail": "View Details",
+    "colorMode": {
+      "default": "Default",
+      "glacier": "Glacier Blue",
+      "zhuqing-ink": "Bamboo Ink",
+      "midnightviolet": "Lilac Dawn",
+      "neonpro": "Cyber Neon"
+    }
   }
 }

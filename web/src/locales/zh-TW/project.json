@@ -132,6 +132,13 @@
     "errRate": "請求錯誤率",
     "diskUsage": "磁碟使用率",
     "publish": "發布於",
-    "detail": "查看詳細"
+    "detail": "查看詳細",
+    "colorMode": {
+      "default": "極簡預設",
+      "glacier": "冰川藍調",
+      "zhuqing-ink": "竹影清墨",
+      "midnightviolet": "晨曦淺紫",
+      "neonpro": "賽博螢光"
+    }
   }
 }
