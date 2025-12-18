@@ -22,6 +22,10 @@
     <img alt="Docker Image Size"
       src="https://img.shields.io/docker/image-size/shichen437/gowlive">
   </a>
+  <a href="https://t.me/+ApCMUBMvNa1lNGM1">
+    <img alt="Join Telegram"
+      src="https://img.shields.io/badge/Telegram-blue?logo=Telegram">
+  </a>
 </p>
 </div>
 
