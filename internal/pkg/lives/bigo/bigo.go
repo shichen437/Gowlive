@@ -28,9 +28,14 @@ func init() {
 type builder struct{}
 
 func (b *builder) Build(url *url.URL) (lives.LiveApi, error) {
+	useragent, err := manager.GetUserAgentManager().GetUserAgent(platform)
+	if err != nil {
+		useragent = consts.CommonAgent
+	}
 	return &Bigo{
 		Url:         url,
 		Platform:    platform,
+		UserAgent:   useragent,
 		RespCookies: make(map[string]string),
 	}, nil
 }
@@ -75,7 +80,7 @@ func (l *Bigo) requestWebApi(ctx context.Context, uid string) (string, error) {
 	c := g.Client()
 	c.SetTimeout(time.Second * 10)
 	headers := g.MapStrStr{
-		"User-Agent":      consts.CommonAgent,
+		"User-Agent":      l.UserAgent,
 		"Referer":         referer,
 		"Accept-Language": consts.CommonLang,
 	}

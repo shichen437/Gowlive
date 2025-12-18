@@ -46,10 +46,10 @@ func (b *PlatformBucket) Acquire(ctx context.Context, n int) error {
 		return nil
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 7*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
-	ticker := time.NewTicker(321 * time.Millisecond)
+	ticker := time.NewTicker(202 * time.Millisecond)
 	defer ticker.Stop()
 
 	for {

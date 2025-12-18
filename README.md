@@ -67,11 +67,7 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 </div>
 <div align="center">
   <img src="resources/assets/screenshots/room-card.jpg" alt="房间卡片" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/room-list.jpg" alt="房间列表" width="45%">
-</div>
-<div align="center">
-  <img src="resources/assets/screenshots/anchor.jpg" alt="主播" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/push.jpg" alt="推送" width="45%">
+  <img src="resources/assets/screenshots/room-green.jpg" alt="主题" width="45%">
 </div>
 
 ## 📦 部署

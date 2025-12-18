@@ -56,22 +56,18 @@ _This project is for learning and technical exchange purposes only, not for comm
 ## 📸 Preview
 
 <div align="center">
-  <img src="resources/assets/screenshots/login.jpg" alt="Login Page" width="92%">
+  <img src="resources/assets/screenshots/en/login.jpg" alt="Login Page" width="92%">
 </div>
 
 <br>
 
 <div align="center">
-  <img src="resources/assets/screenshots/home.jpg" alt="Home Page" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/settings.jpg" alt="Settings" width="45%">
+  <img src="resources/assets/screenshots/en/home.jpg" alt="Home Page" width="45%">&nbsp;&nbsp;
+  <img src="resources/assets/screenshots/en/settings.jpg" alt="Settings" width="45%">
 </div>
 <div align="center">
-  <img src="resources/assets/screenshots/room-card.jpg" alt="Room Card" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/room-list.jpg" alt="Room List" width="45%">
-</div>
-<div align="center">
-  <img src="resources/assets/screenshots/anchor.jpg" alt="Anchor" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/push.jpg" alt="Push" width="45%">
+  <img src="resources/assets/screenshots/en/room-card.jpg" alt="Room Card" width="45%">&nbsp;&nbsp;
+  <img src="resources/assets/screenshots/en/room-green.jpg" alt="Theme" width="45%">
 </div>
 
 ## 📦 Deployment

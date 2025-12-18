@@ -14,6 +14,7 @@ import (
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/metrics"
@@ -28,9 +29,14 @@ func init() {
 type builder struct{}
 
 func (b *builder) Build(url *url.URL) (lives.LiveApi, error) {
+	useragent, err := manager.GetUserAgentManager().GetUserAgent(platform)
+	if err != nil {
+		useragent = consts.CommonAgent
+	}
 	return &Douyin{
 		Url:         url,
 		Platform:    platform,
+		UserAgent:   useragent,
 		RespCookies: make(map[string]string),
 	}, nil
 }
@@ -71,6 +77,7 @@ func (l *Douyin) GetInfo() (info *lives.LiveState, err error) {
 func (l *Douyin) requestWebPage() (body string, err error) {
 	c := g.Client()
 	cookieMap := l.assembleCookieMap()
+	c.SetAgent(l.UserAgent)
 	c.SetCookieMap(cookieMap)
 	req, err := c.Get(gctx.GetInitCtx(), l.Url.String())
 	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Page: "+l.Url.String())

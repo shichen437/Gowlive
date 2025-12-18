@@ -13,5 +13,6 @@ const (
 type Douyin struct {
 	Url         *url.URL
 	Platform    string
+	UserAgent   string
 	RespCookies map[string]string
 }

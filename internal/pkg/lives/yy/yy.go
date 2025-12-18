@@ -27,9 +27,14 @@ func init() {
 type builder struct{}
 
 func (b *builder) Build(url *url.URL) (lives.LiveApi, error) {
+	useragent, err := manager.GetUserAgentManager().GetUserAgent(platform)
+	if err != nil {
+		useragent = consts.CommonAgent
+	}
 	return &YY{
 		Url:         url,
 		Platform:    platform,
+		UserAgent:   useragent,
 		RespCookies: make(map[string]string),
 	}, nil
 }
@@ -45,7 +50,7 @@ func (l *YY) GetInfo() (info *lives.LiveState, err error) {
 		return
 	}
 	headers := g.MapStrStr{
-		"User-Agent":      consts.CommonAgent,
+		"User-Agent":      l.UserAgent,
 		"Referer":         referer,
 		"Accept-Language": consts.CommonLang,
 	}

@@ -40,7 +40,7 @@ func NewTokenBucketManager() *TokenBucketManager {
 
 func (m *TokenBucketManager) Start() {
 	m.startOnce.Do(func() {
-		m.ticker = time.NewTicker(2400 * time.Millisecond)
+		m.ticker = time.NewTicker(1500 * time.Millisecond)
 		go func() {
 			for {
 				select {

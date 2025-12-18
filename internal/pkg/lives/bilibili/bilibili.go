@@ -10,6 +10,7 @@ import (
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/metrics"
@@ -24,9 +25,14 @@ func init() {
 type builder struct{}
 
 func (b *builder) Build(url *url.URL) (lives.LiveApi, error) {
+	useragent, err := manager.GetUserAgentManager().GetUserAgent(platform)
+	if err != nil {
+		useragent = consts.CommonAgent
+	}
 	return &Bilibili{
 		Url:         url,
 		Platform:    platform,
+		UserAgent:   useragent,
 		RespCookies: make(map[string]string),
 	}, nil
 }
@@ -66,7 +72,7 @@ func (l *Bilibili) GetInfo() (info *lives.LiveState, err error) {
 
 func (l *Bilibili) requestStreamInfoApi() (infos []*lives.StreamUrlInfo, err error) {
 	c := g.Client()
-	c.SetAgent(userAgent)
+	c.SetAgent(l.UserAgent)
 	c.SetCookieMap(l.assembleCookieMap())
 	payload := fmt.Sprintf(`?room_id=%s&protocol=0,1&format=0,1,2&codec=0,1&qn=10000&platform=web&ptype=8&dolby=5&panorama=1`, l.RoomID)
 	resp, err := c.Get(gctx.GetInitCtx(), liveApiUrlv2+payload)
@@ -96,7 +102,7 @@ func (l *Bilibili) requestStreamInfoApi() (infos []*lives.StreamUrlInfo, err err
 
 func (l *Bilibili) getUserInfo(info *lives.LiveState) error {
 	c := g.Client()
-	c.SetAgent(userAgent)
+	c.SetAgent(l.UserAgent)
 	c.SetCookieMap(l.assembleCookieMap())
 	resp, err := c.Get(gctx.GetInitCtx(), userApiUrl, g.Map{
 		"roomid": l.RoomID,
@@ -116,7 +122,7 @@ func (l *Bilibili) getUserInfo(info *lives.LiveState) error {
 
 func (l *Bilibili) requestWebApi() (*lives.LiveState, error) {
 	c := g.Client()
-	c.SetAgent(userAgent)
+	c.SetAgent(l.UserAgent)
 	c.SetCookieMap(l.assembleCookieMap())
 	resp, err := c.Get(gctx.GetInitCtx(), roomApiUrl, g.Map{
 		"room_id": l.RoomID,
@@ -145,7 +151,7 @@ func (l *Bilibili) parseRoomID() error {
 		return gerror.New(l.Platform + "无效链接")
 	}
 	c := g.Client()
-	c.SetAgent(userAgent)
+	c.SetAgent(l.UserAgent)
 	c.SetCookieMap(l.assembleCookieMap())
 	resp, err := c.Get(gctx.GetInitCtx(), roomInitUrl, g.Map{
 		"id": paths[1],
@@ -178,7 +184,7 @@ func (l *Bilibili) assembleCookieMap() map[string]string {
 
 func (l *Bilibili) getHeadersForDownloader() map[string]string {
 	return map[string]string{
-		"User-Agent": userAgent,
+		"User-Agent": l.UserAgent,
 		"Referer":    l.Url.String(),
 	}
 }

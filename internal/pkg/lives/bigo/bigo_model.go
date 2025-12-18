@@ -13,6 +13,7 @@ const (
 type Bigo struct {
 	Url         *url.URL
 	Platform    string
+	UserAgent   string
 	RespCookies map[string]string
 }
 
