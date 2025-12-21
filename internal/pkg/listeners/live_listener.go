@@ -127,7 +127,7 @@ func (l *listener) refresh() bool {
 		l.mu.Unlock()
 	}
 
-	if !info.IsLive && info.Anchor != "" && (oldState.RoomName != info.RoomName || oldState.Anchor != info.Anchor) {
+	if info.Anchor != "" && (oldState.RoomName != info.RoomName || oldState.Anchor != info.Anchor) {
 		l.ed.DispatchEvent(events.NewEvent("NameChanged", l.session))
 	}
 	return info.IsLive

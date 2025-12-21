@@ -29,6 +29,8 @@
     "failed": "失败",
     "live": "直播",
     "info": "信息",
+    "on": "开启",
+    "off": "关闭",
     "platform": "平台",
     "push": "推送",
     "remark": "备注",

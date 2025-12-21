@@ -24,4 +24,5 @@ type LiveManage struct {
 	UpdatedAt      *gtime.Time //
 	Quality        any         //
 	SegmentTime    any         //
+	MonitorOnly    any         //
 }

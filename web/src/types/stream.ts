@@ -8,6 +8,7 @@ export interface LiveManage {
   monitorStopAt: string;
   quality: 0 | 1 | 2 | 3 | 4;
   segmentTime: number;
+  monitorOnly: number;
   remark: string;
 }
 
@@ -19,6 +20,7 @@ export interface RoomInfo {
   platform: string;
   status: number;
   isRecording: boolean;
+  isLiving: boolean;
   isTop: boolean;
 }
 

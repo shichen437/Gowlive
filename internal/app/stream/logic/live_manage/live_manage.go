@@ -65,6 +65,7 @@ func (s *sLiveManage) List(ctx context.Context, req *v1.GetRoomListReq) (res *v1
 	for _, item := range list {
 		if item.Status != 0 {
 			item.IsRecording = registry.Get().IsRecording(item.LiveId)
+			item.IsLiving = registry.Get().IsLiving(item.LiveId)
 		}
 	}
 	res.Rows = list
@@ -171,7 +172,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 	validNeedUpdate := false
 	if tempData.MonitorType != req.MonitorType || tempData.Interval != req.Interval || tempData.Format != req.Format ||
 		tempData.MonitorStartAt != req.MonitorStartAt || tempData.MonitorStopAt != req.MonitorStopAt || tempData.Remark != req.Remark ||
-		tempData.Quality != req.Quality || tempData.SegmentTime != req.SegmentTime {
+		tempData.Quality != req.Quality || tempData.SegmentTime != req.SegmentTime || tempData.MonitorOnly != req.MonitorOnly {
 		validNeedUpdate = true
 	}
 	if !validNeedUpdate {
@@ -185,6 +186,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 		MonitorStopAt:  req.MonitorStopAt,
 		Quality:        req.Quality,
 		SegmentTime:    req.SegmentTime,
+		MonitorOnly:    req.MonitorOnly,
 		Remark:         req.Remark,
 		UpdatedAt:      utils.Now(),
 	})
@@ -391,6 +393,7 @@ func saveLiveConfig(ctx context.Context, req *v1.PostLiveManageReq, liveId *int6
 			MonitorStopAt:  req.MonitorStopAt,
 			SegmentTime:    req.SegmentTime,
 			Quality:        req.Quality,
+			MonitorOnly:    req.MonitorOnly,
 			Remark:         req.Remark,
 			CreatedAt:      utils.Now(),
 		})

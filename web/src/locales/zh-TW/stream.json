@@ -79,6 +79,7 @@
       "monitorEndTime": "監控結束時間",
       "segment": "切片時長",
       "segmentNone": "不切片",
+      "monitorOnly": "僅監控",
       "export": "導出",
       "createTime": "添加時間",
       "monitorStatus": {
@@ -87,7 +88,8 @@
         "cron": "定時監控",
         "realtime": "即時監控",
         "intelligent": "智慧監控",
-        "recording": "錄製中"
+        "recording": "錄製中",
+        "living": "直播中"
       },
       "monitorType": {
         "title": "監控類型",

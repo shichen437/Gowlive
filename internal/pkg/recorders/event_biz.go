@@ -35,7 +35,7 @@ func liveEndBiz(ctx context.Context, session *lives.LiveSession) {
 		go message_push.LivePush(gctx.GetInitCtx(), session.State.Anchor, false)
 	}
 	autoClean := mr.GetSettingsManager().GetSetting(consts.SKAutoCleanLittleFile)
-	if autoClean > 0 {
+	if autoClean > 0 && session.Config.MonitorOnly == 0 {
 		go cleanLittleFiles(session.Filename, autoClean)
 	}
 }

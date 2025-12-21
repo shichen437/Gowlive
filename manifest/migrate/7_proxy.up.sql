@@ -6,3 +6,5 @@ CREATE TABLE IF NOT EXISTS sys_proxy(
     created_at datetime(0) NOT NULL, -- Created Time
     updated_at datetime(0) DEFAULT NULL -- Updated Time
 );
+
+ALTER TABLE live_manage ADD COLUMN monitor_only int(1) NOT NULL DEFAULT 0;

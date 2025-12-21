@@ -14,7 +14,7 @@
                 <PinOff class="w-4 h-4 mr-2" />
                 <span>{{ t('stream.rooms.buttons.unTop') }}</span>
             </DropdownMenuItem>
-            <DropdownMenuItem v-if="room.isRecording" @click="$emit('streamPreview', room.liveId)">
+            <DropdownMenuItem v-if="room.isRecording || room.isLiving" @click="$emit('streamPreview', room.liveId)">
                 <Eye class="w-4 h-4 mr-2" />
                 <span>{{ t('stream.rooms.buttons.preview') }}</span>
             </DropdownMenuItem>

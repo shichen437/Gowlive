@@ -29,6 +29,8 @@
     "failed": "Failed",
     "live": "Live",
     "info": "Info",
+    "on": "On",
+    "off": "Off",
     "platform": "Platform",
     "push": "Push",
     "remark": "Remark",

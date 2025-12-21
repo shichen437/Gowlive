@@ -13,6 +13,8 @@
 "stream.live.valid.QualityRequired" = "清晰度不可為空"
 "stream.live.valid.QualityInvalid" = "清晰度參數不合法"
 "stream.live.valid.SliceTimeRequired" = "分片時間不可為空"
+"stream.live.valid.MonitorOnlyRequired" = "僅監控參數不可為空"
+"stream.live.valid.MonitorOnlyInvalid" = "僅監控參數不合法"
 "stream.live.valid.RemarkMaxLength" = "備註最大長度為 45"
 "stream.live.valid.ExportTypeRequired" = "匯出類型不可為空"
 "stream.live.valid.ExportTypeInvalid" = "匯出類型不合法"

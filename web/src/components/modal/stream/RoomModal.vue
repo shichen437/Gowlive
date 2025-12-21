@@ -173,16 +173,35 @@
                         </div>
                     </template>
 
-                    <FormField v-slot="{ componentField, errorMessage }" name="remark">
-                        <FormItem>
-                            <FormLabel>{{ t('common.fields.remark') }}</FormLabel>
-                            <FormControl>
-                                <Input type="text" :placeholder="t('stream.rooms.placeholder.remark')"
-                                    v-bind="componentField" :class="{ 'border-red-500': errorMessage }" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    </FormField>
+                    <div class="grid grid-cols-2 gap-4">
+                        <FormField v-slot="{ componentField, errorMessage }" name="monitorOnly">
+                            <FormItem>
+                                <FormLabel>{{ t('stream.rooms.fields.monitorOnly') }}</FormLabel>
+                                <Select v-bind="componentField">
+                                    <FormControl>
+                                        <SelectTrigger class="w-full" :class="{ 'border-red-500': errorMessage }">
+                                            <SelectValue :placeholder="t('common.placeholder.select')" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent class="w-[--radix-select-trigger-width]">
+                                        <SelectItem :value="0">{{ t('common.fields.off') }}</SelectItem>
+                                        <SelectItem :value="1">{{ t('common.fields.on') }}</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField v-slot="{ componentField, errorMessage }" name="remark">
+                            <FormItem>
+                                <FormLabel>{{ t('common.fields.remark') }}</FormLabel>
+                                <FormControl>
+                                    <Input type="text" :placeholder="t('stream.rooms.placeholder.remark')"
+                                        v-bind="componentField" :class="{ 'border-red-500': errorMessage }" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                    </div>
                 </div>
                 <DialogFooter>
                     <Button type="submit" :disabled="isSubmitting">
@@ -219,6 +238,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
+    FormDescription,
 } from '@/components/ui/form';
 import {
     Select,
@@ -265,6 +285,7 @@ const formSchema = toTypedSchema(
         monitorStartAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: t('stream.rooms.valid.timeFormat') }).optional().nullable(),
         monitorStopAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: t('stream.rooms.valid.timeFormat') }).optional().nullable(),
         remark: z.string().max(45, { message: t('stream.rooms.valid.remarkLength') }).optional().nullable(),
+        monitorOnly: z.coerce.number(),
     }).refine(data => {
         if (data.monitorType === 2) {
             return !!data.monitorStartAt && !!data.monitorStopAt;
@@ -285,6 +306,7 @@ const { handleSubmit, values, setValues, resetForm } = useForm({
         monitorType: 0,
         quality: 0,
         segmentTime: 0,
+        monitorOnly: 0,
         remark: '',
         monitorStartAt: null,
         monitorStopAt: null,
@@ -342,7 +364,8 @@ const openModal = async (id?: number) => {
                 monitorType: Number(roomData.monitorType),
                 monitorStartAt: roomData.monitorStartAt || null,
                 monitorStopAt: roomData.monitorStopAt || null,
-                remark: roomData.remark || ''
+                remark: roomData.remark || '',
+                monitorOnly: Number(roomData.monitorOnly)
             };
 
             setValues(formattedData);

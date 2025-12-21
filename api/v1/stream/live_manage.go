@@ -40,6 +40,7 @@ type PostLiveManageReq struct {
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#stream.live.valid.MonitorEndTimeRequired|stream.live.valid.MonitorEndTimeSame"`
 	Quality        int    `json:"quality" v:"required|in:0,1,2,3,4#stream.live.valid.QualityRequired|stream.live.valid.QualityInvalid"`
 	SegmentTime    int    `json:"segmentTime" v:"required#stream.live.valid.SliceTimeRequired"`
+	MonitorOnly    int    `json:"monitorOnly" v:"required|in:0,1#stream.live.valid.MonitorOnlyRequired|stream.live.valid.MonitorOnlyInvalid"`
 	Remark         string `json:"remark" v:"max-length:45#stream.live.valid.RemarkMaxLength"`
 }
 type PostLiveManageRes struct {
@@ -67,6 +68,7 @@ type PutLiveManageReq struct {
 	MonitorStopAt  string `json:"monitorStopAt" v:"required-if:monitorType,2|not-eq:monitorStartAt#stream.live.valid.MonitorEndTimeRequired|stream.live.valid.MonitorEndTimeSame"`
 	Quality        int    `json:"quality" v:"required|in:0,1,2,3,4#stream.live.valid.QualityRequired|stream.live.valid.QualityInvalid"`
 	SegmentTime    int    `json:"segmentTime" v:"required#stream.live.valid.SliceTimeRequired"`
+	MonitorOnly    int    `json:"monitorOnly" v:"required|in:0,1#stream.live.valid.MonitorOnlyRequired|stream.live.valid.MonitorOnlyInvalid"`
 	Remark         string `json:"remark" v:"max-length:45#stream.live.valid.RemarkMaxLength"`
 }
 type PutLiveManageRes struct {

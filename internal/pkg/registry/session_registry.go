@@ -155,11 +155,23 @@ func (r *SessionRegistry) IsRecording(sessionId int) bool {
 	session, ok := r.sessions[sessionId]
 	r.mu.RUnlock()
 
-	if !ok || session.RecorderManager == nil {
+	if !ok || session.Config.MonitorOnly == 1 || session.RecorderManager == nil {
 		return false
 	}
 
 	return session.RecorderManager.(recorders.Manager).HasRecorder(context.Background())
+}
+
+func (r *SessionRegistry) IsLiving(sessionId int) bool {
+	r.mu.RLock()
+	session, ok := r.sessions[sessionId]
+	r.mu.RUnlock()
+
+	if !ok || session.Config.MonitorOnly == 0 {
+		return false
+	}
+
+	return session.GetState().IsLive
 }
 
 func (r *SessionRegistry) RecordingCount() int {
@@ -201,7 +213,7 @@ func (r *SessionRegistry) StopAll(ctx context.Context) {
 }
 
 func (r *SessionRegistry) GetPreviewInfo(sessionId int) *PreviewInfo {
-	if !r.Exists(sessionId) || !r.IsRecording(sessionId) {
+	if !r.Exists(sessionId) || (!r.IsLiving(sessionId) && !r.IsRecording(sessionId)) {
 		return nil
 	}
 	session, ok := r.sessions[sessionId]
@@ -225,7 +237,7 @@ func (r *SessionRegistry) GetPreviewInfo(sessionId int) *PreviewInfo {
 func (r *SessionRegistry) GetPreviewList() []*PreviewInfo {
 	result := make([]*PreviewInfo, 0, len(r.sessions))
 	for id, session := range r.sessions {
-		if r.IsRecording(id) {
+		if r.IsRecording(id) || r.IsLiving(id) {
 			state := session.GetState()
 			if len(state.StreamInfos) == 0 {
 				continue

@@ -79,6 +79,7 @@
       "monitorEndTime": "Monitoring End Time",
       "segment": "Segment Duration",
       "segmentNone": "No Segmentation",
+      "monitorOnly": "Monitor Only",
       "export": "Export as",
       "createTime": "Create Time",
       "monitorStatus": {
@@ -87,7 +88,8 @@
         "cron": "Scheduled",
         "realtime": "Real-time",
         "intelligent": "Intelligent",
-        "recording": "Recording"
+        "recording": "Recording",
+        "living": "Live Now"
       },
       "monitorType": {
         "title": "Monitoring Type",

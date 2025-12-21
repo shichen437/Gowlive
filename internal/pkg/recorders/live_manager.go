@@ -48,6 +48,9 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 			return
 		}
 		liveStartBiz(ctx, session)
+		if m.session.Config.MonitorOnly == 1 {
+			return
+		}
 		err := m.AddRecorder(ctx)
 		if err != nil {
 			g.Log().Errorf(ctx, "failed to add recorder for session %d: %v", m.session.Id, err)
@@ -68,6 +71,10 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 		if session.Id != m.session.Id {
 			return
 		}
+		if m.session.Config.MonitorOnly == 1 {
+			liveEndBiz(ctx, session)
+			return
+		}
 		if err := m.RemoveRecorder(ctx); err == nil {
 			liveEndBiz(ctx, session)
 		}
@@ -77,7 +84,7 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 
 	ed.AddEventListener("RecordingStoppedDueToDiskSpace", events.NewEventListener(func(event *events.Event) {
 		session := event.Object.(*lives.LiveSession)
-		if session.Id != m.session.Id {
+		if session.Id != m.session.Id || m.session.Config.MonitorOnly == 1 {
 			return
 		}
 		g.Log().Warningf(ctx, "Received RecordingStoppedDueToDiskSpace event for session %d. Removing recorder.", m.session.Id)
@@ -184,7 +191,7 @@ func (m *manager) reconciliationLoop(ctx context.Context) {
 }
 
 func (m *manager) reconcile(ctx context.Context) {
-	if !m.session.GetState().IsLive || m.HasRecorder(ctx) {
+	if !m.session.GetState().IsLive || m.HasRecorder(ctx) || m.session.Config.MonitorOnly == 1 {
 		return
 	}
 	if diskOverLimit() {

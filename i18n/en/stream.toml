@@ -13,6 +13,8 @@
 "stream.live.valid.QualityRequired" = "Quality cannot be empty"
 "stream.live.valid.QualityInvalid" = "Invalid quality parameter"
 "stream.live.valid.SliceTimeRequired" = "Slice duration cannot be empty"
+"stream.live.valid.MonitorOnlyRequired" = "Monitor-only parameter must not be empty"
+"stream.live.valid.MonitorOnlyInvalid" = "Monitor-only parameter is invalid"
 "stream.live.valid.RemarkMaxLength" = "Remark maximum length is 45"
 "stream.live.valid.ExportTypeRequired" = "Export type cannot be empty"
 "stream.live.valid.ExportTypeInvalid" = "Invalid export type"

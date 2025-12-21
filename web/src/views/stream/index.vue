@@ -54,9 +54,10 @@
                             <TableCell class="text-center" :class="getStatusColor(
                                 room.status,
                                 room.isRecording,
+                                room.isLiving,
                             )
                                 ">{{
-                                    getStatusText(room.status, room.isRecording)
+                                    getStatusText(room.status, room.isRecording, room.isLiving)
                                 }}</TableCell>
                             <TableCell class="text-center space-x-2">
                                 <Button v-if="room.status === 0" variant="ghost" size="icon"
@@ -106,9 +107,10 @@
                         <Badge variant="secondary" class="text-sm" :class="getStatusColor(
                             room.status,
                             room.isRecording,
+                            room.isLiving,
                         )
                             ">{{
-                                getStatusText(room.status, room.isRecording)
+                                getStatusText(room.status, room.isRecording, room.isLiving)
                             }}</Badge>
                         <div class="flex space-x-1">
                             <Button v-if="room.status === 0" variant="ghost" size="icon"
@@ -290,8 +292,8 @@ onMounted(async () => {
     getRooms();
 });
 
-const getStatusColor = (status: number, isRecording: boolean) => {
-    if (isRecording) {
+const getStatusColor = (status: number, isRecording: boolean, isLiving: boolean) => {
+    if (isRecording || isLiving) {
         return "text-red-600";
     }
     switch (status) {
@@ -306,9 +308,12 @@ const getStatusColor = (status: number, isRecording: boolean) => {
     }
 };
 
-const getStatusText = (status: number, isRecording: boolean) => {
+const getStatusText = (status: number, isRecording: boolean, isLiving: boolean) => {
     if (isRecording) {
         return t('stream.rooms.fields.monitorStatus.recording');
+    }
+    if (isLiving) {
+        return t('stream.rooms.fields.monitorStatus.living');
     }
     switch (status) {
         case 1:
