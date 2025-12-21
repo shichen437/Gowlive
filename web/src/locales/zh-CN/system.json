@@ -95,5 +95,25 @@
       "nameNotEmpty": "渠道名称不能为空",
       "typeNotEmpty": "渠道类型不能为空"
     }
+  },
+  "proxy": {
+    "add": {
+      "title": "添加代理",
+      "desc": "在此处添加新代理。完成后单击“保存”。"
+    },
+    "edit": {
+      "title": "编辑代理",
+      "desc": "在此处对代理进行更改。完成后单击“保存”。"
+    },
+    "fields": {
+      "proxy": "代理地址"
+    },
+    "placeholder": {
+      "proxy": "请输入代理地址，用 , 或换行分隔。支持 http:// 或 socks5:// 协议"
+    },
+    "deleteDesc": "此操作无法撤销。这将永久删除代理。",
+    "toast": {
+      "listErr": "获取代理列表失败"
+    }
   }
 }

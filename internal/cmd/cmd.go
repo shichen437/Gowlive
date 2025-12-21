@@ -70,6 +70,8 @@ var (
 				g.Log().Errorf(ctx, "server 启动异常，错误信息：%v", err)
 				return err
 			}
+			initProxyRegistry(ctx)
+			initCookieRegistry(ctx)
 			g.Go(ctx, func(c context.Context) {
 				time.Sleep(1500 * time.Millisecond)
 				CheckFile()
@@ -160,7 +162,7 @@ func bindRoute(group *ghttp.RouterGroup) {
 		Common.InternalDict,
 		Media.FileManage, Media.FileCheck,
 		Stream.LiveManage, Stream.LiveHistory, Stream.LiveCookie, Stream.AnchorInfo,
-		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel, System.SysNotify)
+		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel, System.SysNotify, System.SysProxy)
 }
 
 func shutdown(sig os.Signal) {

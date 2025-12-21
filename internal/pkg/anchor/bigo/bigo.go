@@ -63,7 +63,11 @@ func (d *Bigo) ParseAnchorInfo(ctx context.Context) (info *anchor.AnchorInfo, er
 }
 
 func (d *Bigo) getWebRequestResp(ctx context.Context, uid string) (string, error) {
+	d.Proxy = manager.GetProxyManager().GetRandomProxy(platform)
 	c := g.Client()
+	if d.Proxy != "" {
+		c.SetProxy(d.Proxy)
+	}
 	c.SetTimeout(time.Second * 10)
 	c.SetAgent(consts.CommonAgent)
 	c.SetContentType(consts.CommonJsonType)

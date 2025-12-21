@@ -14,6 +14,7 @@ type Bigo struct {
 	Url         *url.URL
 	Platform    string
 	UserAgent   string
+	Proxy       string
 	RespCookies map[string]string
 }
 

@@ -17,6 +17,7 @@ import StreamPreview from "@/views/stream/preview.vue";
 import SystemLogs from "@/views/system/logs.vue";
 import SystemNotify from "@/views/system/notify.vue";
 import SystemChannel from "@/views/system/channel.vue";
+import SystemProxy from "@/views/system/proxy.vue";
 import MediaCheck from "@/views/media/check.vue";
 import MediaFile from "@/views/media/file.vue";
 import MediaPlay from "@/views/media/play.vue";
@@ -113,6 +114,12 @@ const routes = [
             name: "SystemLogs",
             component: SystemLogs,
             meta: { title: "project.router.logCenter" },
+          },
+          {
+            path: "proxy",
+            name: "SystemProxy",
+            component: SystemProxy,
+            meta: { title: "project.router.proxyCenter" },
           },
         ],
       },

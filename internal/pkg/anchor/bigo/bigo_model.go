@@ -12,6 +12,7 @@ const (
 type Bigo struct {
 	Url      *url.URL
 	Platform string
+	Proxy    string
 }
 
 type BigoUserProfileResp struct {

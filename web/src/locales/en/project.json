@@ -51,6 +51,7 @@
     "logCenter": "Logs",
     "pushChannel": "Push",
     "notificationCenter": "Notifications",
+    "proxyCenter": "Proxy",
     "commonQuestions": "FAQ",
     "personalCenter": "Profile",
     "about": "About",

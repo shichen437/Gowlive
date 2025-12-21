@@ -95,5 +95,25 @@
       "nameNotEmpty": "Channel name cannot be empty",
       "typeNotEmpty": "Channel type cannot be empty"
     }
+  },
+  "proxy": {
+    "add": {
+      "title": "Add Proxy",
+      "desc": "Add a new proxy here. Click save when you're done."
+    },
+    "edit": {
+      "title": "Edit Proxy",
+      "desc": "Make changes to your proxy here. Click save when you're done."
+    },
+    "fields": {
+      "proxy": "Proxy Url"
+    },
+    "placeholder": {
+      "proxy": "Please enter proxy addresses, separated by “,” or new lines. Support http:// or socks5:// protocol."
+    },
+    "deleteDesc": "This action cannot be undone. This will permanently delete the proxy.",
+    "toast": {
+      "listErr": "Failed to fetch proxy list"
+    }
   }
 }

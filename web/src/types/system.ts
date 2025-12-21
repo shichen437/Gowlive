@@ -45,3 +45,10 @@ export interface PushChannelWebhook {
   sign: string;
   at: string;
 }
+
+export interface SysProxy {
+  id: number;
+  platform: string;
+  proxy: string[];
+  remark: string;
+}

@@ -7,6 +7,8 @@ import (
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/shichen437/gowlive/internal/app/stream/dao"
 	"github.com/shichen437/gowlive/internal/app/stream/model/entity"
+	sysDao "github.com/shichen437/gowlive/internal/app/system/dao"
+	sysEntity "github.com/shichen437/gowlive/internal/app/system/model/entity"
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/crons"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
@@ -19,7 +21,6 @@ func LiveMonitor() {
 	g.Log().Info(ctx, "LiveMonitor Starting...")
 	defer g.Log().Info(ctx, "LiveMonitor Started!")
 	lives.GetBucketManager()
-	initCookieRegistry(ctx)
 	sessionIds := getLiveSessionIds4Init(ctx)
 	if len(sessionIds) > 0 {
 		reg := registry.Get()
@@ -73,5 +74,21 @@ func initCookieRegistry(ctx context.Context) {
 	cookieReg := manager.GetCookieManager()
 	for _, cookie := range cookies {
 		cookieReg.Save(ctx, cookie.Platform, cookie.Cookie)
+	}
+}
+
+func initProxyRegistry(ctx context.Context) {
+	var proxies []*sysEntity.SysProxy
+	err := sysDao.SysProxy.Ctx(ctx).Scan(&proxies)
+	if err != nil {
+		g.Log().Errorf(ctx, "Failed to get system proxy from database: %v", err)
+		return
+	}
+	if len(proxies) <= 0 {
+		return
+	}
+	proxyReg := manager.GetProxyManager()
+	for _, proxy := range proxies {
+		proxyReg.SaveProxy(ctx, proxy.Platform, proxy.Proxy)
 	}
 }

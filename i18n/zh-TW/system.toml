@@ -27,6 +27,11 @@
 "system.settings.valid.KeyRequired" = "鍵名不可為空"
 "system.settings.valid.ValueRequired" = "值不可為空"
 
+"system.proxy.valid.IDRequired" = "代理 ID 不可為空"
+"system.proxy.valid.PlatformRequired" = "平台不可為空"
+"system.proxy.valid.ProxyRequired" = "代理不可為空"
+"system.proxy.valid.RemarkMaxLength" = "備註長度最多為 45"
+
 "system.push.error.Delete" = "刪除推送渠道失敗"
 "system.push.error.GetDetail" = "取得渠道詳情失敗"
 "system.push.error.GetList" = "取得渠道列表失敗"
@@ -44,3 +49,9 @@
 "system.settings.error.Add" = "新增設定失敗"
 "system.settings.error.Update" = "修改設定失敗"
 "system.settings.error.Get" = "取得設定資料失敗"
+
+"system.proxy.error.Added" = "已新增過該平臺的代理"
+"system.proxy.error.NotFound" = "未找到代理"
+"system.proxy.error.ValidUrlBlank" = "有效代理地址不可為空"
+"system.proxy.error.UrlLength" = "代理地址數量必須小於或等於 30"
+"system.proxy.error.UrlUnSupported" = "存在不支援的代理地址協議"

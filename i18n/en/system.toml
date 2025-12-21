@@ -27,6 +27,11 @@
 "system.settings.valid.KeyRequired" = "Key cannot be empty"
 "system.settings.valid.ValueRequired" = "Value cannot be empty"
 
+"system.proxy.valid.IDRequired" = "Proxy ID cannot be empty"
+"system.proxy.valid.PlatformRequired" = "Platform cannot be empty"
+"system.proxy.valid.ProxyRequired" = "Proxy cannot be empty"
+"system.proxy.valid.RemarkMaxLength" = "Remark length can be at most 45"
+
 "system.push.error.Delete" = "Failed to delete push channel"
 "system.push.error.GetDetail" = "Failed to get channel details"
 "system.push.error.GetList" = "Failed to get channel list"
@@ -44,3 +49,9 @@
 "system.settings.error.Add" = "Failed to add setting"
 "system.settings.error.Update" = "Failed to update setting"
 "system.settings.error.Get" = "Failed to get setting data"
+
+"system.proxy.error.Added" = "Proxy for this platform has already been added"
+"system.proxy.error.NotFound" = "Proxy not found"
+"system.proxy.error.ValidUrlBlank" = "Valid proxy address cannot be empty"
+"system.proxy.error.UrlLength" = "The number of proxy addresses must be less than or equal to 30"
+"system.proxy.error.UrlUnSupported" = "Unsupported proxy address protocol detected"

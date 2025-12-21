@@ -35,6 +35,7 @@ export const configurableMenu = ref([
       { title: "project.router.logCenter", to: "/system/logs" },
       { title: "project.router.pushChannel", to: "/system/channel" },
       { title: "project.router.notificationCenter", to: "/system/notify" },
+      { title: "project.router.proxyCenter", to: "/system/proxy" },
     ],
   },
   {

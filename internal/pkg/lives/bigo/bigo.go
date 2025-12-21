@@ -77,7 +77,11 @@ func (l *Bigo) GetInfo() (info *lives.LiveState, err error) {
 }
 
 func (l *Bigo) requestWebApi(ctx context.Context, uid string) (string, error) {
+	l.Proxy = manager.GetProxyManager().GetRandomProxy(platform)
 	c := g.Client()
+	if l.Proxy != "" {
+		c.SetProxy(l.Proxy)
+	}
 	c.SetTimeout(time.Second * 10)
 	headers := g.MapStrStr{
 		"User-Agent":      l.UserAgent,
