@@ -1,10 +1,16 @@
 <template>
     <div class="space-y-4">
         <div class="flex justify-between items-center">
-            <Button variant="destructive" @click="openConfirmDeleteAllModal">
-                <Trash2 class="w-4 h-4 mr-2" />
-                {{ t('system.logs.clear.button') }}
-            </Button>
+            <div class="flex items-center space-x-2">
+                <Button variant="destructive" @click="openConfirmDeleteAllModal">
+                    <Trash2 class="w-4 h-4 mr-2" />
+                    {{ t('system.logs.clear.button') }}
+                </Button>
+                <Button @click="showTerminalLogModal = true">
+                    <Terminal class="w-4 h-4 mr-2" />
+                    {{ t('system.logs.terminal.button') }}
+                </Button>
+            </div>
             <div class="flex items-center space-x-2">
                 <SortLogsDropDownMenu v-model:sort="sort" @update:sort="handleSortChange" />
                 <FilterLogsDropDownMenu v-model:filter="filter" @update:filter="handleFilterChange" />
@@ -92,6 +98,7 @@
     <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
         :onConfirm="handleDeleteAllLogs" :title="t('system.logs.clear.title')"
         :description="t('system.logs.clear.desc')" />
+    <TerminalLogModal :open="showTerminalLogModal" :on-open-change="(open: any) => (showTerminalLogModal = open)" />
 </template>
 
 <script setup lang="ts">
@@ -100,6 +107,7 @@ import { useI18n } from "vue-i18n";
 import { listLogs, deleteLogs, deleteAllLogs } from "@/api/system/sys_logs";
 import type { SysLogs } from "@/types/system";
 import ConfirmModal from "@/components/modal/ConfirmModal.vue";
+import TerminalLogModal from "@/components/modal/system/TerminalLogModal.vue";
 import SortLogsDropDownMenu from "@/components/dropdownmenu/system/SortLogsDropDownMenu.vue";
 import FilterLogsDropDownMenu from "@/components/dropdownmenu/system/FilterLogsDropDownMenu.vue";
 import {
@@ -125,13 +133,14 @@ import {
     TooltipContent,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-vue-next";
+import { Trash2, Terminal } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Badge } from "@/components/ui/badge";
 
 const { t } = useI18n();
 const showConfirmModal = ref(false);
 const showConfirmDeleteAllModal = ref(false);
+const showTerminalLogModal = ref(false);
 const logs = ref<SysLogs[]>([]);
 const pageNum = ref(1);
 const pageSize = ref(10);

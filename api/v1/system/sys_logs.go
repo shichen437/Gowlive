@@ -35,3 +35,21 @@ type DeleteAllLogsReq struct {
 type DeleteAllLogsRes struct {
 	g.Meta `mime:"application/json"`
 }
+
+type GetTerminalLogsListReq struct {
+	g.Meta `path:"/system/logs/terminal" method:"get" tags:"日志管理" summary:"获取终端日志"`
+	Since  int64 `json:"since"`
+	Limit  int   `json:"limit" v:"required|min:1|max:100"`
+}
+
+type GetTerminalLogsListRes struct {
+	g.Meta `mime:"application/json"`
+	Rows   []*LogItem `json:"rows"`
+	Next   int64      `json:"next"`
+}
+
+type LogItem struct {
+	Time  int64  `json:"time"`
+	Level string `json:"level"`
+	Msg   string `json:"msg"`
+}

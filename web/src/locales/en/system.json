@@ -20,6 +20,10 @@
     "toast": {
       "clearSuccess": "Cleared successfully",
       "clearFailed": "Clear failed"
+    },
+    "terminal": {
+      "button": "Terminal Logs",
+      "title": "Terminal Logs"
     }
   },
   "notify": {

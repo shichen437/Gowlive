@@ -83,7 +83,7 @@ func (l *Douyin) requestWebPage() (body string, err error) {
 	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Page: "+l.Url.String())
 	if err != nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
-		g.Log().Error(gctx.GetInitCtx(), err.Error())
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebPage err info: ", err)
 		return
 	}
 	metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, true, false)
@@ -93,7 +93,7 @@ func (l *Douyin) requestWebPage() (body string, err error) {
 	resp, err := c2.Do(req.Request)
 	if err != nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
-		g.Log().Error(gctx.GetInitCtx(), err.Error())
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebPage c2 err info: ", err)
 		return
 	}
 	switch code := resp.StatusCode; code {

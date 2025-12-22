@@ -96,9 +96,11 @@ func (l *Bigo) requestWebApi(ctx context.Context, uid string) (string, error) {
 	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Request: "+l.Url.String())
 	resp, err := c.Post(ctx, studioInfoApi, params)
 	if err != nil {
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi err info: ", err)
 		return "", err
 	}
 	if resp.StatusCode != http.StatusOK {
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi response code: ", resp.StatusCode)
 		return "", gerror.New("Bigo platform request failed")
 	}
 	body, err := utils.Text(resp.Response)
@@ -151,8 +153,9 @@ func (l *Bigo) assembleCookieMap() map[string]string {
 
 func (l *Bigo) getHeadersForDownloader() map[string]string {
 	return map[string]string{
-		"User-Agent": consts.CommonAgent,
+		"User-Agent": l.UserAgent,
 		"Referer":    l.Url.String(),
+		"Proxy":      l.Proxy,
 	}
 }
 

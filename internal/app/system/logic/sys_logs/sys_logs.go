@@ -4,10 +4,12 @@ import (
 	"context"
 
 	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/util/gconv"
 	v1 "github.com/shichen437/gowlive/api/v1/system"
 	"github.com/shichen437/gowlive/internal/app/system/dao"
 	"github.com/shichen437/gowlive/internal/app/system/model/entity"
 	"github.com/shichen437/gowlive/internal/app/system/service"
+	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
@@ -58,6 +60,16 @@ func (s *sSysLogs) DeleteAll(ctx context.Context, req *v1.DeleteAllLogsReq) (res
 	if err != nil {
 		err = utils.TError(ctx, "system.logs.error.DeleteAll")
 	}
+	return
+}
+
+func (s *sSysLogs) Terminal(ctx context.Context, req *v1.GetTerminalLogsListReq) (res *v1.GetTerminalLogsListRes, err error) {
+	res = &v1.GetTerminalLogsListRes{}
+	var list []*v1.LogItem
+	mList, next := manager.GetLogBufferManager().List(req.Since, req.Limit)
+	res.Next = next
+	gconv.Struct(mList, &list)
+	res.Rows = list
 	return
 }
 

@@ -1,25 +1,24 @@
 {
-  "version": "0.2.1",
-  "date": "2025-12-18",
+  "version": "0.2.2",
+  "date": "2025-12-22",
   "info": {
     "feature": {
       "name": "功能",
       "items": [
         {
-          "desc": "新增支持直播预览"
+          "desc": "新增平台代理(Bigo)"
         },
         {
-          "desc": "新增色彩模式"
+          "desc": "新增终端日志"
+        },
+        {
+          "desc": "新增仅监控不录制"
         }
       ]
     },
     "enhance": {
       "name": "优化",
-      "items": [
-        {
-          "desc": "优化监控逻辑"
-        }
-      ]
+      "items": []
     },
     "fix": {
       "name": "修复",

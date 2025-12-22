@@ -11,7 +11,9 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gproc"
+	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/util/gconv"
 
 	Admin "github.com/shichen437/gowlive/internal/app/admin/controller"
@@ -70,6 +72,7 @@ var (
 				g.Log().Errorf(ctx, "server 启动异常，错误信息：%v", err)
 				return err
 			}
+			initHandler()
 			initProxyRegistry(ctx)
 			initCookieRegistry(ctx)
 			g.Go(ctx, func(c context.Context) {
@@ -155,6 +158,17 @@ func initDir() {
 	os.MkdirAll(utils.DATA_PATH, os.ModePerm)
 	os.MkdirAll(utils.STREAM_PATH, os.ModePerm)
 	os.MkdirAll(utils.DOWNLOAD_PATH, os.ModePerm)
+}
+
+func initHandler() {
+	g.Log().SetHandlers(func(ctx context.Context, in *glog.HandlerInput) {
+		manager.GetLogBufferManager().Append(manager.LogItem{
+			Time:  gtime.Now().UnixMilli(),
+			Level: in.LevelFormat,
+			Msg:   in.ValuesContent(),
+		})
+		in.Next(ctx)
+	})
 }
 
 func bindRoute(group *ghttp.RouterGroup) {

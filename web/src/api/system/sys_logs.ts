@@ -1,10 +1,10 @@
 import request from "@/lib/api";
 
 export async function listLogs(params: any) {
-  if (params.status === '') {
+  if (params.status === "") {
     delete params.status;
   }
-  if (params.type === '') {
+  if (params.type === "") {
     delete params.type;
   }
   return request({
@@ -26,5 +26,13 @@ export async function deleteAllLogs(data: any) {
     url: "/system/logs/all",
     method: "delete",
     data: data,
+  });
+}
+
+export async function terminalLogs(params: any) {
+  return request({
+    url: "/system/logs/terminal",
+    method: "get",
+    params: params,
   });
 }

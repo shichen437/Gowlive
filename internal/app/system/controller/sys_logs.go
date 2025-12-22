@@ -23,3 +23,7 @@ func (s *sysLogsController) Delete(ctx context.Context, req *v1.DeleteLogsReq) (
 func (s *sysLogsController) DeleteAll(ctx context.Context, req *v1.DeleteAllLogsReq) (res *v1.DeleteAllLogsRes, err error) {
 	return service.SysLogs().DeleteAll(ctx, req)
 }
+
+func (s *sysLogsController) Terminal(ctx context.Context, req *v1.GetTerminalLogsListReq) (res *v1.GetTerminalLogsListRes, err error) {
+	return service.SysLogs().Terminal(ctx, req)
+}

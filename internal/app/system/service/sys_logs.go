@@ -16,6 +16,7 @@ type (
 		List(ctx context.Context, req *v1.GetLogsListReq) (res *v1.GetLogsListRes, err error)
 		Delete(ctx context.Context, req *v1.DeleteLogsReq) (res *v1.DeleteLogsRes, err error)
 		DeleteAll(ctx context.Context, req *v1.DeleteAllLogsReq) (res *v1.DeleteAllLogsRes, err error)
+		Terminal(ctx context.Context, req *v1.GetTerminalLogsListReq) (res *v1.GetTerminalLogsListRes, err error)
 	}
 )
 

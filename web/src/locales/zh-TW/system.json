@@ -20,6 +20,10 @@
     "toast": {
       "clearSuccess": "清空成功",
       "clearFailed": "清空失敗"
+    },
+    "terminal": {
+      "button": "終端日誌",
+      "title": "終端日誌"
     }
   },
   "notify": {

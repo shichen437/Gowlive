@@ -15,6 +15,10 @@ func (p *Parser) buildArgs(ffUserAgent, file string, sUrl *url.URL, headers map[
 	}
 	args := p.basicArgs(ffUserAgent, referer, sUrl)
 	for k, v := range headers {
+		if k == "Proxy" && v != "" {
+			args = append(args, "-http_proxy", v)
+			continue
+		}
 		if k == "User-Agent" || k == "Referer" {
 			continue
 		}

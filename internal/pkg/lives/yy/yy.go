@@ -103,6 +103,7 @@ func (l *YY) requestWebApi(ctx context.Context, headers, cookieMap map[string]st
 	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Request: "+l.Url.String())
 	resp, err := c.Get(ctx, l.Url.String())
 	if err != nil {
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi err info: ", err)
 		return "", err
 	}
 	body, err := utils.Text(resp.Response)
@@ -166,6 +167,7 @@ func requestWebStreamInfoApi(ctx context.Context, cid string, headers, cookieMap
 	c.SetCookieMap(cookieMap)
 	resp, err := c.Post(ctx, streamAPI, dataJSON)
 	if err != nil {
+		g.Log().Error(gctx.GetInitCtx(), "requestWebStreamInfoApi err info: ", err)
 		return "", err
 	}
 	return utils.Text(resp.Response)
@@ -183,6 +185,7 @@ func requestWebDetailApi(ctx context.Context, cid string, headers, cookieMap map
 	c.SetCookieMap(cookieMap)
 	resp, err := c.Get(ctx, detailAPI)
 	if err != nil {
+		g.Log().Error(gctx.GetInitCtx(), "requestWebDetailApi err info: ", err)
 		return "", err
 	}
 	return utils.Text(resp.Response)

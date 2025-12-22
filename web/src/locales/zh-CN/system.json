@@ -20,6 +20,10 @@
     "toast": {
       "clearSuccess": "清空成功",
       "clearFailed": "清空失败"
+    },
+    "terminal": {
+      "button": "终端日志",
+      "title": "终端日志"
     }
   },
   "notify": {
