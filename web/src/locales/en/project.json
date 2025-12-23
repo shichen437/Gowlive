@@ -134,6 +134,15 @@
     "diskUsage": "Disk Usage",
     "publish": "Published on",
     "detail": "View Details",
+    "sheet": {
+      "title": "Preferences",
+      "desc": "Adjust some of your preferences here",
+      "fields": {
+        "appearance": "Appearance",
+        "language": "Language",
+        "theme": "Theme"
+      }
+    },
     "colorMode": {
       "default": "Default",
       "glacier": "Glacier Blue",

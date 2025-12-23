@@ -54,38 +54,7 @@
             <Button @click="toggleFullscreen" variant="ghost" size="icon">
                 <component :is="isFullscreen ? Minimize : Maximize" class="h-5 w-5" />
             </Button>
-            <DropdownMenu>
-                <DropdownMenuTrigger as-child>
-                    <Button variant="ghost" size="icon">
-                        <Palette class="h-5 w-5" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem v-for="ct in themes" :key="ct.value" @click="setTheme(ct.value)"
-                        :class="{ 'bg-accent': theme === ct.value }">
-                        {{ t(ct.name) }}
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu>
-                <DropdownMenuTrigger as-child>
-                    <Button variant="ghost" size="icon">
-                        <Languages class="h-5 w-5" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem v-for="l in locales" :key="l.locale" @click="changeLocale(l.locale)"
-                        :class="{ 'bg-accent': locale === l.locale }">
-                        {{ l.name }}
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-            <Button @click="cycle()" variant="ghost" size="icon">
-                <Sun class="h-5 w-5" v-if="mode === 'light'" />
-                <Moon class="h-5 w-5" v-else-if="mode === 'dark'" />
-                <SunMoon class="h-5 w-5" v-else />
-                <span class="sr-only">Toggle theme</span>
-            </Button>
+            <SettingsSheet />
             <HoverCard v-if="Object.keys(features).length > 0">
                 <HoverCardTrigger as-child>
                     <Button variant="ghost" size="icon">
@@ -135,7 +104,6 @@
 import { computed, onMounted, onUnmounted, ref, reactive, type Ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/store/user";
-import { useTheme } from "@/composables/useTheme";
 import { createSSEConnection } from "@/lib/sse";
 import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
@@ -151,13 +119,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
@@ -172,31 +133,14 @@ import type { UserInfo } from "@/types/user";
 import {
     Maximize,
     Minimize,
-    Moon,
-    Sun,
-    SunMoon,
     Megaphone,
     Calendar,
     Frown,
-    Languages,
-    Palette,
 } from "lucide-vue-next";
 import features from "@/lib/others/feature.json";
+import SettingsSheet from './SettingsSheet.vue';
 
-const { t, locale } = useI18n();
-
-const locales = [
-    { locale: 'en', name: 'English' },
-    { locale: 'zh-CN', name: '简体中文' },
-    { locale: 'zh-TW', name: '繁體中文' },
-]
-
-const changeLocale = (lang: string) => {
-    locale.value = lang;
-    localStorage.setItem('locale', lang);
-};
-
-const { mode, cycle, theme, setTheme, themes } = useTheme();
+const { t } = useI18n();
 
 const userStore = useUserStore();
 const userInfo: Ref<UserInfo | null> = computed(() => userStore.userInfo);

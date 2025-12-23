@@ -134,6 +134,15 @@
     "diskUsage": "磁碟使用率",
     "publish": "發布於",
     "detail": "查看詳細",
+    "sheet": {
+      "title": "偏好設定",
+      "desc": "這裡調整你的一些偏好設定",
+      "fields": {
+        "appearance": "外觀",
+        "language": "語言",
+        "theme": "主題"
+      }
+    },
     "colorMode": {
       "default": "極簡預設",
       "glacier": "冰川藍調",
