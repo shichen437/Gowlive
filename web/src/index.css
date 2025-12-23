@@ -495,6 +495,96 @@
     --vis-tooltip-padding: none !important;
 }
 
+.theme-macaron {
+    --radius: 0.625rem;
+    --background: oklch(0.97 0.015 350);
+    --foreground: oklch(0.2 0.01 250);
+    --card: oklch(0.98 0.012 350);
+    --card-foreground: var(--foreground);
+    --popover: oklch(0.98 0.012 350);
+    --popover-foreground: var(--foreground);
+    --primary: oklch(0.88 0.08 350);
+    --primary-foreground: oklch(0.22 0.01 350);
+    --secondary: oklch(0.9 0.06 240);
+    --secondary-foreground: var(--primary-foreground);
+    --muted: oklch(0.95 0.02 350);
+    --muted-foreground: oklch(0.58 0.02 250);
+    --accent: oklch(0.9 0.06 280);
+    --accent-foreground: var(--primary-foreground);
+    --destructive: oklch(0.75 0.1 25);
+    --border: oklch(0.89 0.02 250);
+    --input: var(--border);
+    --ring: oklch(0.8 0.05 350);
+    --chart-1: oklch(0.88 0.08 350);
+    --chart-2: oklch(0.9 0.06 240);
+    --chart-3: oklch(0.92 0.06 95);
+    --chart-4: oklch(0.9 0.06 160);
+    --chart-5: oklch(0.9 0.06 280);
+    --sidebar: oklch(0.96 0.015 350);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--secondary);
+    --sidebar-accent-foreground: var(--primary-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+    --top: oklch(0.94 0.015 350);
+    --vis-primary-color: 340 40% 72%;
+    --vis-secondary-color: 240 35% 72%;
+    --vis-text-color: 240 8% 12%;
+    --vis-tooltip-background-color: hsla(340, 35%, 97%, 0.95);
+    --vis-tooltip-border-color: hsla(340, 20%, 75%, 0.35);
+    --vis-tooltip-text-color: hsl(240, 8%, 12%);
+    --vis-tooltip-shadow-color: hsla(240, 12%, 20%, 0.12);
+    --vis-tooltip-backdrop-filter: blur(6px);
+    --vis-tooltip-padding: 8px 10px;
+}
+
+.dark.theme-macaron {
+    --radius: 0.625rem;
+    --background: oklch(0.22 0.012 250);
+    --foreground: oklch(0.98 0.008 250);
+    --card: oklch(0.24 0.012 250);
+    --card-foreground: var(--foreground);
+    --popover: oklch(0.24 0.012 250);
+    --popover-foreground: var(--foreground);
+    --primary: oklch(0.86 0.09 350);
+    --primary-foreground: oklch(0.2 0.01 350);
+    --secondary: oklch(0.86 0.07 240);
+    --secondary-foreground: var(--primary-foreground);
+    --muted: oklch(0.3 0.015 350);
+    --muted-foreground: oklch(0.9 0.02 250);
+    --accent: oklch(0.86 0.07 280);
+    --accent-foreground: var(--primary-foreground);
+    --destructive: oklch(0.76 0.1 25);
+    --border: oklch(0.34 0.02 250);
+    --input: var(--border);
+    --ring: oklch(0.78 0.06 350);
+    --chart-1: oklch(0.86 0.09 350);
+    --chart-2: oklch(0.86 0.07 240);
+    --chart-3: oklch(0.88 0.07 95);
+    --chart-4: oklch(0.88 0.07 160);
+    --chart-5: oklch(0.86 0.07 280);
+    --sidebar: oklch(0.26 0.015 250);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--secondary);
+    --sidebar-accent-foreground: var(--primary-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+    --top: oklch(0.3 0.015 250);
+    --vis-primary-color: 340 45% 76%;
+    --vis-secondary-color: 240 40% 74%;
+    --vis-text-color: 240 6% 96%;
+    --vis-tooltip-background-color: hsla(240, 10%, 14%, 0.85);
+    --vis-tooltip-border-color: hsla(340, 20%, 45%, 0.35);
+    --vis-tooltip-text-color: hsl(240, 6%, 96%);
+    --vis-tooltip-shadow-color: hsla(240, 12%, 4%, 0.35);
+    --vis-tooltip-backdrop-filter: blur(6px);
+    --vis-tooltip-padding: 8px 10px;
+}
+
 @layer base {
     * {
         @apply border-border outline-ring/50;

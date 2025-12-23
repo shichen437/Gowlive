@@ -11,6 +11,7 @@ export const themes = [
     name: "project.topbar.colorMode.midnightviolet",
   },
   { value: "neonpro", name: "project.topbar.colorMode.neonpro" },
+  { value: "macaron", name: "project.topbar.colorMode.macaron" },
 ];
 
 export const useTheme = () => {
