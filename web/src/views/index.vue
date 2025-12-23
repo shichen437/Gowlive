@@ -51,6 +51,7 @@
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
         :onConfirm="handleLogout" :title="t('project.login.logout.confirm')"
         :description="t('project.login.logout.confirmDesc')" />
+    <GlobalShortcuts />
 </template>
 
 <script setup lang="ts">
@@ -76,6 +77,7 @@ import {
 import { ref } from 'vue';
 import ConfirmModal from '@/components/modal/ConfirmModal.vue';
 import { useI18n } from 'vue-i18n';
+import GlobalShortcuts from '@/components/functional/GlobalShortcuts.vue';
 
 const { t } = useI18n();
 

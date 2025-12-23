@@ -141,6 +141,13 @@
         "appearance": "外觀",
         "language": "語言",
         "theme": "主題"
+      },
+      "tabs": {
+        "appearance": "外觀",
+        "shortcuts": "快捷鍵"
+      },
+      "actions": {
+        "open_terminal": "打開終端"
       }
     },
     "colorMode": {

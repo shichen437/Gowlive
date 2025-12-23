@@ -141,6 +141,13 @@
         "appearance": "Appearance",
         "language": "Language",
         "theme": "Theme"
+      },
+      "tabs": {
+        "appearance": "Appearance",
+        "shortcuts": "Shortcuts"
+      },
+      "actions": {
+        "open_terminal": "Open Terminal"
       }
     },
     "colorMode": {
