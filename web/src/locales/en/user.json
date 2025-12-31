@@ -78,5 +78,20 @@
     "toast": {
       "updateErr": "Failed to update settings"
     }
+  },
+  "syncSettings": {
+    "title": "Data Sync",
+    "desc": "Adjust your data sync settings here.",
+    "enable": {
+      "title": "Enable Data Sync"
+    },
+    "failedRetry": "Failed automatically retry",
+    "noConfig": "No Config",
+    "connnected": "Connected",
+    "connectFailed": "Connection Failed",
+    "toast": {
+      "updateOk": "Settings updated successfully",
+      "updateErr": "Failed to update settings"
+    }
   }
 }

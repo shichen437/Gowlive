@@ -26,6 +26,7 @@ export const configurableMenu = ref([
     children: [
       { title: "project.router.fileManagement", to: "/media/file" },
       { title: "project.router.fileDetection", to: "/media/check" },
+      { title: "project.router.fileSync", to: "/media/sync" },
     ],
   },
   {

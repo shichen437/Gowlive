@@ -16,6 +16,18 @@ export interface FileCheckTask {
   updatedAt: string;
 }
 
+export interface FileSyncTask {
+  id: number;
+  path: string;
+  filename: string;
+  syncPath: string;
+  duration: number;
+  status: number;
+  remark: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export function canPlay(file: FileInfo) {
   return isVideo(file) || isAudio(file);
 }

@@ -30,4 +30,7 @@ const (
 	SKDiskProtection      = "sk_disk_protection"
 	SKAutoCleanLittleFile = "sk_auto_clean_little_file"
 	SKFixedResolution     = "sk_fixed_resolution"
+
+	SKDataSyncEnable      = "sk_data_sync_enable"
+	SKDataSyncFailedRetry = "sk_data_sync_failed_retry"
 )

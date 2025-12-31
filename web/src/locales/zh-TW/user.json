@@ -78,5 +78,20 @@
     "toast": {
       "updateErr": "更新設定失敗"
     }
+  },
+  "syncSettings": {
+    "title": "資料同步",
+    "desc": "在這裡調整你的資料同步相關設定。",
+    "enable": {
+      "title": "啟用資料同步"
+    },
+    "failedRetry": "失敗自動重試",
+    "noConfig": "未啟用",
+    "connnected": "已連線",
+    "connectFailed": "連線失敗",
+    "toast": {
+      "updateOk": "更新設定成功",
+      "updateErr": "更新設定失敗"
+    }
   }
 }

@@ -9,6 +9,7 @@ export interface LiveManage {
   quality: 0 | 1 | 2 | 3 | 4;
   segmentTime: number;
   monitorOnly: number;
+  syncPath: string;
   remark: string;
 }
 

@@ -47,6 +47,7 @@
     "mediaCenter": "Media",
     "fileManagement": "Files",
     "fileDetection": "Scan",
+    "fileSync": "Sync",
     "systemManagement": "System",
     "logCenter": "Logs",
     "pushChannel": "Push",
@@ -126,6 +127,11 @@
         "value": "item-6",
         "question": "About Recording Formats",
         "answer": "MKV/TS: Resilient to power loss, easy to repair; FLV: Low overhead, continuous writing; MP4: Feature-rich, not resilient to power loss."
+      },
+      {
+        "value": "item-7",
+        "question": "About Data Synchronization",
+        "answer": "Data synchronization only occurs after the live stream ends, and requires configuration of Openlist related parameters and corresponding storage paths in the room management interface."
       }
     ]
   },

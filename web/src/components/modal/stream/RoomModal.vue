@@ -191,6 +191,19 @@
                                 <FormMessage />
                             </FormItem>
                         </FormField>
+                        <FormField v-slot="{ componentField, errorMessage }" name="syncPath">
+                            <FormItem>
+                                <FormLabel>{{ t('stream.rooms.fields.syncPath') }}</FormLabel>
+                                <FormControl>
+                                    <Input type="text" :placeholder="t('stream.rooms.placeholder.syncPath')"
+                                        v-bind="componentField" :class="{ 'border-red-500': errorMessage }" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                    </div>
+
+                    <div>
                         <FormField v-slot="{ componentField, errorMessage }" name="remark">
                             <FormItem>
                                 <FormLabel>{{ t('common.fields.remark') }}</FormLabel>
@@ -286,6 +299,7 @@ const formSchema = toTypedSchema(
         monitorStopAt: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: t('stream.rooms.valid.timeFormat') }).optional().nullable(),
         remark: z.string().max(45, { message: t('stream.rooms.valid.remarkLength') }).optional().nullable(),
         monitorOnly: z.coerce.number(),
+        syncPath: z.string().max(255, { message: t('stream.rooms.valid.syncPathLength') }).optional().nullable(),
     }).refine(data => {
         if (data.monitorType === 2) {
             return !!data.monitorStartAt && !!data.monitorStopAt;
@@ -307,6 +321,7 @@ const { handleSubmit, values, setValues, resetForm } = useForm({
         quality: 0,
         segmentTime: 0,
         monitorOnly: 0,
+        syncPath: '',
         remark: '',
         monitorStartAt: null,
         monitorStopAt: null,
@@ -365,7 +380,8 @@ const openModal = async (id?: number) => {
                 monitorStartAt: roomData.monitorStartAt || null,
                 monitorStopAt: roomData.monitorStopAt || null,
                 remark: roomData.remark || '',
-                monitorOnly: Number(roomData.monitorOnly)
+                monitorOnly: Number(roomData.monitorOnly),
+                syncPath: roomData.syncPath || ''
             };
 
             setValues(formattedData);

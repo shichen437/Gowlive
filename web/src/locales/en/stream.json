@@ -80,6 +80,7 @@
       "segment": "Segment Duration",
       "segmentNone": "No Segmentation",
       "monitorOnly": "Monitor Only",
+      "syncPath": "Sync Path",
       "export": "Export as",
       "createTime": "Create Time",
       "monitorStatus": {
@@ -156,6 +157,7 @@
       "quality": "Select quality",
       "segment": "Select segment duration",
       "remark": "Please enter a remark",
+      "syncPath": "Please enter sync path",
       "batchUrls": "Enter live URLs, separated by commas or new lines, up to 30"
     },
     "valid": {
@@ -164,6 +166,7 @@
       "intervalMax": "Maximum interval is 600 seconds",
       "timeFormat": "Time format must be HH:mm",
       "remarkLength": "Remark can be at most 45 characters",
+      "syncPathLength": "Sync path can be at most 255 characters",
       "cronTime": "Scheduled monitoring requires start and end times",
       "batchUrlsNum": "Up to 30 live URLs are supported",
       "batchUrlInvalid": "Invalid URL format: "

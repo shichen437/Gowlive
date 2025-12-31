@@ -47,6 +47,7 @@
     "mediaCenter": "媒体中心",
     "fileManagement": "文件管理",
     "fileDetection": "文件检测",
+    "fileSync": "文件同步",
     "systemManagement": "系统管理",
     "logCenter": "日志中心",
     "pushChannel": "推送渠道",
@@ -126,6 +127,11 @@
         "value": "item-6",
         "question": "关于录制格式",
         "answer": "MKV/TS：抗断电，易修复；FLV：低开销，连续写入；MP4：功能全面，不抗断电。"
+      },
+      {
+        "value": "item-7",
+        "question": "关于数据同步",
+        "answer": "数据同步仅在直播结束后同步文件，需要配置 Openlist 相关参数且在房间管理界面配置对应存储路径。"
       }
     ]
   },

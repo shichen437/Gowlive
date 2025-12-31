@@ -8,6 +8,12 @@ project:
   sm4key: "abcdefghijklmnopqrstuvwxyz123456"
   lang: "zh-CN"
 
+openlist:
+  domain: ""
+  username: ""
+  password: ""
+  code: ""
+
 logger:
   path: "resources/logs/system/"
   prefix: ""

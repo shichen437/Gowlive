@@ -78,5 +78,20 @@
     "toast": {
       "updateErr": "更新设置失败"
     }
+  },
+  "syncSettings": {
+    "title": "数据同步",
+    "desc": "在这里调整你的数据同步相关设置。",
+    "enable": {
+      "title": "启用数据同步"
+    },
+    "failedRetry": "失败自动重试",
+    "noConfig": "未配置",
+    "connnected": "已连接",
+    "connectFailed": "连接失败",
+    "toast": {
+      "updateOk": "更新设置成功",
+      "updateErr": "更新设置失败"
+    }
   }
 }

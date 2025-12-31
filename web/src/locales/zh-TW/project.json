@@ -47,6 +47,7 @@
     "mediaCenter": "媒體中心",
     "fileManagement": "檔案管理",
     "fileDetection": "檔案檢測",
+    "fileSync": "檔案同步",
     "systemManagement": "系統管理",
     "logCenter": "日誌中心",
     "pushChannel": "推送管道",
@@ -126,6 +127,11 @@
         "value": "item-6",
         "question": "關於錄製格式",
         "answer": "MKV/TS：抗斷電，易修復；FLV：低開銷，連續寫入；MP4：功能全面，不抗斷電。"
+      },
+      {
+        "value": "item-7",
+        "question": "关于資料同步",
+        "answer": "資料同步僅在直播結束後同步檔案，需設定 Openlist 相關參數，並在房間管理介面配置對應的儲存路徑。"
       }
     ]
   },

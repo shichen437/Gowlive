@@ -25,4 +25,5 @@ type LiveManage struct {
 	Quality        any         //
 	SegmentTime    any         //
 	MonitorOnly    any         //
+	SyncPath       any         //
 }

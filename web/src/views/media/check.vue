@@ -13,7 +13,7 @@
                         <TableHead class="text-center">{{ t('media.common.fields.filename') }}</TableHead>
                         <TableHead class="text-center">{{ t('media.check.fields.progress.title') }}</TableHead>
                         <TableHead class="text-center">{{ t('media.check.fields.status.title') }}</TableHead>
-                        <TableHead class="text-center">{{ t('media.check.fields.duration') }}</TableHead>
+                        <TableHead class="text-center">{{ t('media.common.fields.duration') }}</TableHead>
                         <TableHead class="text-center">{{ t('media.check.fields.finishTime') }}</TableHead>
                         <TableHead class="text-center">{{ t('common.operation.title') }}</TableHead>
                     </TableRow>
@@ -67,9 +67,11 @@
     </div>
 
     <ConfirmModal :open="showConfirmModal" :onOpenChange="(open: any) => showConfirmModal = open"
-        :onConfirm="performDelete" :title="t('common.operation.deleteConfirm')" :description="t('media.check.deleteConfirmDesc')" />
+        :onConfirm="performDelete" :title="t('common.operation.deleteConfirm')"
+        :description="t('media.check.deleteConfirmDesc')" />
     <ConfirmModal :open="showConfirmDeleteAllModal" :onOpenChange="(open: any) => (showConfirmDeleteAllModal = open)"
-        :onConfirm="handleDeleteAllTasks" :title="t('media.check.clear.title')" :description="t('media.check.clear.desc')" />
+        :onConfirm="handleDeleteAllTasks" :title="t('media.check.clear.title')"
+        :description="t('media.check.clear.desc')" />
 </template>
 
 <script setup lang="ts">

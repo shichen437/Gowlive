@@ -23,4 +23,5 @@ type LiveManage struct {
 	Quality        int         `json:"quality"        orm:"quality"          description:""`
 	SegmentTime    int         `json:"segmentTime"    orm:"segment_time"     description:""`
 	MonitorOnly    int         `json:"monitorOnly"    orm:"monitor_only"     description:""`
+	SyncPath       string      `json:"syncPath"       orm:"sync_path"        description:""`
 }

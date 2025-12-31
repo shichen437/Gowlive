@@ -40,7 +40,6 @@
         "acerr": "Full check error",
         "success": "Check completed"
       },
-      "duration": "Duration",
       "finishTime": "Finish Time"
     },
     "deleteConfirmDesc": "Are you sure you want to delete this task? This action cannot be undone.",
@@ -81,7 +80,32 @@
   },
   "common": {
     "fields": {
-      "filename": "Filename"
+      "filename": "Filename",
+      "duration": "Duration"
+    }
+  },
+  "sync": {
+    "title": "File Sync",
+    "clearAll": "Clear Records",
+    "fields": {
+      "syncPath": "Sync Path",
+      "status": {
+        "pending": "Pending",
+        "syncing": "Syncing",
+        "success": "Success",
+        "failed": "Failed",
+        "notFound": "File not found"
+      }
+    },
+    "toast": {
+      "loadFailed": "Failed to load sync tasks",
+      "resyncSuccess": "Resync successful",
+      "resyncFailed": "Resync failed"
+    },
+    "confirm": {
+      "clearAllTitle": "Confirm Clear",
+      "clearAllDesc": "Are you sure you want to clear all completed sync records? This action cannot be undone.",
+      "deleteDesc": "Are you sure you want to delete this sync task? This action cannot be undone."
     }
   }
 }

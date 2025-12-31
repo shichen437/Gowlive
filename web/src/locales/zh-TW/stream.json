@@ -80,6 +80,7 @@
       "segment": "切片時長",
       "segmentNone": "不切片",
       "monitorOnly": "僅監控",
+      "syncPath": "同步路徑",
       "export": "導出",
       "createTime": "添加時間",
       "monitorStatus": {
@@ -156,6 +157,7 @@
       "quality": "選擇清晰度",
       "segment": "選擇切片時長",
       "remark": "請輸入備註",
+      "syncPath": "請輸入同步路徑",
       "batchUrls": "請輸入直播連結，支援英文逗號或換行分隔，最多 30 個"
     },
     "valid": {
@@ -164,6 +166,7 @@
       "intervalMax": "間隔時間最大為 600 秒",
       "timeFormat": "時間格式必須為 HH:mm",
       "remarkLength": "備註最長為 45 個字",
+      "syncPathLength": "同步路徑最長為255個字元",
       "cronTime": "定時監控需要設定開始與結束時間",
       "batchUrlsNum": "最多支援 30 個直播連結",
       "batchUrlInvalid": "連結格式無效："

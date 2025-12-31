@@ -17,6 +17,7 @@ import (
 	mr "github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/message_push"
 	"github.com/shichen437/gowlive/internal/pkg/service"
+	"github.com/shichen437/gowlive/internal/pkg/third/openlist"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
@@ -36,7 +37,11 @@ func liveEndBiz(ctx context.Context, session *lives.LiveSession) {
 	}
 	autoClean := mr.GetSettingsManager().GetSetting(consts.SKAutoCleanLittleFile)
 	if autoClean > 0 && session.Config.MonitorOnly == 0 {
-		go cleanLittleFiles(session.Filename, autoClean)
+		cleanLittleFiles(session.Filename, autoClean)
+	}
+	syncEnable := mr.GetSettingsManager().GetSetting(consts.SKDataSyncEnable)
+	if syncEnable == 1 && openlist.CheckLoginParams() {
+		go syncTask(session.Filename, session.Config.SyncPath)
 	}
 }
 
@@ -79,20 +84,6 @@ func cleanLittleFiles(filename string, fileSize int) {
 
 	origPath := filepath.Join(dir, name)
 
-	getFileSize := func(path string) (int64, bool) {
-		info, err := os.Stat(path)
-		if err != nil {
-			if os.IsNotExist(err) {
-				return 0, false
-			}
-			return 0, false
-		}
-		if !info.Mode().IsRegular() {
-			return 0, false
-		}
-		return info.Size(), true
-	}
-
 	deleteIfSmall := func(path string, threshold int64) bool {
 		sz, ok := getFileSize(path)
 		if !ok {
@@ -132,4 +123,59 @@ func cleanLittleFiles(filename string, fileSize int) {
 		g.Log().Info(ctx, "no little files found!")
 		return
 	}
+}
+
+func syncTask(filename, syncPath string) {
+	if strings.TrimSpace(filename) == "" || syncPath == "" {
+		return
+	}
+
+	ctx := gctx.GetInitCtx()
+
+	dir, name := filepath.Split(filename)
+	syncManager := mr.GetFileSyncManager()
+
+	if _, exists := getFileSize(filename); exists {
+		id := service.AddSyncTask(ctx, dir, name, syncPath)
+		if id > 0 {
+			syncManager.Add(id)
+			g.Log().Infof(ctx, "Added sync task for file: %s", filename)
+		}
+		return
+	}
+
+	ext := filepath.Ext(name)
+	base := strings.TrimSuffix(name, ext)
+	foundAny := false
+	const maxParts = 1000
+	for i := range maxParts {
+		partName := fmt.Sprintf("%s_%03d%s", base, i, ext)
+		partPath := filepath.Join(dir, partName)
+
+		if _, ok := getFileSize(partPath); !ok {
+			break
+		}
+
+		foundAny = true
+		id := service.AddSyncTask(ctx, dir, partName, syncPath)
+		if id > 0 {
+			syncManager.Add(id)
+			g.Log().Infof(ctx, "Added sync task for file part: %s", partPath)
+		}
+	}
+
+	if !foundAny {
+		g.Log().Infof(ctx, "No files found to sync for: %s", filename)
+	}
+}
+
+func getFileSize(path string) (int64, bool) {
+	info, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return 0, false
+		}
+		return 0, false
+	}
+	return info.Size(), info.Mode().IsRegular()
 }

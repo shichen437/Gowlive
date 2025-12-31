@@ -13,13 +13,14 @@ var (
 	storageWarning     = "storageWarning"
 	cpuPercent         = "cpuPercent"
 	anchorInfo         = "anchorInfo"
+	syncFile           = "syncFile"
 )
 
 func SystemCron(ctx context.Context) {
 	gcron.Add(ctx, "*/5 * * * * *", func(ctx context.Context) {
 		system.CpuPercent(ctx)
 	}, cpuPercent)
-	gcron.Add(ctx, "@hourly", func(ctx context.Context) {
+	gcron.Add(ctx, "@every 12h", func(ctx context.Context) {
 		g.Log().Info(ctx, "Add job - "+checkLatestVersion)
 		system.CheckVersion(ctx)
 	}, checkLatestVersion)
@@ -32,6 +33,9 @@ func SystemCron(ctx context.Context) {
 		g.Log().Info(ctx, "Add job - "+anchorInfo)
 		AnchorInfoCron(ctx)
 	}, anchorInfo)
+	gcron.Add(ctx, "@hourly", func(ctx context.Context) {
+		SyncFile(ctx)
+	}, syncFile)
 
 	// 启动时执行一次
 	go AnchorInfoCron(ctx)

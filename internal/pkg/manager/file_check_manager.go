@@ -6,6 +6,7 @@ import (
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/service"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
@@ -103,6 +104,10 @@ func checkMedia(ctx context.Context, tid int) {
 	}
 	absPath, err := utils.FileAbsPath(task.Path, task.Filename)
 	if err != nil || absPath == "" {
+		service.UpdateCheckTaskFileStatus(ctx, task.Id, consts.MediaCheckFileStatusNotExists)
+		return
+	}
+	if !gfile.Exists(absPath) {
 		service.UpdateCheckTaskFileStatus(ctx, task.Id, consts.MediaCheckFileStatusNotExists)
 		return
 	}

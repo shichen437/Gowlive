@@ -80,7 +80,7 @@ func (nm *NotifyManager) processNotify() {
 	}
 }
 
-func (nm *NotifyManager) Stop() {
+func (nm *NotifyManager) Close() {
 	close(nm.stopChan)
 	nm.wg.Wait()
 	close(nm.queue)

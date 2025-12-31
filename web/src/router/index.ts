@@ -20,6 +20,7 @@ import SystemChannel from "@/views/system/channel.vue";
 import SystemProxy from "@/views/system/proxy.vue";
 import MediaCheck from "@/views/media/check.vue";
 import MediaFile from "@/views/media/file.vue";
+import MediaSync from "@/views/media/sync.vue";
 import MediaPlay from "@/views/media/play.vue";
 import Help from "@/views/help/index.vue";
 import Users from "@/views/users/index.vue";
@@ -90,6 +91,12 @@ const routes = [
             name: "MediaCheck",
             component: MediaCheck,
             meta: { title: "project.router.fileDetection" },
+          },
+          {
+            path: "sync",
+            name: "MediaSync",
+            component: MediaSync,
+            meta: { title: "project.router.fileSync" },
           },
         ],
       },

@@ -12,4 +12,10 @@ const (
 	MediaCheckFileStatusSuccess   = 1
 	MediaCheckFileStatusError     = 2
 	MediaCheckFileStatusNotExists = 3
+
+	FileSyncStatusInit         = 0
+	FileSyncStatusUploading    = 1
+	FileSyncStatusSuccess      = 2
+	FileSyncStatusError        = 3
+	FileSyncStatusFileNotFound = 4
 )

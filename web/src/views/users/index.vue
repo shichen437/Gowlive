@@ -12,6 +12,11 @@
                     @click="activeView = 'live-settings'">
                     {{ t('user.liveSettings.title') }}
                 </Button>
+                <Button variant="ghost" class="w-full justify-start"
+                    :class="{ 'bg-accent text-accent-foreground': activeView === 'sync-settings' }"
+                    @click="activeView = 'sync-settings'">
+                    {{ t('user.syncSettings.title') }}
+                </Button>
             </nav>
         </div>
 
@@ -65,6 +70,9 @@
             <div v-if="activeView === 'live-settings'">
                 <LiveSettings />
             </div>
+            <div v-if="activeView === 'sync-settings'">
+                <SyncSettings />
+            </div>
         </div>
     </div>
     <UpdateProfileModal v-model:open="showProfileModal" :user-info="userInfo" @success="onProfileUpdateSuccess" />
@@ -87,6 +95,7 @@ import { Mars, Venus } from 'lucide-vue-next';
 import UpdateProfileModal from '@/components/modal/admin/UpdateProfileModal.vue';
 import UpdatePwdModal from '@/components/modal/admin/UpdatePwdModal.vue';
 import LiveSettings from './LiveSettings.vue';
+import SyncSettings from './SyncSettings.vue';
 
 const { t } = useI18n();
 const userStore = useUserStore();

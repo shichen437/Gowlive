@@ -40,7 +40,6 @@
         "acerr": "全量檢測異常",
         "success": "檢測完成"
       },
-      "duration": "耗時",
       "finishTime": "結束時間"
     },
     "deleteConfirmDesc": "你確定要刪除這個任務嗎？此操作無法撤銷。",
@@ -81,7 +80,32 @@
   },
   "common": {
     "fields": {
-      "filename": "檔名"
+      "filename": "檔名",
+      "duration": "耗時"
+    }
+  },
+  "sync": {
+    "title": "檔案同步",
+    "clearAll": "清空記錄",
+    "fields": {
+      "syncPath": "同步路徑",
+      "status": {
+        "pending": "待同步",
+        "syncing": "同步中",
+        "success": "同步成功",
+        "failed": "同步失敗",
+        "notFound": "文件不存在"
+      }
+    },
+    "toast": {
+      "loadFailed": "載入同步任務失敗",
+      "resyncSuccess": "已重新同步",
+      "resyncFailed": "重新同步失敗"
+    },
+    "confirm": {
+      "clearAllTitle": "確認清空",
+      "clearAllDesc": "你確定要清空所有已完成的同步記錄嗎？此操作無法撤銷。",
+      "deleteDesc": "你確定要刪除這個同步任務嗎？此操作無法撤銷。"
     }
   }
 }

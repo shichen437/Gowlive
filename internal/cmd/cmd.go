@@ -21,6 +21,7 @@ import (
 	Media "github.com/shichen437/gowlive/internal/app/media/controller"
 	Stream "github.com/shichen437/gowlive/internal/app/stream/controller"
 	System "github.com/shichen437/gowlive/internal/app/system/controller"
+	Third "github.com/shichen437/gowlive/internal/app/third/controller"
 
 	"github.com/shichen437/gowlive/internal/app/admin/dao"
 	"github.com/shichen437/gowlive/internal/app/admin/model/do"
@@ -31,6 +32,7 @@ import (
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
 	"github.com/shichen437/gowlive/internal/pkg/sse"
+	"github.com/shichen437/gowlive/internal/pkg/third/openlist"
 	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
@@ -80,6 +82,7 @@ var (
 				CheckFile()
 				JobInit()
 				LiveMonitor()
+				SyncFile()
 			}, func(c context.Context, err error) {
 				g.Log().Errorf(c, "starter 启动异常，错误信息：%v", err)
 			})
@@ -174,16 +177,19 @@ func initHandler() {
 func bindRoute(group *ghttp.RouterGroup) {
 	group.Bind(Admin.SysUser,
 		Common.InternalDict,
-		Media.FileManage, Media.FileCheck,
+		Third.Openlist,
+		Media.FileManage, Media.FileCheck, Media.FileSync,
 		Stream.LiveManage, Stream.LiveHistory, Stream.LiveCookie, Stream.AnchorInfo,
 		System.SystemOverview, System.SystemSettings, System.SysLogs, System.PushChannel, System.SysNotify, System.SysProxy)
 }
 
 func shutdown(sig os.Signal) {
 	registry.Get().StopAll(gctx.GetInitCtx())
-	manager.GetLogManager().Stop()
-	manager.GetNotifyManager().Stop()
+	manager.GetLogManager().Close()
+	manager.GetNotifyManager().Close()
 	manager.GetFileCheckManager().Close()
+	manager.GetFileSyncManager().Close()
 	lives.GetBucketManager().Stop()
+	openlist.Logout()
 	g.Log().Info(gctx.GetInitCtx(), "all monitor shutdown!")
 }

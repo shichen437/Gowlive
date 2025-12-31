@@ -34,6 +34,7 @@ type LiveManageColumns struct {
 	Quality        string //
 	SegmentTime    string //
 	MonitorOnly    string //
+	SyncPath       string //
 }
 
 // liveManageColumns holds the columns for the table live_manage.
@@ -51,6 +52,7 @@ var liveManageColumns = LiveManageColumns{
 	Quality:        "quality",
 	SegmentTime:    "segment_time",
 	MonitorOnly:    "monitor_only",
+	SyncPath:       "sync_path",
 }
 
 // NewLiveManageDao creates and returns a new DAO object for table data access.

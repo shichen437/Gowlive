@@ -172,7 +172,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 	validNeedUpdate := false
 	if tempData.MonitorType != req.MonitorType || tempData.Interval != req.Interval || tempData.Format != req.Format ||
 		tempData.MonitorStartAt != req.MonitorStartAt || tempData.MonitorStopAt != req.MonitorStopAt || tempData.Remark != req.Remark ||
-		tempData.Quality != req.Quality || tempData.SegmentTime != req.SegmentTime || tempData.MonitorOnly != req.MonitorOnly {
+		tempData.Quality != req.Quality || tempData.SegmentTime != req.SegmentTime || tempData.MonitorOnly != req.MonitorOnly || tempData.SyncPath != req.SyncPath {
 		validNeedUpdate = true
 	}
 	if !validNeedUpdate {
@@ -188,6 +188,7 @@ func (s *sLiveManage) Update(ctx context.Context, req *v1.PutLiveManageReq) (res
 		SegmentTime:    req.SegmentTime,
 		MonitorOnly:    req.MonitorOnly,
 		Remark:         req.Remark,
+		SyncPath:       req.SyncPath,
 		UpdatedAt:      utils.Now(),
 	})
 	if tempData.MonitorType != req.MonitorType {
@@ -394,6 +395,7 @@ func saveLiveConfig(ctx context.Context, req *v1.PostLiveManageReq, liveId *int6
 			SegmentTime:    req.SegmentTime,
 			Quality:        req.Quality,
 			MonitorOnly:    req.MonitorOnly,
+			SyncPath:       req.SyncPath,
 			Remark:         req.Remark,
 			CreatedAt:      utils.Now(),
 		})

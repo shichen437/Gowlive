@@ -72,7 +72,7 @@ func (lm *LogManager) processLogs() {
 	}
 }
 
-func (lm *LogManager) Stop() {
+func (lm *LogManager) Close() {
 	close(lm.stopChan)
 	lm.wg.Wait()
 	close(lm.queue)

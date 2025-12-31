@@ -55,6 +55,7 @@ type LiveConfig struct {
 	Quality        int
 	SegmentTime    int
 	MonitorOnly    int
+	SyncPath       string
 }
 
 type LiveState struct {
