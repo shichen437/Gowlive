@@ -44,6 +44,7 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 - 🍪 **Cookie管理**: 方便地管理不同平台的登录Cookie。
 - 📁 **文件管理**: 管理录制下来的视频文件。
 - ☑️ **文件检测**: 检测视频文件是否损坏。
+- 🔄 **文件同步**: 基于 openlist 实现文件同步。
 - 📜 **日志中心**: 记录系统运行日志，方便排查问题。
 - 📢 **推送渠道**: 支持通过 Gotify、邮件等多种渠道推送消息。
 - 🔔 **通知中心**: 集中查看和管理所有通知。
@@ -71,7 +72,7 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 </div>
 <div align="center">
   <img src="resources/assets/screenshots/room-card.jpg" alt="房间卡片" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/room-green.jpg" alt="主题" width="45%">
+  <img src="resources/assets/screenshots/sync.jpg" alt="同步" width="45%">
 </div>
 
 ## 📦 部署
@@ -113,11 +114,15 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 
     **环境变量:**
 
-| 变量名           | 变量描述                  | 默认值                             | 是否必填 |
-| :--------------- | :------------------------ | :--------------------------------- | :------- |
-| `PROJECT_SM4KEY` | SM4 加密密钥 (32位字符串) | `abcdefghijklmnopqrstuvwxyz123456` | 是       |
-| `TZ`             | 时区                      | `Asia/Shanghai`                    | 否       |
-| `PROJECT_LANG`   | 语言                      | `zh-CN` (`en`, `zh-TW`)            | 否       |
+| 变量名              | 变量描述                  | 默认值                             | 是否必填 |
+| :------------------ | :------------------------ | :--------------------------------- | :------- |
+| `PROJECT_SM4KEY`    | SM4 加密密钥 (32位字符串) | `abcdefghijklmnopqrstuvwxyz123456` | 是       |
+| `TZ`                | 时区                      | `Asia/Shanghai`                    | 否       |
+| `PROJECT_LANG`      | 语言                      | `zh-CN` (`en`, `zh-TW`)            | 否       |
+| `OPENLIST_DOMAIN`   | openlist域名              | http://192.168.1.1:5444            | 否       |
+| `OPENLIST_USERNAME` | openlist用户名            |                                    | 否       |
+| `OPENLIST_PASSWORD` | openlist密码              |                                    | 否       |
+| `PROJECT_CODE`      | openlist 2FA code         |                                    | 否       |
 
 3.  启动服务:
     ```bash

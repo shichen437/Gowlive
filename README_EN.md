@@ -44,6 +44,7 @@ _This project is for learning and technical exchange purposes only, not for comm
 - 🍪 **Cookie Management**: Conveniently manage login Cookies from different platforms.
 - 📁 **File Management**: Manage recorded video files.
 - ☑️ **File Check**: Checks if video files are corrupted.
+- 🔄 **File Sync**: Synchronizes files based on openlist.
 - 📜 **Log Center**: Records system operation logs for easy troubleshooting.
 - 📢 **Push Channels**: Supports sending messages through various channels such as Gotify, email.
 - 🔔 **Notification Center**: Centralized viewing and management of all notifications.
@@ -71,7 +72,7 @@ _This project is for learning and technical exchange purposes only, not for comm
 </div>
 <div align="center">
   <img src="resources/assets/screenshots/en/room-card.jpg" alt="Room Card" width="45%">&nbsp;&nbsp;
-  <img src="resources/assets/screenshots/en/room-green.jpg" alt="Theme" width="45%">
+  <img src="resources/assets/screenshots/en/sync.jpg" alt="Sync" width="45%">
 </div>
 
 ## 📦 Deployment
@@ -114,11 +115,15 @@ _This project is for learning and technical exchange purposes only, not for comm
 
     **Environment Variables:**
 
-| Variable Name    | Description                        | Default Value                      | Required |
-| :--------------- | :--------------------------------- | :--------------------------------- | :------- |
-| `PROJECT_SM4KEY` | SM4 Encryption Key (32-bit string) | `abcdefghijklmnopqrstuvwxyz123456` | Yes      |
-| `TZ`             | Timezone                           | `Asia/Shanghai`                    | No       |
-| `PROJECT_LANG`   | Language                           | `zh-CN` (`en`, `zh-TW`)            | No       |
+| Variable Name       | Description                        | Default Value                      | Required |
+| :------------------ | :--------------------------------- | :--------------------------------- | :------- |
+| `PROJECT_SM4KEY`    | SM4 Encryption Key (32-bit string) | `abcdefghijklmnopqrstuvwxyz123456` | Yes      |
+| `TZ`                | Timezone                           | `Asia/Shanghai`                    | No       |
+| `PROJECT_LANG`      | Language                           | `zh-CN` (`en`, `zh-TW`)            | No       |
+| `OPENLIST_DOMAIN`   | openlist domain                    | http://192.168.1.1:5444            | 否       |
+| `OPENLIST_USERNAME` | openlist username                  |                                    | 否       |
+| `OPENLIST_PASSWORD` | openlist password                  |                                    | 否       |
+| `PROJECT_CODE`      | openlist 2FA code                  |                                    | 否       |
 
 3.  Start the service:
     ```bash
