@@ -123,7 +123,7 @@ _This project is for learning and technical exchange purposes only, not for comm
 | `OPENLIST_DOMAIN`   | openlist domain                    | http://192.168.1.1:5444            | 否       |
 | `OPENLIST_USERNAME` | openlist username                  |                                    | 否       |
 | `OPENLIST_PASSWORD` | openlist password                  |                                    | 否       |
-| `PROJECT_CODE`      | openlist 2FA code                  |                                    | 否       |
+| `OPENLIST_CODE`     | openlist 2FA code                  |                                    | 否       |
 
 3.  Start the service:
     ```bash

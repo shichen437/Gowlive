@@ -122,7 +122,7 @@ _本项目仅用于学习和技术交流，请勿用于商业用途。不涉及�
 | `OPENLIST_DOMAIN`   | openlist域名              | http://192.168.1.1:5444            | 否       |
 | `OPENLIST_USERNAME` | openlist用户名            |                                    | 否       |
 | `OPENLIST_PASSWORD` | openlist密码              |                                    | 否       |
-| `PROJECT_CODE`      | openlist 2FA code         |                                    | 否       |
+| `OPENLIST_CODE`     | openlist 2FA code         |                                    | 否       |
 
 3.  启动服务:
     ```bash
