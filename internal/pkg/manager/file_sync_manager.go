@@ -99,7 +99,7 @@ func syncFile(ctx context.Context, sid int) {
 	}
 	current := utils.Now()
 	task := service.GetSyncTaskById(ctx, sid)
-	if task == nil || sid != task.Id || task.Status != consts.FileSyncStatusInit {
+	if task == nil || sid != task.Id || task.Status > consts.FileSyncStatusUploading {
 		return
 	}
 	absPath, err := utils.FileAbsPath(task.Path, task.Filename)
