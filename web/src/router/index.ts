@@ -22,7 +22,6 @@ import MediaCheck from "@/views/media/check.vue";
 import MediaFile from "@/views/media/file.vue";
 import MediaSync from "@/views/media/sync.vue";
 import MediaPlay from "@/views/media/play.vue";
-import Help from "@/views/help/index.vue";
 import Users from "@/views/users/index.vue";
 import About from "@/views/about/index.vue";
 import NotFound from "@/views/NotFound.vue";
@@ -129,12 +128,6 @@ const routes = [
             meta: { title: "project.router.proxyCenter" },
           },
         ],
-      },
-      {
-        path: "help/index",
-        name: "Help",
-        component: Help,
-        meta: { title: "project.router.commonQuestions" },
       },
       {
         path: "user/index",

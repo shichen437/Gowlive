@@ -11,7 +11,11 @@
       "new": "发现新版本",
       "email": "作者邮箱",
       "sourceCode": "访问源码",
-      "sourceMirror": "源码镜像"
+      "website": {
+        "title": "项目网站",
+        "main": "地址",
+        "backup": "备用地址"
+      }
     },
     "support": {
       "title": "赞助 & 支持",
@@ -53,7 +57,6 @@
     "pushChannel": "推送渠道",
     "notificationCenter": "通知中心",
     "proxyCenter": "系统代理",
-    "commonQuestions": "常见问题",
     "personalCenter": "个人中心",
     "about": "关于",
     "mediaPlayer": "媒体播放",
@@ -88,52 +91,6 @@
       "available": "可用",
       "usage": "使用率"
     }
-  },
-  "help": {
-    "title": "常见问题",
-    "desc": "这里是一些比较常见的问题。",
-    "faqs": [
-      {
-        "value": "item-0",
-        "question": "关于监控类型",
-        "answer": "智能监控会通过直播状态、直播历史和监控指标动态调整轮询时间。如对实时性要求较高，建议开启实时监控。如直播时间固定，建议开启定时监控。"
-      },
-      {
-        "value": "item-1",
-        "question": "关于监控数量",
-        "answer": "目前未进行压测，暂无单平台最大同时监控数的有效数据。"
-      },
-      {
-        "value": "item-2",
-        "question": "关于监控指标",
-        "answer": "监控指标会统计五分钟内的直播请求数据，出现异常指标时会进行全局告警。"
-      },
-      {
-        "value": "item-3",
-        "question": "直播链接格式",
-        "answer": "暂时只支持 web 端直播间链接，例如：https://live.platform.com/xxxxxx"
-      },
-      {
-        "value": "item-4",
-        "question": "主页链接格式",
-        "answer": "暂时只支持 web 端主播主页链接，例如：https://www.platform.com/user/xxxxxx"
-      },
-      {
-        "value": "item-5",
-        "question": "关于视频播放",
-        "answer": "对于 H5 播放器： \r\nMKV格式仅部分浏览器支持音频解码(如 Edge);\r\nFLV/TS格式由于原生不支持，拖拽进度条功能受限。"
-      },
-      {
-        "value": "item-6",
-        "question": "关于录制格式",
-        "answer": "MKV/TS：抗断电，易修复；FLV：低开销，连续写入；MP4：功能全面，不抗断电。"
-      },
-      {
-        "value": "item-7",
-        "question": "关于数据同步",
-        "answer": "数据同步仅在直播结束后同步文件，需要配置 Openlist 相关参数且在房间管理界面配置对应存储路径。"
-      }
-    ]
   },
   "topbar": {
     "errRate": "请求错误率",

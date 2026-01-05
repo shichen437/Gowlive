@@ -11,7 +11,11 @@
       "new": "New Version Found",
       "email": "Author Email",
       "sourceCode": "Source Code",
-      "sourceMirror": "Source Mirror"
+      "website": {
+        "title": "Project Website",
+        "main": "Address",
+        "backup": "Backup Address"
+      }
     },
     "support": {
       "title": "Sponsorship & Support",
@@ -53,7 +57,6 @@
     "pushChannel": "Push",
     "notificationCenter": "Notifications",
     "proxyCenter": "Proxy",
-    "commonQuestions": "FAQ",
     "personalCenter": "Profile",
     "about": "About",
     "mediaPlayer": "Player",
@@ -88,52 +91,6 @@
       "available": "Available",
       "usage": "Usage"
     }
-  },
-  "help": {
-    "title": "FAQ",
-    "desc": "Here are some frequently asked questions.",
-    "faqs": [
-      {
-        "value": "item-0",
-        "question": "About Monitoring Types",
-        "answer": "Smart monitoring dynamically adjusts polling intervals based on live status, history, and metrics. For high real-time requirements, it's recommended to enable real-time monitoring. If the broadcast time is fixed, scheduled monitoring is suggested."
-      },
-      {
-        "value": "item-1",
-        "question": "About Monitoring Quantity",
-        "answer": "Currently, no stress tests have been performed, so there is no valid data on the maximum number of concurrent monitors per platform."
-      },
-      {
-        "value": "item-2",
-        "question": "About Monitoring Metrics",
-        "answer": "Monitoring metrics collect live request data within a five-minute window. A global alert is triggered when abnormal metrics appear."
-      },
-      {
-        "value": "item-3",
-        "question": "Live Stream URL Format",
-        "answer": "Only web live room URLs are supported for now, for example: https://live.platform.com/xxxxxx"
-      },
-      {
-        "value": "item-4",
-        "question": "Homepage URL Format",
-        "answer": "Only web anchor homepage URLs are supported for now, for example: https://www.platform.com/user/xxxxxx"
-      },
-      {
-        "value": "item-5",
-        "question": "About Video Playback",
-        "answer": "For H5 players: \r\nAudio decoding for MKV format is only supported by some browsers (e.g., Edge);\r\nSeeking functionality for FLV/TS formats is limited due to lack of native support."
-      },
-      {
-        "value": "item-6",
-        "question": "About Recording Formats",
-        "answer": "MKV/TS: Resilient to power loss, easy to repair; FLV: Low overhead, continuous writing; MP4: Feature-rich, not resilient to power loss."
-      },
-      {
-        "value": "item-7",
-        "question": "About Data Synchronization",
-        "answer": "Data synchronization only occurs after the live stream ends, and requires configuration of Openlist related parameters and corresponding storage paths in the room management interface."
-      }
-    ]
   },
   "topbar": {
     "errRate": "Request Error Rate",

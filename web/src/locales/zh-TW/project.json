@@ -11,7 +11,11 @@
       "new": "發現新版本",
       "email": "作者信箱",
       "sourceCode": "存取原始碼",
-      "sourceMirror": "原始碼鏡像"
+      "website": {
+        "title": "項目網站",
+        "main": "地址",
+        "backup": "備用地址"
+      }
     },
     "support": {
       "title": "贊助與支援",
@@ -53,7 +57,6 @@
     "pushChannel": "推送管道",
     "notificationCenter": "通知中心",
     "proxyCenter": "系統代理",
-    "commonQuestions": "常見問題",
     "personalCenter": "個人中心",
     "about": "關於",
     "mediaPlayer": "媒體播放",
@@ -88,52 +91,6 @@
       "available": "可用",
       "usage": "使用率"
     }
-  },
-  "help": {
-    "title": "常見問題",
-    "desc": "這裡是一些較為常見的問題。",
-    "faqs": [
-      {
-        "value": "item-0",
-        "question": "關於監控類型",
-        "answer": "智慧監控會透過直播狀態、直播歷史和監控指標動態調整輪詢時間。如對即時性要求較高，建議開啟即時監控。如直播時間固定，建議開啟定時監控。"
-      },
-      {
-        "value": "item-1",
-        "question": "關於監控數量",
-        "answer": "目前未進行壓力測試，尚無單平台最大同時監控數的有效數據。"
-      },
-      {
-        "value": "item-2",
-        "question": "關於監控指標",
-        "answer": "監控指標會統計五分鐘內的直播請求數據，出現異常指標時會進行全域警報。"
-      },
-      {
-        "value": "item-3",
-        "question": "直播連結格式",
-        "answer": "暫時僅支援網頁端直播間連結，例如：https://live.platform.com/xxxxxx"
-      },
-      {
-        "value": "item-4",
-        "question": "主頁連結格式",
-        "answer": "暫時僅支援網頁端主播主頁連結，例如：https://www.platform.com/user/xxxxxx"
-      },
-      {
-        "value": "item-5",
-        "question": "關於影片播放",
-        "answer": "對於 H5 播放器：\r\nMKV 格式僅部分瀏覽器支援音訊解碼 (如 Edge)；\r\nFLV/TS 格式由於原生不支援，拖曳進度條功能受限。"
-      },
-      {
-        "value": "item-6",
-        "question": "關於錄製格式",
-        "answer": "MKV/TS：抗斷電，易修復；FLV：低開銷，連續寫入；MP4：功能全面，不抗斷電。"
-      },
-      {
-        "value": "item-7",
-        "question": "关于資料同步",
-        "answer": "資料同步僅在直播結束後同步檔案，需設定 Openlist 相關參數，並在房間管理介面配置對應的儲存路徑。"
-      }
-    ]
   },
   "topbar": {
     "errRate": "請求錯誤率",

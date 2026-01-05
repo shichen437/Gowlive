@@ -29,17 +29,24 @@
                     </p>
                     <p class="flex items-center truncate">
                         <Github class="w-4 h-4 mr-2" />
-                        {{ t('project.about.info.sourceCode') }}: <a href="https://github.com/shichen437/Gowlive" target="_blank"
-                            class="text-slate-500 hover:underline ml-1">Github</a>
+                        {{ t('project.about.info.sourceCode') }}: <a href="https://github.com/shichen437/Gowlive"
+                            target="_blank" class="text-slate-500 hover:underline ml-1">Github</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://gitee.com/shichen437/Gowlive" target="_blank"
+                            class="text-slate-500 hover:underline ml-1">Gitee</a>
                     </p>
                     <p class="flex items-center">
                         <Mail class="w-4 h-4 mr-2" />
                         {{ t('project.about.info.email') }}: shichen437@126.com
                     </p>
                     <p class="flex items-center truncate">
-                        <Gitlab class="w-4 h-4 mr-2" />
-                        {{ t('project.about.info.sourceMirror') }}: <a href="https://gitee.com/shichen437/Gowlive" target="_blank"
-                            class="text-slate-500 hover:underline ml-1">Gitee</a>
+                        <Link class="w-4 h-4 mr-2" />
+                        {{ t('project.about.info.website.title') }}: <a href="https://shichen437.github.io"
+                            target="_blank" class="text-slate-500 hover:underline ml-1">{{
+                                t('project.about.info.website.main') }}</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://gowlive-6b1dv010m.maozi.io" target="_blank"
+                            class="text-slate-500 hover:underline ml-1">{{
+                                t('project.about.info.website.backup') }}</a>
                     </p>
                 </div>
             </CardContent>
@@ -65,7 +72,7 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Github, Gitlab, Tag, Mail } from 'lucide-vue-next'
+import { Github, Link, Tag, Mail } from 'lucide-vue-next'
 import { latestVersion as apiLatestVersion } from '@/api/system/settings'
 
 const { t } = useI18n()
