@@ -19,6 +19,16 @@ func UpdateSyncTaskStatus(ctx context.Context, taskId, status int, createdAt *gt
 	return err
 }
 
+func UpdateSyncTaskStatusWithError(ctx context.Context, taskId, status int, errMsg string, createdAt *gtime.Time) error {
+	_, err := dao.FileSyncTask.Ctx(ctx).WherePri(taskId).Update(do.FileSyncTask{
+		Status:    status,
+		Duration:  utils.DiffNowSeconds(createdAt),
+		Remark:    errMsg,
+		UpdatedAt: utils.Now(),
+	})
+	return err
+}
+
 func AddSyncTask(ctx context.Context, path, filename, syncPath string) int {
 	if path == "" || filename == "" || syncPath == "" {
 		return 0

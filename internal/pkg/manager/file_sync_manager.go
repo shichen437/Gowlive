@@ -115,7 +115,7 @@ func syncFile(ctx context.Context, sid int) {
 	err = openlist.Upload(task.SyncPath, task.Path, task.Filename)
 	if err != nil {
 		g.Log().Error(ctx, "file sync error : ", err)
-		service.UpdateSyncTaskStatus(ctx, task.Id, consts.FileSyncStatusError, current)
+		service.UpdateSyncTaskStatusWithError(ctx, task.Id, consts.FileSyncStatusError, err.Error(), current)
 		return
 	}
 	service.UpdateSyncTaskStatus(ctx, task.Id, consts.FileSyncStatusSuccess, current)
