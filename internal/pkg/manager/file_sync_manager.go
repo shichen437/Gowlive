@@ -119,4 +119,7 @@ func syncFile(ctx context.Context, sid int) {
 		return
 	}
 	service.UpdateSyncTaskStatus(ctx, task.Id, consts.FileSyncStatusSuccess, current)
+	if GetSettingsManager().GetSetting(consts.SKDataSyncAutoDelete) == 1 {
+		gfile.Remove(absPath)
+	}
 }

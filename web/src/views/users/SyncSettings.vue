@@ -3,7 +3,7 @@
         <h2 class="text-2xl font-bold tracking-tight">{{ t('user.syncSettings.title') }}</h2>
         <p class="text-muted-foreground">{{ t('user.syncSettings.desc') }}</p>
         <Card>
-            <CardContent>
+            <CardContent class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="flex items-center justify-between">
                         <Label for="data-sync-enable" class="flex flex-col space-y-1">
@@ -20,6 +20,19 @@
                         <Switch id="data-sync-failed-retry" :checked="dataSyncFailedRetry" v-model="dataSyncFailedRetry"
                             @update:checked="updateSetting('data-sync-failed-retry', $event)"
                             :disabled="openlist.status === 0" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center justify-between">
+                        <Label for="data-sync-auto-delete" class="flex flex-col space-y-1">
+                            <span class="text-md">同步完成删除文件</span>
+                        </Label>
+                        <Switch id="data-sync-auto-delete" :checked="dataSyncAutoDelete" v-model="dataSyncAutoDelete"
+                            @update:checked="updateSetting('sk_data_sync_auto_delete', $event)"
+                            :disabled="openlist.status === 0" />
+                    </div>
+                    <div class="flex items-center justify-between">
+
                     </div>
                 </div>
             </CardContent>
@@ -56,6 +69,7 @@ const { t } = useI18n();
 
 const dataSyncEnable = ref(false);
 const dataSyncFailedRetry = ref(false);
+const dataSyncAutoDelete = ref(false);
 const openlist = ref({ status: 0, text: "", color: "" })
 
 async function fetchSetting(key: string): Promise<Record<string, number>> {
@@ -92,12 +106,14 @@ async function fetchOpenlistStatus() {
 let loadingSettings = true
 onMounted(async () => {
     try {
-        const result: Record<string, number> = await fetchSetting('sk_data_sync_enable,sk_data_sync_failed_retry');
+        const result: Record<string, number> = await fetchSetting('sk_data_sync_enable,sk_data_sync_failed_retry,sk_data_sync_auto_delete');
         dataSyncEnable.value = result['sk_data_sync_enable'] == 1;
         dataSyncFailedRetry.value = result['sk_data_sync_failed_retry'] == 1;
+        dataSyncAutoDelete.value = result['sk_data_sync_auto_delete'] == 1;
 
         bindToggleSetting(dataSyncEnable, 'sk_data_sync_enable');
         bindToggleSetting(dataSyncFailedRetry, 'sk_data_sync_failed_retry');
+        bindToggleSetting(dataSyncAutoDelete, 'sk_data_sync_auto_delete');
 
         const defaultStatusInfo = { text: t('user.syncSettings.notEnabled'), color: "text-gray-500" };
         openlist.value = { status: 0, ...defaultStatusInfo };

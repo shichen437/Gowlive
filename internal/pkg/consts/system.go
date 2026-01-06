@@ -33,4 +33,5 @@ const (
 
 	SKDataSyncEnable      = "sk_data_sync_enable"
 	SKDataSyncFailedRetry = "sk_data_sync_failed_retry"
+	SKDataSyncAutoDelete  = "sk_data_sync_auto_delete"
 )
