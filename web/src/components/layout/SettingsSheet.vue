@@ -48,8 +48,7 @@
                     </div>
                     <div class="grid gap-3 mt-6">
                         <Label class="font-medium">{{ t('project.topbar.sheet.fields.theme') }}</Label>
-                        <RadioGroup :model-value="theme" @update:model-value="setTheme"
-                            class="grid grid-cols-3 gap-2">
+                        <RadioGroup :model-value="theme" @update:model-value="setTheme" class="grid grid-cols-3 gap-2">
                             <div v-for="ct in themes" :key="ct.value">
                                 <RadioGroupItem :value="ct.value" :id="ct.value" class="peer sr-only" />
                                 <Label :for="ct.value"
@@ -76,11 +75,20 @@
                 <TabsContent value="shortcuts">
                     <div class="grid gap-3">
                         <div class="flex items-center justify-between rounded-lg border p-3">
-                            <span class="text-sm font-medium">{{ t('project.topbar.sheet.actions.open_terminal')
-                                }}</span>
+                            <span class="text-sm font-medium">
+                                {{ t('project.topbar.sheet.actions.open_terminal') }}</span>
                             <KbdGroup>
                                 <Kbd>Ctrl</Kbd>
                                 <Kbd>T</Kbd>
+                            </KbdGroup>
+                        </div>
+                        <div class="flex items-center justify-between rounded-lg border p-3">
+                            <span class="text-sm font-medium">
+                                {{ t('project.topbar.sheet.actions.quick_add') }}
+                            </span>
+                            <KbdGroup>
+                                <Kbd>Ctrl</Kbd>
+                                <Kbd>N</Kbd>
                             </KbdGroup>
                         </div>
                     </div>

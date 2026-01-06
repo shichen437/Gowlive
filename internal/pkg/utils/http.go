@@ -58,3 +58,11 @@ func GetCookieMap(platform, cookie, refer string) map[string]string {
 	}
 	return cookieMap
 }
+
+func UrlRemoveParams(raw string) string {
+	head, _, found := strings.Cut(raw, "?")
+	if found {
+		return head
+	}
+	return raw
+}

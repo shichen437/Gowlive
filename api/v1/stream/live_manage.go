@@ -156,3 +156,12 @@ type PreviewInfo struct {
 	Url      string            `json:"url"`
 	Headers  map[string]string `json:"headers"`
 }
+
+type PostQuickLinkReq struct {
+	g.Meta `path:"/live/quick/add" method:"post" tags:"直播管理" summary:"快速添加链接"`
+	Url    string `json:"url" dc:"链接地址" v:"required|url"`
+}
+
+type PostQuickLinkRes struct {
+	g.Meta `mime:"application/json"`
+}

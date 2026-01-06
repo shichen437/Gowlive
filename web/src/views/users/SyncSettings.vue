@@ -25,7 +25,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="flex items-center justify-between">
                         <Label for="data-sync-auto-delete" class="flex flex-col space-y-1">
-                            <span class="text-md">同步完成删除文件</span>
+                            <span class="text-md">{{ t('user.syncSettings.deleteOnFinish') }}</span>
                         </Label>
                         <Switch id="data-sync-auto-delete" :checked="dataSyncAutoDelete" v-model="dataSyncAutoDelete"
                             @update:checked="updateSetting('sk_data_sync_auto_delete', $event)"

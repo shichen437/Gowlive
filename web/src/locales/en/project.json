@@ -110,7 +110,8 @@
         "shortcuts": "Shortcuts"
       },
       "actions": {
-        "open_terminal": "Open Terminal"
+        "open_terminal": "Open Terminal",
+        "quick_add": "Quick Add"
       }
     },
     "colorMode": {

@@ -35,6 +35,7 @@
 "stream.live.error.Update" = "Failed to update live room"
 "stream.live.error.Delete" = "Failed to delete live room"
 "stream.live.error.Preview" = "Preview live room failed"
+"stream.live.error.QuickAdd" = "Failed to quickly add"
 
 "stream.live.error.BatchAddNumLimit" = "Batch add limit is 1–30 rooms"
 "stream.live.error.BatchAdd" = "Failed to batch add live rooms"

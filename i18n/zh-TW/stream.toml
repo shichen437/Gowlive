@@ -35,6 +35,7 @@
 "stream.live.error.Update" = "更新直播間失敗"
 "stream.live.error.Delete" = "刪除直播間失敗"
 "stream.live.error.Preview" = "預覽直播間失敗"
+"stream.live.error.QuickAdd" = "快速添加失敗"
 
 "stream.live.error.BatchAddNumLimit" = "批次新增直播間數量限制為 1–30 個"
 "stream.live.error.BatchAdd" = "批次新增直播間失敗"

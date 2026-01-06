@@ -110,7 +110,8 @@
         "shortcuts": "快捷键"
       },
       "actions": {
-        "open_terminal": "打开终端"
+        "open_terminal": "打开终端",
+        "quick_add": "快捷添加"
       }
     },
     "colorMode": {

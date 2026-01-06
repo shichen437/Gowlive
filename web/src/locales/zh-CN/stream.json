@@ -184,5 +184,13 @@
       "noId": "直播间ID不存在",
       "loadErr": "加载直播流信息失败"
     }
+  },
+  "quickAdd": {
+    "title": "快捷添加",
+    "desc": "输入直播间URL或主页链接以快速添加。",
+    "urlRequired": "URL不能为空。",
+    "urlInvalid": "无效的URL格式。",
+    "success": "快捷添加成功。",
+    "failed": "快捷添加失败。"
   }
 }

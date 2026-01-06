@@ -90,6 +90,10 @@ func (s *sLiveManage) Get(ctx context.Context, req *v1.GetLiveManageReq) (res *v
 func (s *sLiveManage) Add(ctx context.Context, req *v1.PostLiveManageReq) (res *v1.PostLiveManageRes, err error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
+	if checkExistsRoomUrl(ctx, req.RoomUrl) {
+		err = utils.TError(ctx, "stream.anchor.error.Repeated")
+		return
+	}
 	liveApi, err := lives.New(req.RoomUrl)
 	if err != nil {
 		g.Log().Errorf(ctx, "获取解析 api 失败，错误信息：%v", err)
@@ -122,6 +126,11 @@ func (s *sLiveManage) BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchR
 		newCtx := gctx.GetInitCtx()
 		errUrls := make([]string, 0)
 		for _, roomUrl := range req.RoomUrls {
+			if checkExistsRoomUrl(ctx, roomUrl) {
+				g.Log().Errorf(newCtx, "链接 %s 重复添加", roomUrl)
+				errUrls = append(errUrls, roomUrl)
+				continue
+			}
 			liveApi, err := lives.New(roomUrl)
 			if err != nil {
 				g.Log().Errorf(newCtx, "链接 %s 获取解析 API 失败，错误信息：%v", roomUrl, err)
@@ -364,6 +373,53 @@ func (s *sLiveManage) PreviewList(ctx context.Context, req *v1.PreviewRoomListRe
 	}
 	gconv.Struct(list, &res.PreviewList)
 	return
+}
+
+func (s *sLiveManage) QuickAdd(ctx context.Context, req *v1.PostQuickLinkReq) (res *v1.PostQuickLinkRes, err error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	liveApi, err := lives.New(req.Url)
+	if err == nil {
+		if checkExistsRoomUrl(ctx, req.Url) {
+			err = utils.TError(ctx, "stream.anchor.error.Repeated")
+			return
+		}
+		info, liveErr := liveApi.GetInfo()
+		if liveErr != nil || info == nil {
+			g.Log().Errorf(ctx, "获取直播数据失败，错误信息：%v", liveErr)
+			err = utils.TError(ctx, "stream.live.error.GetRoomInfo")
+			return
+		}
+		var liveId int64
+		liveReq := &v1.PostLiveManageReq{
+			RoomUrl:     req.Url,
+			MonitorType: consts.MonitorTypeStop,
+			Interval:    30,
+			Format:      "flv",
+		}
+		err = saveLiveConfig(ctx, liveReq, &liveId, info)
+		if err != nil {
+			g.Log().Errorf(ctx, "保存直播配置失败，错误信息：%v", err)
+			err = utils.TError(ctx, "stream.live.error.Add")
+			return
+		}
+		return
+	}
+	_, err = service.AnchorInfo().Add(ctx, &v1.PostAnchorReq{
+		Url: req.Url,
+	})
+	if err != nil {
+		g.Log().Errorf(ctx, "添加主播信息失败，错误信息：%v", err)
+		err = utils.TError(ctx, "stream.live.error.QuickAdd")
+		return
+	}
+	return
+}
+
+func checkExistsRoomUrl(ctx context.Context, url string) bool {
+	qUrl := utils.UrlRemoveParams(url)
+	count, _ := dao.LiveManage.Ctx(ctx).WhereLike(dao.LiveManage.Columns().RoomUrl, qUrl+"%").Count()
+	return count > 0
 }
 
 func dealSortParams(m *gdb.Model, sort string) *gdb.Model {

@@ -110,7 +110,8 @@
         "shortcuts": "快捷鍵"
       },
       "actions": {
-        "open_terminal": "打開終端"
+        "open_terminal": "打開終端",
+        "quick_add": "快速新增"
       }
     },
     "colorMode": {

@@ -86,6 +86,7 @@
       "title": "Enable Data Sync"
     },
     "failedRetry": "Failed automatically retry",
+    "deleteOnFinish": "Delete files after sync",
     "noConfig": "No Config",
     "connnected": "Connected",
     "connectFailed": "Connection Failed",

@@ -184,5 +184,13 @@
       "noId": "Live room ID is missing",
       "loadErr": "Failed to load live stream info"
     }
+  },
+  "quickAdd": {
+    "title": "Quick Add",
+    "desc": "Enter the livestream room URL or homepage link to add quickly.",
+    "urlRequired": "URL cannot be empty.",
+    "urlInvalid": "Invalid URL format.",
+    "success": "Quick Add succeeded.",
+    "failed": "Quick Add failed."
   }
 }

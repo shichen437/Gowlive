@@ -97,3 +97,11 @@ export async function previewList() {
     method: "get",
   });
 }
+
+export async function quickAdd(url: string) {
+  return request({
+    url: "/live/quick/add",
+    method: "post",
+    data: { url },
+  });
+}

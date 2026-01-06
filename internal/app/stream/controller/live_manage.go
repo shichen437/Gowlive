@@ -63,3 +63,7 @@ func (c *liveManageController) Preview(ctx context.Context, req *v1.PreviewRoomR
 func (c *liveManageController) PreviewList(ctx context.Context, req *v1.PreviewRoomListReq) (res *v1.PreviewRoomListRes, err error) {
 	return service.LiveManage().PreviewList(ctx, req)
 }
+
+func (c *liveManageController) QuickAdd(ctx context.Context, req *v1.PostQuickLinkReq) (res *v1.PostQuickLinkRes, err error) {
+	return service.LiveManage().QuickAdd(ctx, req)
+}

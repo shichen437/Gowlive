@@ -26,6 +26,7 @@ type (
 		Export(ctx context.Context, req *v1.ExportRoomInfoReq) (res *v1.ExportRoomInfoRes, err error)
 		Preview(ctx context.Context, req *v1.PreviewRoomReq) (res *v1.PreviewRoomRes, err error)
 		PreviewList(ctx context.Context, req *v1.PreviewRoomListReq) (res *v1.PreviewRoomListRes, err error)
+		QuickAdd(ctx context.Context, req *v1.PostQuickLinkReq) (res *v1.PostQuickLinkRes, err error)
 	}
 )
 

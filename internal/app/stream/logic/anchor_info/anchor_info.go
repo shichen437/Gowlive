@@ -55,6 +55,10 @@ func (c *sAnchorInfo) List(ctx context.Context, req *v1.GetAnchorListReq) (res *
 }
 
 func (c *sAnchorInfo) Add(ctx context.Context, req *v1.PostAnchorReq) (res *v1.PostAnchorRes, err error) {
+	if checkExistsAnchorUrl(ctx, req.Url) {
+		err = utils.TError(ctx, "stream.anchor.error.Repeated")
+		return
+	}
 	aApi, err := anchor.New(req.Url)
 	if err != nil {
 		g.Log().Errorf(ctx, "获取解析 api 失败，错误信息：%v", err)
@@ -156,6 +160,12 @@ func (c *sAnchorInfo) StatInfo(ctx context.Context, req *v1.GetAnchorStatInfoReq
 
 	res.Data = info
 	return
+}
+
+func checkExistsAnchorUrl(ctx context.Context, url string) bool {
+	qUrl := utils.UrlRemoveParams(url)
+	count, _ := dao.AnchorInfo.Ctx(ctx).WhereLike(dao.AnchorInfo.Columns().Url, qUrl+"%").Count()
+	return count > 0
 }
 
 func saveAnchorInfo(ctx context.Context, req *v1.PostAnchorReq, anchorInfo *anchor.AnchorInfo) error {
