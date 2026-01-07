@@ -1,24 +1,31 @@
 {
-  "version": "0.2.3",
-  "date": "2025-12-31",
+  "version": "0.2.4",
+  "date": "2025-01-07",
   "info": {
     "feature": {
       "name": "功能",
       "items": [
         {
-          "desc": "新增支持openlist同步"
+          "desc": "新增快捷添加直播间/主播"
         },
         {
-          "desc": "新增偏好设置"
+          "desc": "新增支持同步完成清除文件"
         },
         {
-          "desc": "新增日志快捷键"
+          "desc": "新增项目文档链接"
         }
       ]
     },
     "enhance": {
       "name": "优化",
-      "items": []
+      "items": [
+        {
+          "desc": "优化文件同步逻辑"
+        },
+        {
+          "desc": "移除原FAQ"
+        }
+      ]
     },
     "fix": {
       "name": "修复",
