@@ -95,7 +95,7 @@ func (l *Bigo) requestWebApi(ctx context.Context, uid string) (string, error) {
 	c.SetCookieMap(l.assembleCookieMap())
 	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Request: "+l.Url.String())
 	resp, err := c.Post(ctx, studioInfoApi, params)
-	if err != nil {
+	if err != nil || resp == nil {
 		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi err info: ", err)
 		return "", err
 	}

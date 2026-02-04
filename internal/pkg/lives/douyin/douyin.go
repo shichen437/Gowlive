@@ -81,7 +81,7 @@ func (l *Douyin) requestWebPage() (body string, err error) {
 	c.SetCookieMap(cookieMap)
 	req, err := c.Get(gctx.GetInitCtx(), l.Url.String())
 	g.Log().Info(gctx.GetInitCtx(), "Get Room Web Page: "+l.Url.String())
-	if err != nil {
+	if err != nil || req == nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, false)
 		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebPage err info: ", err)
 		return
@@ -91,7 +91,7 @@ func (l *Douyin) requestWebPage() (body string, err error) {
 	req.Header.Set("Cookie", cookieWithOdinTt)
 	c2 := g.Client()
 	resp, err := c2.Do(req.Request)
-	if err != nil {
+	if err != nil || resp == nil {
 		metrics.GetIndicatorManager().Record(gctx.GetInitCtx(), platform, false, true)
 		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebPage c2 err info: ", err)
 		return

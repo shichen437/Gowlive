@@ -130,8 +130,8 @@ func (l *Bilibili) requestWebApi() (*lives.LiveState, error) {
 		"room_id": l.RoomID,
 		"from":    "room",
 	})
-	if err != nil || resp.StatusCode != 200 {
-		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi err info: ", err, "response code: ", resp.StatusCode)
+	if err != nil || resp == nil || resp.StatusCode != 200 {
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi err info: ", err, "response: ", resp)
 		return nil, gerror.New(l.Platform + "获取房间信息失败")
 	}
 	defer resp.Close()
