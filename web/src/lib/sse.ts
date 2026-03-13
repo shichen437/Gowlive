@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getToken } from "@/store/auth";
-import { useUserStore } from "@/store/user";
+import { getToken } from '@/store/auth';
+import { useUserStore } from '@/store/user';
 
 type SSEConfig = {
   channel: string;
@@ -33,13 +33,13 @@ class SSEClient {
       heartbeatTimeout: 20000,
       ...config,
     };
-    this.baseURL = import.meta.env.VITE_APP_BASE_API || "";
+    this.baseURL = import.meta.env.VITE_APP_BASE_API || '';
   }
 
   private getEventSourceURL(): string {
     const token = getToken();
     const params = new URLSearchParams({ channel: this.config.channel });
-    if (token) params.append("token", token);
+    if (token) params.append('token', token);
     return `${this.baseURL}/sse?${params.toString()}`;
   }
 
@@ -49,8 +49,8 @@ class SSEClient {
       const now = Date.now();
       const diff = now - this.lastMessageTime;
       if (diff > (this.config.heartbeatTimeout || 30000)) {
-        console.warn("SSE: heartbeat timeout, reconnecting...");
-        this.scheduleReconnect("heartbeat-timeout");
+        console.warn('SSE: heartbeat timeout, reconnecting...');
+        this.scheduleReconnect('heartbeat-timeout');
       }
     }, this.config.heartbeatInterval);
   }
@@ -66,7 +66,7 @@ class SSEClient {
     if (this.isReconnecting) return;
 
     if (this.retryCount >= (this.config.maxRetries || 5)) {
-      this.config.onError?.(new Error("SSE: reconnect failed"));
+      this.config.onError?.(new Error('SSE: reconnect failed'));
       return;
     }
 
@@ -83,7 +83,7 @@ class SSEClient {
       console.warn(
         `SSE: try ${this.retryCount} times reconnect after ${
           delay / 1000
-        }s... (${reason || "unknown"})`
+        }s... (${reason || 'unknown'})`,
       );
       this.connect();
       this.isReconnecting = false;
@@ -98,7 +98,7 @@ class SSEClient {
     this.lastMessageTime = Date.now();
 
     this.eventSource.onopen = () => {
-      console.info("SSE: connected");
+      console.info('SSE: connected');
       this.retryCount = 0;
       this.isReconnecting = false;
       this.config.onOpen?.();
@@ -125,13 +125,13 @@ class SSEClient {
       const status = (target as any).status;
       if (status === 401 || status === -401) {
         useUserStore().logout();
-        if (typeof window !== "undefined") window.location.href = "/login";
+        if (typeof window !== 'undefined') window.location.href = '/login';
         return;
       }
 
       if (target.readyState === EventSource.CLOSED) {
-        console.warn("SSE: connection closed, scheduling reconnect...");
-        this.scheduleReconnect("eventsource-closed");
+        console.warn('SSE: connection closed, scheduling reconnect...');
+        this.scheduleReconnect('eventsource-closed');
       }
     };
   }

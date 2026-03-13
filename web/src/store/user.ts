@@ -1,21 +1,21 @@
-import { defineStore } from "pinia";
-import router from "@/router";
-import { login as apiLogin, logout as apiLogout, getInfo } from "@/api/login";
-import { type UserInfo } from "@/types/user";
+import { defineStore } from 'pinia';
+import router from '@/router';
+import { login as apiLogin, logout as apiLogout, getInfo } from '@/api/login';
+import { type UserInfo } from '@/types/user';
 import {
   setToken,
   removeToken,
   setUsername,
   setIsLoggedIn,
   removeIsLoggedIn,
-} from "./auth";
-import { USER_KEY, LOGGED_KEY } from "./consts";
+} from './auth';
+import { USER_KEY, LOGGED_KEY } from './consts';
 
 interface UserState {
   userInfo: UserInfo | null;
 }
 
-export const useUserStore = defineStore("user", {
+export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     userInfo: (() => {
       try {
@@ -51,11 +51,11 @@ export const useUserStore = defineStore("user", {
         setToken(res.data.token);
         setUsername(username);
         setIsLoggedIn(true);
-        localStorage.setItem(LOGGED_KEY, "true");
+        localStorage.setItem(LOGGED_KEY, 'true');
         await this.getUserInfo(true);
-        router.push("/");
+        router.push('/');
       } catch (error: any) {
-        throw new Error(error.message || "登录失败");
+        throw new Error(error.message || '登录失败');
       }
     },
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import request from "@/lib/api";
+import request from '@/lib/api';
 
 export async function getInternalDict(type: string) {
   if (type === 'file_check_task_status') {
@@ -20,8 +20,8 @@ export async function getInternalDict(type: string) {
     dictType: type,
   };
   return request({
-    url: "/dict/internal/type",
-    method: "get",
+    url: '/dict/internal/type',
+    method: 'get',
     params: params,
   });
 }

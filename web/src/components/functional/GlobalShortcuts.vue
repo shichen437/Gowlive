@@ -1,6 +1,12 @@
 <template>
-    <TerminalLogModal :open="isTerminalLogModalOpen" :on-open-change="handleTerminalLogModalOpenChange" />
-    <QuickAddModal :open="isQuickAddModalOpen" :on-open-change="handleQuickAddModalOpenChange" />
+  <TerminalLogModal
+    :open="isTerminalLogModalOpen"
+    :on-open-change="handleTerminalLogModalOpenChange"
+  />
+  <QuickAddModal
+    :open="isQuickAddModalOpen"
+    :on-open-change="handleQuickAddModalOpenChange"
+  />
 </template>
 
 <script setup lang="ts">
@@ -13,19 +19,19 @@ const isTerminalLogModalOpen = ref(false);
 const isQuickAddModalOpen = ref(false);
 
 const handleTerminalLogModalOpenChange = (open: boolean) => {
-    isTerminalLogModalOpen.value = open;
+  isTerminalLogModalOpen.value = open;
 };
 
 const handleQuickAddModalOpenChange = (open: boolean) => {
-    isQuickAddModalOpen.value = open;
+  isQuickAddModalOpen.value = open;
 };
 
 useKeyboardShortcuts({
-    'ctrl+t': () => {
-        isTerminalLogModalOpen.value = true;
-    },
-    'ctrl+n': () => {
-        isQuickAddModalOpen.value = true;
-    },
+  'ctrl+t': () => {
+    isTerminalLogModalOpen.value = true;
+  },
+  'ctrl+n': () => {
+    isQuickAddModalOpen.value = true;
+  },
 });
 </script>

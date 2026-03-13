@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from "@/components/ui/button";
-import { useRouter } from "vue-router";
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 function goHome() {
-  router.push("/");
+  router.push('/');
 }
 </script>

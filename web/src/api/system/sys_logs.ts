@@ -1,38 +1,38 @@
-import request from "@/lib/api";
+import request from '@/lib/api';
 
 export async function listLogs(params: any) {
-  if (params.status === "") {
+  if (params.status === '') {
     delete params.status;
   }
-  if (params.type === "") {
+  if (params.type === '') {
     delete params.type;
   }
   return request({
-    url: "/system/logs/list",
-    method: "get",
+    url: '/system/logs/list',
+    method: 'get',
     params: params,
   });
 }
 
 export async function deleteLogs(id: number) {
   return request({
-    url: "/system/logs/" + id,
-    method: "delete",
+    url: '/system/logs/' + id,
+    method: 'delete',
   });
 }
 
 export async function deleteAllLogs(data: any) {
   return request({
-    url: "/system/logs/all",
-    method: "delete",
+    url: '/system/logs/all',
+    method: 'delete',
     data: data,
   });
 }
 
 export async function terminalLogs(params: any) {
   return request({
-    url: "/system/logs/terminal",
-    method: "get",
+    url: '/system/logs/terminal',
+    method: 'get',
     params: params,
   });
 }

@@ -1,6 +1,6 @@
-import { ref, onMounted, computed } from "vue";
-import { getInternalDict as getInternalDictFromApi } from "@/api/common/internal_dict";
-import type { InternalDict } from "@/types/dict";
+import { ref, onMounted, computed } from 'vue';
+import { getInternalDict as getInternalDictFromApi } from '@/api/common/internal_dict';
+import type { InternalDict } from '@/types/dict';
 
 const cache = new Map<string, InternalDict[]>();
 
@@ -34,7 +34,7 @@ export function useDict(type: string) {
     dict.value.map((item) => ({
       label: item.dictLabel,
       value: item.dictValue,
-    }))
+    })),
   );
 
   return {

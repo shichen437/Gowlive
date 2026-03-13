@@ -1,170 +1,170 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { getToken } from "@/store/auth";
+import { createRouter, createWebHistory } from 'vue-router';
+import { getToken } from '@/store/auth';
 
-import Login from "@/views/login.vue";
+import Login from '@/views/login.vue';
 
 // 布局/父路由
-import Index from "@/views/index.vue";
+import Index from '@/views/index.vue';
 
 // 子页面
-import Dashboard from "@/views/dashboard/index.vue";
-import Stream from "@/views/stream/index.vue";
-import StreamMetrics from "@/views/stream/metrics.vue";
-import StreamHistory from "@/views/stream/history.vue";
-import StreamCookie from "@/views/stream/cookie.vue";
-import StreamAuthor from "@/views/stream/author.vue";
-import StreamPreview from "@/views/stream/preview.vue";
-import SystemLogs from "@/views/system/logs.vue";
-import SystemNotify from "@/views/system/notify.vue";
-import SystemChannel from "@/views/system/channel.vue";
-import SystemProxy from "@/views/system/proxy.vue";
-import MediaCheck from "@/views/media/check.vue";
-import MediaFile from "@/views/media/file.vue";
-import MediaSync from "@/views/media/sync.vue";
-import MediaPlay from "@/views/media/play.vue";
-import Users from "@/views/users/index.vue";
-import About from "@/views/about/index.vue";
-import NotFound from "@/views/NotFound.vue";
+import Dashboard from '@/views/dashboard/index.vue';
+import Stream from '@/views/stream/index.vue';
+import StreamMetrics from '@/views/stream/metrics.vue';
+import StreamHistory from '@/views/stream/history.vue';
+import StreamCookie from '@/views/stream/cookie.vue';
+import StreamAuthor from '@/views/stream/author.vue';
+import StreamPreview from '@/views/stream/preview.vue';
+import SystemLogs from '@/views/system/logs.vue';
+import SystemNotify from '@/views/system/notify.vue';
+import SystemChannel from '@/views/system/channel.vue';
+import SystemProxy from '@/views/system/proxy.vue';
+import MediaCheck from '@/views/media/check.vue';
+import MediaFile from '@/views/media/file.vue';
+import MediaSync from '@/views/media/sync.vue';
+import MediaPlay from '@/views/media/play.vue';
+import Users from '@/views/users/index.vue';
+import About from '@/views/about/index.vue';
+import NotFound from '@/views/NotFound.vue';
 
 const routes = [
   {
-    path: "/",
-    name: "Index",
+    path: '/',
+    name: 'Index',
     component: Index,
-    redirect: "/dashboard",
+    redirect: '/dashboard',
     children: [
       {
-        path: "dashboard",
-        name: "Dashboard",
+        path: 'dashboard',
+        name: 'Dashboard',
         component: Dashboard,
-        meta: { title: "project.router.overview" },
+        meta: { title: 'project.router.overview' },
       },
       {
-        path: "stream",
-        meta: { title: "project.router.liveManagement" },
+        path: 'stream',
+        meta: { title: 'project.router.liveManagement' },
         children: [
           {
-            path: "metrics",
-            name: "StreamMetrics",
+            path: 'metrics',
+            name: 'StreamMetrics',
             component: StreamMetrics,
-            meta: { title: "project.router.monitoringMetrics" },
+            meta: { title: 'project.router.monitoringMetrics' },
           },
           {
-            path: "history",
-            name: "StreamHistory",
+            path: 'history',
+            name: 'StreamHistory',
             component: StreamHistory,
-            meta: { title: "project.router.liveHistory" },
+            meta: { title: 'project.router.liveHistory' },
           },
           {
-            path: "index",
-            name: "Stream",
+            path: 'index',
+            name: 'Stream',
             component: Stream,
-            meta: { title: "project.router.roomList" },
+            meta: { title: 'project.router.roomList' },
           },
           {
-            path: "author",
-            name: "StreamAuthor",
+            path: 'author',
+            name: 'StreamAuthor',
             component: StreamAuthor,
-            meta: { title: "project.router.anchorData" },
+            meta: { title: 'project.router.anchorData' },
           },
           {
-            path: "cookie",
-            name: "StreamCookie",
+            path: 'cookie',
+            name: 'StreamCookie',
             component: StreamCookie,
-            meta: { title: "project.router.cookie" },
+            meta: { title: 'project.router.cookie' },
           },
         ],
       },
       {
-        path: "media",
-        meta: { title: "project.router.mediaCenter" },
+        path: 'media',
+        meta: { title: 'project.router.mediaCenter' },
         children: [
           {
-            path: "file",
-            name: "MediaFile",
+            path: 'file',
+            name: 'MediaFile',
             component: MediaFile,
-            meta: { title: "project.router.fileManagement" },
+            meta: { title: 'project.router.fileManagement' },
           },
           {
-            path: "check",
-            name: "MediaCheck",
+            path: 'check',
+            name: 'MediaCheck',
             component: MediaCheck,
-            meta: { title: "project.router.fileDetection" },
+            meta: { title: 'project.router.fileDetection' },
           },
           {
-            path: "sync",
-            name: "MediaSync",
+            path: 'sync',
+            name: 'MediaSync',
             component: MediaSync,
-            meta: { title: "project.router.fileSync" },
+            meta: { title: 'project.router.fileSync' },
           },
         ],
       },
       {
-        path: "system",
-        meta: { title: "project.router.systemManagement" },
+        path: 'system',
+        meta: { title: 'project.router.systemManagement' },
         children: [
           {
-            path: "channel",
-            name: "SystemChannel",
+            path: 'channel',
+            name: 'SystemChannel',
             component: SystemChannel,
-            meta: { title: "project.router.pushChannel" },
+            meta: { title: 'project.router.pushChannel' },
           },
           {
-            path: "notify",
-            name: "SystemNotify",
+            path: 'notify',
+            name: 'SystemNotify',
             component: SystemNotify,
-            meta: { title: "project.router.notificationCenter" },
+            meta: { title: 'project.router.notificationCenter' },
           },
           {
-            path: "logs",
-            name: "SystemLogs",
+            path: 'logs',
+            name: 'SystemLogs',
             component: SystemLogs,
-            meta: { title: "project.router.logCenter" },
+            meta: { title: 'project.router.logCenter' },
           },
           {
-            path: "proxy",
-            name: "SystemProxy",
+            path: 'proxy',
+            name: 'SystemProxy',
             component: SystemProxy,
-            meta: { title: "project.router.proxyCenter" },
+            meta: { title: 'project.router.proxyCenter' },
           },
         ],
       },
       {
-        path: "user/index",
-        name: "Users",
+        path: 'user/index',
+        name: 'Users',
         component: Users,
-        meta: { title: "project.router.personalCenter" },
+        meta: { title: 'project.router.personalCenter' },
       },
       {
-        path: "about/index",
-        name: "About",
+        path: 'about/index',
+        name: 'About',
         component: About,
-        meta: { title: "project.router.about" },
+        meta: { title: 'project.router.about' },
       },
     ],
   },
   {
-    path: "/media/play",
-    name: "MediaPlay",
+    path: '/media/play',
+    name: 'MediaPlay',
     component: MediaPlay,
-    meta: { title: "project.router.mediaPlayer" },
+    meta: { title: 'project.router.mediaPlayer' },
   },
   {
-    path: "/stream/preview",
-    name: "StreamPreview",
+    path: '/stream/preview',
+    name: 'StreamPreview',
     component: StreamPreview,
-    meta: { title: "project.router.streamPreview" },
+    meta: { title: 'project.router.streamPreview' },
   },
   {
-    path: "/login",
-    name: "Login",
+    path: '/login',
+    name: 'Login',
     component: Login,
   },
   {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
     component: NotFound,
-    meta: { title: "404" },
+    meta: { title: '404' },
   },
 ];
 
@@ -178,13 +178,13 @@ router.beforeEach((to, _from, next) => {
   const hasToken = getToken();
 
   if (hasToken) {
-    if (to.path === "/login") {
-      next({ path: "/" });
+    if (to.path === '/login') {
+      next({ path: '/' });
     } else {
       next();
     }
   } else {
-    if (to.path === "/login") {
+    if (to.path === '/login') {
       next();
     } else {
       next(`/login?redirect=${to.path}`);

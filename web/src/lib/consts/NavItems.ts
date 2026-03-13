@@ -1,51 +1,51 @@
-import { ref } from "vue";
+import { ref } from 'vue';
 import {
   TvMinimal,
   Disc3,
   CircleUserRound,
   Info,
   Infinity,
-} from "lucide-vue-next";
+} from 'lucide-vue-next';
 
 export const configurableMenu = ref([
   {
-    title: "project.router.liveManagement",
+    title: 'project.router.liveManagement',
     icon: TvMinimal,
     children: [
-      { title: "project.router.roomList", to: "/stream/index" },
-      { title: "project.router.liveHistory", to: "/stream/history" },
-      { title: "project.router.anchorData", to: "/stream/author" },
-      { title: "project.router.monitoringMetrics", to: "/stream/metrics" },
-      { title: "project.router.cookie", to: "/stream/cookie" },
+      { title: 'project.router.roomList', to: '/stream/index' },
+      { title: 'project.router.liveHistory', to: '/stream/history' },
+      { title: 'project.router.anchorData', to: '/stream/author' },
+      { title: 'project.router.monitoringMetrics', to: '/stream/metrics' },
+      { title: 'project.router.cookie', to: '/stream/cookie' },
     ],
   },
   {
-    title: "project.router.mediaCenter",
+    title: 'project.router.mediaCenter',
     icon: Disc3,
     children: [
-      { title: "project.router.fileManagement", to: "/media/file" },
-      { title: "project.router.fileDetection", to: "/media/check" },
-      { title: "project.router.fileSync", to: "/media/sync" },
+      { title: 'project.router.fileManagement', to: '/media/file' },
+      { title: 'project.router.fileDetection', to: '/media/check' },
+      { title: 'project.router.fileSync', to: '/media/sync' },
     ],
   },
   {
-    title: "project.router.systemManagement",
+    title: 'project.router.systemManagement',
     icon: Infinity,
     children: [
-      { title: "project.router.logCenter", to: "/system/logs" },
-      { title: "project.router.pushChannel", to: "/system/channel" },
-      { title: "project.router.notificationCenter", to: "/system/notify" },
-      { title: "project.router.proxyCenter", to: "/system/proxy" },
+      { title: 'project.router.logCenter', to: '/system/logs' },
+      { title: 'project.router.pushChannel', to: '/system/channel' },
+      { title: 'project.router.notificationCenter', to: '/system/notify' },
+      { title: 'project.router.proxyCenter', to: '/system/proxy' },
     ],
   },
   {
-    title: "project.router.personalCenter",
+    title: 'project.router.personalCenter',
     icon: CircleUserRound,
-    to: "/user/index",
+    to: '/user/index',
   },
   {
-    title: "project.router.about",
+    title: 'project.router.about',
     icon: Info,
-    to: "/about/index",
+    to: '/about/index',
   },
 ]);

@@ -35,17 +35,17 @@ export function canPlay(file: FileInfo) {
 export function isVideo(file: FileInfo) {
   return (
     !file.isFolder &&
-    (file.filename.endsWith(".mp4") ||
-      file.filename.endsWith(".flv") ||
-      file.filename.endsWith(".mkv") ||
-      file.filename.endsWith(".ts"))
+    (file.filename.endsWith('.mp4') ||
+      file.filename.endsWith('.flv') ||
+      file.filename.endsWith('.mkv') ||
+      file.filename.endsWith('.ts'))
   );
 }
 
 export function isAudio(file: FileInfo) {
-  return !file.isFolder && file.filename.endsWith(".mp3");
+  return !file.isFolder && file.filename.endsWith('.mp3');
 }
 
 export function isMp4(file: FileInfo) {
-  return !file.isFolder && file.filename.endsWith(".mp4");
+  return !file.isFolder && file.filename.endsWith('.mp4');
 }

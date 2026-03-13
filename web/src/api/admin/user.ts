@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import request from "@/lib/api";
+import request from '@/lib/api';
 
 export async function putProfile(nickname: string, sex: number) {
   const data = {
@@ -7,8 +7,8 @@ export async function putProfile(nickname: string, sex: number) {
     sex,
   };
   return request({
-    url: "/user/profile",
-    method: "put",
+    url: '/user/profile',
+    method: 'put',
     data: data,
   });
 }
@@ -19,8 +19,8 @@ export async function putPassword(oldPwd: string, newPwd: string) {
     newPwd,
   };
   return request({
-    url: "/user/password",
-    method: "put",
+    url: '/user/password',
+    method: 'put',
     data: data,
   });
 }

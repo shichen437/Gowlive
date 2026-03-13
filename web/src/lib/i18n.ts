@@ -1,15 +1,15 @@
-import { createI18n } from "vue-i18n";
+import { createI18n } from 'vue-i18n';
 
 const i18n = createI18n({
   legacy: false,
-  locale: localStorage.getItem("locale") || "zh-CN",
-  fallbackLocale: "en",
+  locale: localStorage.getItem('locale') || 'zh-CN',
+  fallbackLocale: 'en',
   messages: loadLocaleMessages(),
 });
 
 function loadLocaleMessages() {
   const messages: Record<string, Record<string, any>> = {};
-  const modules = import.meta.glob("../locales/**/**/*.json", { eager: true });
+  const modules = import.meta.glob('../locales/**/**/*.json', { eager: true });
 
   for (const path in modules) {
     const match = path.match(/\..\/locales\/([^\/]+)\/([^\/]+)\.json$/);

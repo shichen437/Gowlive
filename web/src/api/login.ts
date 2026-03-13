@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import request from "@/lib/api";
+import request from '@/lib/api';
 
 export async function login(username: string, password: string) {
   const data = {
@@ -7,8 +7,8 @@ export async function login(username: string, password: string) {
     password,
   };
   return request({
-    url: "/login",
-    method: "post",
+    url: '/login',
+    method: 'post',
     headers: {
       isToken: false,
     },
@@ -18,14 +18,14 @@ export async function login(username: string, password: string) {
 
 export async function logout() {
   return request({
-    url: "/logout",
-    method: "post",
+    url: '/logout',
+    method: 'post',
   });
 }
 
 export async function getInfo() {
   return request({
-    url: "/user/getInfo",
-    method: "get",
+    url: '/user/getInfo',
+    method: 'get',
   });
 }

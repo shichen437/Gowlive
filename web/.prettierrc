@@ -1,0 +1,10 @@
+semi: true
+singleQuote: true
+trailingComma: all
+overrides:
+  - files: "*.vue"
+    options:
+      parser: vue
+  - files: "*.ts"
+    options:
+      parser: typescript
