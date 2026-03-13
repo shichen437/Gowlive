@@ -2,33 +2,69 @@
     <Dialog v-model:open="open">
         <DialogContent class="sm:max-w-[600px]">
             <DialogHeader>
-                <DialogTitle>{{ isEdit ? t('common.fields.edit') : t('common.fields.add') }}{{
-                    t('system.channel.fields.channel.title') }}</DialogTitle>
+                <DialogTitle
+                    >{{
+                        isEdit
+                            ? t("common.fields.edit")
+                            : t("common.fields.add")
+                    }}{{
+                        t("system.channel.fields.channel.title")
+                    }}</DialogTitle
+                >
             </DialogHeader>
             <form @submit="onSubmit" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <FormField name="name" v-slot="{ componentField }">
                         <FormItem>
-                            <FormLabel>{{ t('system.channel.fields.name') }}</FormLabel>
+                            <FormLabel>{{
+                                t("system.channel.fields.name")
+                            }}</FormLabel>
                             <FormControl>
-                                <Input type="text" :placeholder="t('system.channel.placeholder.name')"
-                                    v-bind="componentField" />
+                                <Input
+                                    type="text"
+                                    :placeholder="
+                                        t('system.channel.placeholder.name')
+                                    "
+                                    v-bind="componentField"
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     </FormField>
                     <FormField name="status" v-slot="{ value, handleChange }">
                         <FormItem>
-                            <FormLabel>{{ t('system.channel.fields.status') }}</FormLabel>
+                            <FormLabel>{{
+                                t("system.channel.fields.status")
+                            }}</FormLabel>
                             <FormControl>
                                 <div class="flex gap-2">
-                                    <Button type="button" class="flex-1" :variant="value === 1 ? 'default' : 'outline'"
-                                        @click="handleChange(1)">
-                                        {{ t('system.channel.fields.statusActive') }}
+                                    <Button
+                                        type="button"
+                                        class="flex-1"
+                                        :variant="
+                                            value === 1 ? 'default' : 'outline'
+                                        "
+                                        @click="handleChange(1)"
+                                    >
+                                        {{
+                                            t(
+                                                "system.channel.fields.statusActive",
+                                            )
+                                        }}
                                     </Button>
-                                    <Button type="button" class="flex-1" :variant="value === 0 ? 'default' : 'outline'"
-                                        @click="handleChange(0)">
-                                        {{ t('system.channel.fields.statusDisabled') }}
+                                    <Button
+                                        type="button"
+                                        class="flex-1"
+                                        :variant="
+                                            value === 0 ? 'default' : 'outline'
+                                        "
+                                        @click="handleChange(0)"
+                                    >
+                                        {{
+                                            t(
+                                                "system.channel.fields.statusDisabled",
+                                            )
+                                        }}
                                     </Button>
                                 </div>
                             </FormControl>
@@ -37,104 +73,213 @@
                     </FormField>
                 </div>
 
-                <Tabs :model-value="values.type" @update:model-value="(val) => handleTypeChange(String(val))"
-                    default-value="email" class="w-full">
-                    <TabsList class="grid w-full grid-cols-5" :class="{ 'pointer-events-none opacity-50': isEdit }">
-                        <TabsTrigger value="email"> {{ t('system.channel.fields.channel.email') }} </TabsTrigger>
-                        <TabsTrigger value="gotify"> Gotify </TabsTrigger>
-                        <TabsTrigger value="lark"> {{ t('system.channel.fields.channel.lark') }} </TabsTrigger>
-                        <TabsTrigger value="dingTalk"> {{ t('system.channel.fields.channel.dingTalk') }} </TabsTrigger>
-                        <TabsTrigger value="weCom"> {{ t('system.channel.fields.channel.weCom') }} </TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="email" class="space-y-4 mt-4 border-0 p-0">
-                        <div class="grid grid-cols-2 gap-4">
-                            <FormField name="email.server" v-slot="{ componentField }">
-                                <FormItem>
-                                    <FormLabel>{{ t('system.channel.fields.smtpServer') }}</FormLabel>
-                                    <FormControl>
-                                        <Input type="text" placeholder="smtp.example.com" v-bind="componentField" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            </FormField>
-                            <FormField name="email.port" v-slot="{ componentField }">
-                                <FormItem>
-                                    <FormLabel>{{ t('system.channel.fields.port') }}</FormLabel>
-                                    <FormControl>
-                                        <Input type="number" placeholder="465" v-bind="componentField" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            </FormField>
-                        </div>
-                        <FormField name="email.sender" v-slot="{ componentField }">
-                            <FormItem>
-                                <FormLabel>{{ t('system.channel.fields.sender') }}</FormLabel>
+                <div class="grid grid-cols-2 gap-4">
+                    <FormField name="type" v-slot="{ value }">
+                        <FormItem>
+                            <FormLabel>{{
+                                t("system.channel.fields.type")
+                            }}</FormLabel>
+                            <Select
+                                :model-value="String(value)"
+                                @update:model-value="handleTypeChange"
+                                :disabled="isEdit"
+                            >
                                 <FormControl>
-                                    <Input type="email" placeholder="sender@example.com" v-bind="componentField" />
+                                    <SelectTrigger class="w-full">
+                                        <SelectValue
+                                            :placeholder="
+                                                t(
+                                                    'system.channel.placeholder.type',
+                                                )
+                                            "
+                                        />
+                                    </SelectTrigger>
                                 </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
-                        <FormField name="email.authCode" v-slot="{ componentField }">
-                            <FormItem>
-                                <FormLabel>{{ t('system.channel.fields.authCode') }}</FormLabel>
-                                <FormControl>
-                                    <Input type="password" :placeholder="t('system.channel.placeholder.authCode')"
-                                        v-bind="componentField" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
-                        <FormField name="email.receiver" v-slot="{ componentField }">
-                            <FormItem>
-                                <FormLabel>{{ t('system.channel.fields.receiver') }}</FormLabel>
-                                <FormControl>
-                                    <Input type="email" placeholder="receiver@example.com" v-bind="componentField" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
-                    </TabsContent>
-                    <TabsContent value="gotify" class="space-y-4 mt-4 border-0 p-0">
-                        <FormField name="url" v-slot="{ componentField }">
-                            <FormItem>
-                                <FormLabel>Gotify URL</FormLabel>
-                                <FormControl>
-                                    <Input type="text" placeholder="https://gotify.example.com"
-                                        v-bind="componentField" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
-                    </TabsContent>
-                    <TabsContent value="lark">
-                        <WebhookForm platform="lark" :messageTypeOptions="larkOptions" :showSign="true" />
-                    </TabsContent>
+                                <SelectContent>
+                                    <SelectItem value="email">{{
+                                        t("system.channel.fields.channel.email")
+                                    }}</SelectItem>
+                                    <SelectItem value="gotify"
+                                        >Gotify</SelectItem
+                                    >
+                                    <SelectItem value="lark">{{
+                                        t("system.channel.fields.channel.lark")
+                                    }}</SelectItem>
+                                    <SelectItem value="dingTalk"
+                                        >{{
+                                            t(
+                                                "system.channel.fields.channel.dingTalk",
+                                            )
+                                        }}
+                                    </SelectItem>
+                                    <SelectItem value="weCom">{{
+                                        t("system.channel.fields.channel.weCom")
+                                    }}</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                    </FormField>
+                    <FormField name="remark" v-slot="{ componentField }">
+                        <FormItem>
+                            <FormLabel>{{
+                                t("common.fields.remark")
+                            }}</FormLabel>
+                            <FormControl>
+                                <Input
+                                    :placeholder="
+                                        t('system.channel.placeholder.remark')
+                                    "
+                                    v-bind="componentField"
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    </FormField>
+                </div>
 
-                    <TabsContent value="dingTalk">
-                        <WebhookForm platform="dingTalk" :messageTypeOptions="basicOptions" :showSign="true" />
-                    </TabsContent>
+                <div v-if="values.type === 'email'" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <FormField
+                            name="email.server"
+                            v-slot="{ componentField }"
+                        >
+                            <FormItem>
+                                <FormLabel>{{
+                                    t("system.channel.fields.smtpServer")
+                                }}</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="text"
+                                        placeholder="smtp.example.com"
+                                        v-bind="componentField"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField
+                            name="email.port"
+                            v-slot="{ componentField }"
+                        >
+                            <FormItem>
+                                <FormLabel>{{
+                                    t("system.channel.fields.port")
+                                }}</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        placeholder="465"
+                                        v-bind="componentField"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                    </div>
+                    <FormField name="email.sender" v-slot="{ componentField }">
+                        <FormItem>
+                            <FormLabel>{{
+                                t("system.channel.fields.sender")
+                            }}</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="email"
+                                    placeholder="sender@example.com"
+                                    v-bind="componentField"
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    </FormField>
+                    <FormField
+                        name="email.authCode"
+                        v-slot="{ componentField }"
+                    >
+                        <FormItem>
+                            <FormLabel>{{
+                                t("system.channel.fields.authCode")
+                            }}</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="password"
+                                    :placeholder="
+                                        t('system.channel.placeholder.authCode')
+                                    "
+                                    v-bind="componentField"
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    </FormField>
+                    <FormField
+                        name="email.receiver"
+                        v-slot="{ componentField }"
+                    >
+                        <FormItem>
+                            <FormLabel>{{
+                                t("system.channel.fields.receiver")
+                            }}</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="email"
+                                    placeholder="receiver@example.com"
+                                    v-bind="componentField"
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    </FormField>
+                </div>
+                <div v-if="values.type === 'gotify'" class="space-y-4">
+                    <FormField name="url" v-slot="{ componentField }">
+                        <FormItem>
+                            <FormLabel>Gotify URL</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="text"
+                                    placeholder="https://gotify.example.com"
+                                    v-bind="componentField"
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    </FormField>
+                </div>
+                <div v-if="values.type === 'lark'">
+                    <WebhookForm
+                        platform="lark"
+                        :messageTypeOptions="larkOptions"
+                        :showSign="true"
+                    />
+                </div>
 
-                    <TabsContent value="weCom">
-                        <WebhookForm platform="weCom" :messageTypeOptions="basicOptions" :showSign="false" />
-                    </TabsContent>
-                </Tabs>
+                <div v-if="values.type === 'dingTalk'">
+                    <WebhookForm
+                        platform="dingTalk"
+                        :messageTypeOptions="basicOptions"
+                        :showSign="true"
+                    />
+                </div>
 
-                <FormField name="remark" v-slot="{ componentField }">
-                    <FormItem>
-                        <FormLabel>{{ t('common.fields.remark') }}</FormLabel>
-                        <FormControl>
-                            <Input :placeholder="t('system.channel.placeholder.remark')" v-bind="componentField" />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                </FormField>
+                <div v-if="values.type === 'weCom'">
+                    <WebhookForm
+                        platform="weCom"
+                        :messageTypeOptions="basicOptions"
+                        :showSign="false"
+                    />
+                </div>
 
                 <DialogFooter>
-                    <Button type="button" variant="outline" @click="open = false">{{ t('common.operation.cancel')
-                        }}</Button>
-                    <Button type="submit">{{ t('common.operation.save') }}</Button>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="open = false"
+                        >{{ t("common.operation.cancel") }}</Button
+                    >
+                    <Button type="submit">{{
+                        t("common.operation.save")
+                    }}</Button>
                 </DialogFooter>
             </form>
         </DialogContent>
@@ -162,7 +307,13 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     addPushChannel,
     updatePushChannel,
@@ -170,39 +321,39 @@ import {
 } from "@/api/system/push_channel";
 import type { PushChannel } from "@/types/system";
 import { toast } from "vue-sonner";
-import WebhookForm from './webhookForm.vue'
-import { useI18n } from 'vue-i18n';
+import WebhookForm from "./WebhookForm.vue";
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
 const larkOptions = [
-    { value: 0, label: '文本' },
-    { value: 1, label: '富文本' },
-    { value: 2, label: '卡片' },
-]
+    { value: 0, label: "文本" },
+    { value: 1, label: "富文本" },
+    { value: 2, label: "卡片" },
+];
 const basicOptions = [
-    { value: 0, label: '文本' },
-    { value: 1, label: '富文本' },
-]
+    { value: 0, label: "文本" },
+    { value: 1, label: "富文本" },
+];
 
 const getInitialValues = () => ({
     status: 1,
-    type: 'email',
-    remark: '',
-    url: '',
+    type: "email",
+    remark: "",
+    url: "",
     email: {
-        sender: '',
-        receiver: '',
-        server: '',
+        sender: "",
+        receiver: "",
+        server: "",
         port: undefined,
-        authCode: '',
+        authCode: "",
     },
     webhook: {
-        webhookUrl: '',
+        webhookUrl: "",
         messageType: 0,
-        sign: '',
+        sign: "",
     },
-})
+});
 
 const props = defineProps<{
     modelValue: boolean;
@@ -219,33 +370,39 @@ const open = computed({
 const isEdit = computed(() => !!props.channel);
 
 const formSchema = toTypedSchema(
-    z
-        .object({
-            name: z.string().min(1, t('system.channel.valid.nameNotEmpty')),
-            type: z.string().min(1, t('system.channel.valid.typeNotEmpty')),
-            status: z.coerce.number(),
-            remark: z.string().optional(),
-            url: z.string().optional(),
-            email: z
-                .object({
-                    sender: z.string().optional(),
-                    receiver: z.string().optional(),
-                    server: z.string().optional(),
-                    port: z.coerce.number().optional(),
-                    authCode: z.string().optional(),
-                })
-                .optional(),
-            webhook: z
-                .object({
-                    webhookUrl: z.string().optional(),
-                    messageType: z.coerce.number().optional(),
-                    sign: z.string().optional(),
-                })
-                .optional(),
-        })
+    z.object({
+        name: z.string().min(1, t("system.channel.valid.nameNotEmpty")),
+        type: z.string().min(1, t("system.channel.valid.typeNotEmpty")),
+        status: z.coerce.number(),
+        remark: z.string().optional(),
+        url: z.string().optional(),
+        email: z
+            .object({
+                sender: z.string().optional(),
+                receiver: z.string().optional(),
+                server: z.string().optional(),
+                port: z.coerce.number().optional(),
+                authCode: z.string().optional(),
+            })
+            .optional(),
+        webhook: z
+            .object({
+                webhookUrl: z.string().optional(),
+                messageType: z.coerce.number().optional(),
+                sign: z.string().optional(),
+            })
+            .optional(),
+    }),
 );
 
-const { handleSubmit, resetForm, values, setFieldValue, setValues, setFieldError } = useForm({
+const {
+    handleSubmit,
+    resetForm,
+    values,
+    setFieldValue,
+    setValues,
+    setFieldError,
+} = useForm({
     validationSchema: formSchema,
 });
 
@@ -255,7 +412,7 @@ watch(open, async (isOpen) => {
             try {
                 const res: any = await getPushChannel(props.channel.id);
                 if (res.code !== 0) {
-                    toast.error(res.msg || t('system.channel.toast.detailErr'))
+                    toast.error(res.msg || t("system.channel.toast.detailErr"));
                 }
                 setValues({
                     ...res.data,
@@ -266,10 +423,10 @@ watch(open, async (isOpen) => {
                 console.error("Failed to fetch channel details:", error);
             }
         } else {
-            resetForm({ values: getInitialValues() })
+            resetForm({ values: getInitialValues() });
         }
     } else {
-        resetForm({ values: getInitialValues() })
+        resetForm({ values: getInitialValues() });
     }
 });
 
@@ -288,13 +445,13 @@ const onSubmit = handleSubmit(async (formValues) => {
 });
 
 const handleTypeChange = (newType: string) => {
-    setFieldValue('type', newType);
+    setFieldValue("type", newType);
     setValues({
         ...values,
-        url: '',
+        url: "",
         email: getInitialValues().email,
         webhook: getInitialValues().webhook,
-    })
-    setFieldError('url', undefined)
+    });
+    setFieldError("url", undefined);
 };
 </script>
