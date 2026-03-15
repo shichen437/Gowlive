@@ -63,11 +63,16 @@
         "email": "Email",
         "lark": "Lark",
         "dingTalk": "DingTalk",
-        "weCom": "WeCom"
+        "weCom": "WeCom",
+        "custom": "Custom"
       },
       "name": "Channel Name",
       "type": "Channel Type",
       "messageType": "Message Type",
+      "webhookUrl": "Webhook URL",
+      "requestMethod": "Request Method",
+      "requestHeaders": "Request Headers",
+      "requestBody": "Request Body",
       "sign": "Signature",
       "status": "Activation Status",
       "statusActive": "Active",
@@ -86,10 +91,17 @@
       "name": "Please enter channel name",
       "authCode": "Please enter authorization code",
       "remark": "Please enter a remark (optional)",
+      "webhookUrl": "Please enter Webhook URL",
+      "requestMethod": "Please select request method",
+      "requestHeaders": "Please enter request headers (JSON format)",
+      "requestBody": "Please enter request body (JSON format)",
       "larkMsgType": "Select Lark message type",
       "dingMsgType": "Select DingTalk message type",
       "weComMsgType": "Select WeCom message type",
       "msgType": "Select message type"
+    },
+    "tooltip": {
+      "pre": "Placeholder: title {{msgTitle}}, content {{msgContent}}"
     },
     "toast": {
       "listErr": "Failed to fetch list",
@@ -97,7 +109,8 @@
     },
     "valid": {
       "nameNotEmpty": "Channel name cannot be empty",
-      "typeNotEmpty": "Channel type cannot be empty"
+      "typeNotEmpty": "Channel type cannot be empty",
+      "invalidJSON": "Please enter a valid JSON format"
     }
   },
   "proxy": {

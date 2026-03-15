@@ -20,6 +20,7 @@ import (
 
 	_ "github.com/shichen437/gowlive/internal/pkg/stream_parser/ffmpeg"
 
+	_ "github.com/shichen437/gowlive/internal/pkg/message_push/custom"
 	_ "github.com/shichen437/gowlive/internal/pkg/message_push/ding_talk"
 	_ "github.com/shichen437/gowlive/internal/pkg/message_push/email"
 	_ "github.com/shichen437/gowlive/internal/pkg/message_push/gotify"

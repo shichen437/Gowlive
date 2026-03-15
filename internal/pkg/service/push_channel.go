@@ -21,7 +21,7 @@ func GetAllPushChannel(ctx context.Context) []*model.PushChannel {
 	if len(list) == 0 || err != nil {
 		return list
 	}
-	earr, warr := []int{}, []int{}
+	earr, warr, carr := []int{}, []int{}, []int{}
 	cMap := make(map[int]*model.PushChannel)
 	for _, v := range list {
 		if v.Type == "email" {
@@ -29,6 +29,9 @@ func GetAllPushChannel(ctx context.Context) []*model.PushChannel {
 		}
 		if slices.Contains(webhookTypeArr, v.Type) {
 			warr = append(warr, v.Id)
+		}
+		if v.Type == "custom" {
+			carr = append(carr, v.Id)
 		}
 		cMap[v.Id] = v
 	}
@@ -46,6 +49,14 @@ func GetAllPushChannel(ctx context.Context) []*model.PushChannel {
 			WhereIn(dao.PushChannelWebhook.Columns().ChannelId, warr).Scan(&webhooks)
 		for _, v := range webhooks {
 			cMap[v.ChannelId].Webhook = v
+		}
+	}
+	if len(carr) > 0 {
+		customs := []*entity.PushChannelCustomWebhook{}
+		err = dao.PushChannelCustomWebhook.Ctx(ctx).
+			WhereIn(dao.PushChannelCustomWebhook.Columns().ChannelId, carr).Scan(&customs)
+		for _, v := range customs {
+			cMap[v.ChannelId].Custom = v
 		}
 	}
 	return list

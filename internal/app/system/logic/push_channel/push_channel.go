@@ -94,6 +94,19 @@ func (s *sPushChannel) Post(ctx context.Context, req *v1.PostPushChannelReq) (re
 				return err
 			}
 		}
+		if req.Type == "custom" {
+			_, err = dao.PushChannelCustomWebhook.Ctx(ctx).Insert(do.PushChannelCustomWebhook{
+				ChannelId:      channelId,
+				WebhookUrl:     req.Custom.WebhookUrl,
+				RequestMethod:  req.Custom.Method,
+				RequestHeaders: req.Custom.Headers,
+				RequestBody:    req.Custom.Body,
+				CreatedAt:      utils.Now(),
+			})
+			if err != nil {
+				return err
+			}
+		}
 		return nil
 	})
 	return
@@ -137,6 +150,18 @@ func (s *sPushChannel) Put(ctx context.Context, req *v1.PutPushChannelReq) (res 
 				return err
 			}
 		}
+		if req.Type == "custom" {
+			_, err = dao.PushChannelCustomWebhook.Ctx(ctx).Where(dao.PushChannelCustomWebhook.Columns().ChannelId, req.Id).Update(do.PushChannelCustomWebhook{
+				WebhookUrl:     req.Custom.WebhookUrl,
+				RequestMethod:  req.Custom.Method,
+				RequestHeaders: req.Custom.Headers,
+				RequestBody:    req.Custom.Body,
+				UpdatedAt:      utils.Now(),
+			})
+			if err != nil {
+				return err
+			}
+		}
 		return nil
 	})
 	return
@@ -171,6 +196,17 @@ func (s *sPushChannel) Get(ctx context.Context, req *v1.GetPushChannelReq) (res 
 			res.Webhook = webhook
 		}
 	}
+	if res.Type == "custom" {
+		var custom *entity.PushChannelCustomWebhook
+		err = dao.PushChannelCustomWebhook.Ctx(ctx).Where(dao.PushChannelCustomWebhook.Columns().ChannelId, req.Id).Limit(1).Scan(&custom)
+		if err != nil {
+			err = utils.TError(ctx, "system.push.error.GetDetail")
+			return
+		}
+		if custom != nil {
+			res.Custom = custom
+		}
+	}
 	return
 }
 
@@ -185,6 +221,10 @@ func (s *sPushChannel) Delete(ctx context.Context, req *v1.DeletePushChannelReq)
 			return err
 		}
 		_, err = dao.PushChannelWebhook.Ctx(ctx).Where(dao.PushChannelWebhook.Columns().ChannelId, req.Id).Delete()
+		if err != nil {
+			return err
+		}
+		_, err = dao.PushChannelCustomWebhook.Ctx(ctx).Where(dao.PushChannelCustomWebhook.Columns().ChannelId, req.Id).Delete()
 		if err != nil {
 			return err
 		}

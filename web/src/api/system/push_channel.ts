@@ -12,9 +12,11 @@ export async function addPushChannel(data: any) {
   if (data.type === 'gotify') {
     data.email = undefined;
     data.webhook = undefined;
+    data.custom = undefined;
   }
   if (data.type === 'email') {
     data.webhook = undefined;
+    data.custom = undefined;
   }
   if (
     data.type === 'lark' ||
@@ -22,6 +24,11 @@ export async function addPushChannel(data: any) {
     data.type === 'weCom'
   ) {
     data.email = undefined;
+    data.custom = undefined;
+  }
+  if (data.type === 'custom') {
+    data.email = undefined;
+    data.webhook = undefined;
   }
   return request({
     url: '/system/push/channel',
@@ -34,9 +41,11 @@ export async function updatePushChannel(data: any) {
   if (data.type === 'gotify') {
     data.email = undefined;
     data.webhook = undefined;
+    data.custom = undefined;
   }
   if (data.type === 'email') {
     data.webhook = undefined;
+    data.custom = undefined;
   }
   if (
     data.type === 'lark' ||
@@ -44,6 +53,11 @@ export async function updatePushChannel(data: any) {
     data.type === 'weCom'
   ) {
     data.email = undefined;
+    data.custom = undefined;
+  }
+  if (data.type === 'custom') {
+    data.email = undefined;
+    data.webhook = undefined;
   }
   return request({
     url: '/system/push/channel',

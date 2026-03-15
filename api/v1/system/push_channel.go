@@ -22,12 +22,13 @@ type GetPushChannelListRes struct {
 type PostPushChannelReq struct {
 	g.Meta  `path:"/system/push/channel" method:"post" tags:"消息推送" summary:"添加渠道"`
 	Name    string                   `json:"name" v:"required#system.push.valid.ChannelNameRequired"`
-	Type    string                   `p:"type" json:"type" v:"required|in:gotify,email,lark,dingTalk,weCom#system.push.valid.ChannelTypeRequired|system.push.valid.ChannelTypeUnsupported"`
+	Type    string                   `p:"type" json:"type" v:"required|in:gotify,email,lark,dingTalk,weCom,custom#system.push.valid.ChannelTypeRequired|system.push.valid.ChannelTypeUnsupported"`
 	Status  int                      `json:"status" v:"required#system.push.valid.ChannelStatusRequired"`
 	Url     string                   `json:"url" v:"required-if:type,gotify#system.push.valid.UrlRequired"`
 	Remark  string                   `json:"remark" v:"max-length:45#system.push.valid.RemarkLength"`
 	Email   *PushChannelEmailModel   `json:"email" v:"required-if:type,email"`
 	Webhook *PushChannelWebhookModel `json:"webhook" v:"required-if:type,lark,type,dingTalk,type,weCom"`
+	Custom  *PushChannelCustomModel  `json:"custom" v:"required-if:type,custom"`
 }
 type PostPushChannelRes struct {
 	g.Meta `mime:"application/json"`
@@ -37,12 +38,13 @@ type PutPushChannelReq struct {
 	g.Meta  `path:"/system/push/channel" method:"put" tags:"消息推送" summary:"修改渠道"`
 	Id      int                      `json:"id" v:"required#system.push.valid.ChannelIDRequired"`
 	Name    string                   `json:"name" v:"required#system.push.valid.ChannelNameRequired"`
-	Type    string                   `p:"type" json:"type" v:"required|in:gotify,email,lark,dingTalk,weCom#system.push.valid.ChannelTypeRequired|system.push.valid.ChannelTypeUnsupported"`
+	Type    string                   `p:"type" json:"type" v:"required|in:gotify,email,lark,dingTalk,weCom,custom#system.push.valid.ChannelTypeRequired|system.push.valid.ChannelTypeUnsupported"`
 	Status  int                      `json:"status" v:"required#system.push.valid.ChannelStatusRequired"`
 	Url     string                   `json:"url" v:"required-if:type,gotify#system.push.valid.UrlRequired"`
 	Remark  string                   `json:"remark" v:"max-length:45#system.push.valid.RemarkLength"`
 	Email   *PushChannelEmailModel   `json:"email" v:"required-if:type,email"`
 	Webhook *PushChannelWebhookModel `json:"webhook" v:"required-if:type,lark,type,dingTalk,type,weCom"`
+	Custom  *PushChannelCustomModel  `json:"custom" v:"required-if:type,custom"`
 }
 type PutPushChannelRes struct {
 	g.Meta `mime:"application/json"`
@@ -78,4 +80,11 @@ type PushChannelWebhookModel struct {
 	MessageType int    `json:"messageType" v:"required|in:0,1,2#system.push.valid.MessageTypeRequired|system.push.valid.MessageTypeInvalid"`
 	Sign        string `json:"sign"`
 	At          string `json:"at"`
+}
+
+type PushChannelCustomModel struct {
+	WebhookUrl string `json:"webhookUrl" v:"required|url#system.push.valid.WebhookUrlRequired|system.push.valid.WebhookUrlFormatInvalid"`
+	Method     int    `json:"requestMethod" v:"in:0,1"`
+	Headers    string `json:"requestHeaders"`
+	Body       string `json:"requestBody"`
 }

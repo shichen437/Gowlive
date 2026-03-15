@@ -80,6 +80,9 @@
                   <SelectItem value="weCom">{{
                     t('system.channel.fields.channel.weCom')
                   }}</SelectItem>
+                  <SelectItem value="custom">{{
+                    t('system.channel.fields.channel.custom')
+                  }}</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -209,6 +212,10 @@
           />
         </div>
 
+        <div v-if="values.type === 'custom'">
+          <CustomForm />
+        </div>
+
         <DialogFooter>
           <Button type="button" variant="outline" @click="open = false">{{
             t('common.operation.cancel')
@@ -256,6 +263,7 @@ import {
 import type { PushChannel } from '@/types/system';
 import { toast } from 'vue-sonner';
 import WebhookForm from './WebhookForm.vue';
+import CustomForm from './CustomForm.vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -287,6 +295,12 @@ const getInitialValues = () => ({
     messageType: 0,
     sign: '',
   },
+  custom: {
+    webhookUrl: '',
+    requestMethod: 1,
+    requestHeaders: '',
+    requestBody: '',
+  },
 });
 
 const props = defineProps<{
@@ -302,6 +316,16 @@ const open = computed({
 });
 
 const isEdit = computed(() => !!props.channel);
+
+const validateJSON = (val: string | undefined) => {
+  if (!val) return true;
+  try {
+    JSON.parse(val);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 const formSchema = toTypedSchema(
   z.object({
@@ -324,6 +348,24 @@ const formSchema = toTypedSchema(
         webhookUrl: z.string().optional(),
         messageType: z.coerce.number().optional(),
         sign: z.string().optional(),
+      })
+      .optional(),
+    custom: z
+      .object({
+        webhookUrl: z.string().optional(),
+        requestMethod: z.coerce.number().optional(),
+        requestHeaders: z
+          .string()
+          .optional()
+          .refine(validateJSON, {
+            message: t('system.channel.valid.invalidJSON'),
+          }),
+        requestBody: z
+          .string()
+          .optional()
+          .refine(validateJSON, {
+            message: t('system.channel.valid.invalidJSON'),
+          }),
       })
       .optional(),
   }),
@@ -352,6 +394,7 @@ watch(open, async (isOpen) => {
           ...res.data,
           email: res.data.email || {},
           webhook: res.data.webhook || {},
+          custom: res.data.custom || {},
         });
       } catch (error) {
         console.error('Failed to fetch channel details:', error);
@@ -385,6 +428,7 @@ const handleTypeChange = (newType: string) => {
     url: '',
     email: getInitialValues().email,
     webhook: getInitialValues().webhook,
+    custom: getInitialValues().custom,
   });
   setFieldError('url', undefined);
 };

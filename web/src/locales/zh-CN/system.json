@@ -63,11 +63,16 @@
         "email": "邮箱",
         "lark": "飞书",
         "dingTalk": "钉钉",
-        "weCom": "企业微信"
+        "weCom": "企业微信",
+        "custom": "自定义"
       },
       "name": "渠道名称",
       "type": "渠道类型",
       "messageType": "消息类型",
+      "webhookUrl": "Webhook 地址",
+      "requestMethod": "请求方式",
+      "requestHeaders": "请求头",
+      "requestBody": "请求体",
       "sign": "签名",
       "status": "启用状态",
       "statusActive": "启用",
@@ -86,10 +91,17 @@
       "name": "请输入渠道名称",
       "authCode": "请输入授权码",
       "remark": "请输入备注(可选)",
+      "webhookUrl": "请输入 Webhook 地址",
+      "requestMethod": "请选择请求方式",
+      "requestHeaders": "请输入请求头 (JSON 格式)",
+      "requestBody": "请输入请求体 (JSON 格式)",
       "larkMsgType": "选择飞书消息类型",
       "dingMsgType": "选择钉钉消息类型",
       "weComMsgType": "选择企业微信消息类型",
       "msgType": "选择消息类型"
+    },
+    "tooltip": {
+      "pre": "占位符：标题 {{msgTitle}}, 内容 {{msgContent}}"
     },
     "toast": {
       "listErr": "获取列表失败",
@@ -97,7 +109,8 @@
     },
     "valid": {
       "nameNotEmpty": "渠道名称不能为空",
-      "typeNotEmpty": "渠道类型不能为空"
+      "typeNotEmpty": "渠道类型不能为空",
+      "invalidJSON": "请输入正确的 JSON 格式"
     }
   },
   "proxy": {

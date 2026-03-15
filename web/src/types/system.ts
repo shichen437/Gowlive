@@ -24,6 +24,7 @@ export interface PushChannel {
   remark: string;
   email: PushChannelEmail;
   webhook: PushChannelWebhook;
+  custom: PushChannelCustomWebhook;
   createdAt: string;
 }
 
@@ -44,6 +45,15 @@ export interface PushChannelWebhook {
   messageType: number;
   sign: string;
   at: string;
+}
+
+export interface PushChannelCustomWebhook {
+  id: number;
+  channelId: number;
+  webhookUrl: string;
+  requestMethod: number;
+  requestHeaders: string;
+  requestBody: string;
 }
 
 export interface SysProxy {

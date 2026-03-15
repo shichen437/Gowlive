@@ -71,6 +71,12 @@ func init() {
 			DictValue: "weCom",
 			DictSort:  5,
 		},
+		{
+			DictType:  ChannelType,
+			DictLabel: "自定义",
+			DictValue: "custom",
+			DictSort:  6,
+		},
 	})
 }
 
