@@ -53,7 +53,7 @@
         <div class="grid grid-cols-2 gap-4">
           <FormField name="type" v-slot="{ value }">
             <FormItem>
-              <FormLabel>{{ t('system.channel.fields.type') }}</FormLabel>
+              <FormLabel>{{ t('system.channel.fields.type') }} </FormLabel>
               <Select
                 :model-value="String(value)"
                 @update:model-value="handleTypeChange"

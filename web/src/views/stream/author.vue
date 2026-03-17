@@ -53,18 +53,16 @@
               </TableCell>
               <TableCell class="text-center">{{ anchor.anchorName }}</TableCell>
               <TableCell class="text-center">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger as-child>
-                      <div class="truncate max-w-xs mx-auto">
-                        {{ anchor.signature }}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{{ anchor.signature }}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <div class="truncate max-w-xs mx-auto">
+                      {{ anchor.signature }}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{{ anchor.signature }}</p>
+                  </TooltipContent>
+                </Tooltip>
               </TableCell>
               <TableCell class="text-center"
                 >{{ formatBigNumber(anchor.followingCount, locale) }}
@@ -182,7 +180,6 @@ import {
   PaginationItem,
 } from '@/components/ui/pagination';
 import {
-  TooltipProvider,
   Tooltip,
   TooltipTrigger,
   TooltipContent,

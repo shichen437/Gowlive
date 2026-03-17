@@ -75,16 +75,14 @@
               <FormItem>
                 <FormLabel
                   >{{ t('stream.rooms.fields.quality.title') }}
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger as-child>
-                        <Info class="w-4 h-4 ml-1" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{{ t('stream.rooms.fields.quality.tooltip') }}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger as-child>
+                      <Info class="w-4 h-4 ml-1" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{{ t('stream.rooms.fields.quality.tooltip') }}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </FormLabel>
                 <Select v-bind="componentField">
                   <FormControl>
@@ -165,24 +163,20 @@
             <FormItem>
               <FormLabel class="flex items-center">
                 {{ t('stream.rooms.fields.monitorType.title') }}
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger as-child>
-                      <Info class="w-4 h-4 ml-1" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>
-                        {{ t('stream.rooms.fields.monitorType.realTimeTip') }}
-                      </p>
-                      <p>{{ t('stream.rooms.fields.monitorType.cronTip') }}</p>
-                      <p>
-                        {{
-                          t('stream.rooms.fields.monitorType.intelligentTip')
-                        }}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <Info class="w-4 h-4 ml-1" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      {{ t('stream.rooms.fields.monitorType.realTimeTip') }}
+                    </p>
+                    <p>{{ t('stream.rooms.fields.monitorType.cronTip') }}</p>
+                    <p>
+                      {{ t('stream.rooms.fields.monitorType.intelligentTip') }}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
               </FormLabel>
               <FormControl>
                 <RadioGroup
@@ -392,7 +386,6 @@ import { Info } from 'lucide-vue-next';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';

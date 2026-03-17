@@ -56,18 +56,16 @@
               </TableCell>
               <TableCell class="text-center">{{ notify.title }}</TableCell>
               <TableCell class="text-center">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger as-child>
-                      <div class="truncate max-w-xs mx-auto">
-                        {{ notify.content }}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{{ notify.content }}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <div class="truncate max-w-xs mx-auto">
+                      {{ notify.content }}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{{ notify.content }}</p>
+                  </TooltipContent>
+                </Tooltip>
               </TableCell>
               <TableCell class="text-center">{{ notify.createdAt }}</TableCell>
               <TableCell class="text-center">
@@ -187,7 +185,6 @@ import {
   PaginationItem,
 } from '@/components/ui/pagination';
 import {
-  TooltipProvider,
   Tooltip,
   TooltipTrigger,
   TooltipContent,

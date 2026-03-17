@@ -13,13 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Info } from 'lucide-vue-next';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useI18n } from 'vue-i18n';
@@ -36,19 +29,7 @@ const methodOptions = [
   <div class="space-y-4 mt-4 border-0 p-0">
     <FormField name="custom.webhookUrl" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel
-          >{{ t('system.channel.fields.webhookUrl') }}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger as-child>
-                <Info class="w-4 h-4 ml-1" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{{ t('system.channel.tooltip.pre') }}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider></FormLabel
-        >
+        <FormLabel>{{ t('system.channel.fields.webhookUrl') }} </FormLabel>
         <FormControl>
           <Input
             type="text"

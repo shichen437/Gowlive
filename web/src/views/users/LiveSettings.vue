@@ -104,16 +104,14 @@
                   t('user.liveSettings.diskProtected.title')
                 }}</span>
               </Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger as-child>
-                    <Info class="w-4 h-4 ml-1" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{{ t('user.liveSettings.diskProtected.tooltip') }}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger as-child>
+                  <Info class="w-4 h-4 ml-1" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{{ t('user.liveSettings.diskProtected.tooltip') }}</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <Select
               id="disk-protection"
@@ -191,16 +189,14 @@
                   t('user.liveSettings.fixedResolution.title')
                 }}</span>
               </Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger as-child>
-                    <Badge variant="secondary">BETA</Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{{ t('user.liveSettings.fixedResolution.tooltip') }}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger as-child>
+                  <Badge variant="secondary">BETA</Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{{ t('user.liveSettings.fixedResolution.tooltip') }}</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <Switch
               id="fixed-resolution"
@@ -252,7 +248,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Info } from 'lucide-vue-next';

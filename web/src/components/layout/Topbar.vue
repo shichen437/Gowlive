@@ -30,27 +30,25 @@
       </Breadcrumb>
     </div>
     <div class="flex items-center gap-4">
-      <TooltipProvider v-if="isUnhealthy">
-        <Tooltip>
-          <TooltipTrigger as-child>
-            <Button variant="ghost" size="icon">
-              <Frown class="h-5 w-5 text-destructive" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <div class="grid gap-2">
-              <p>
-                <span class="mr-2">{{ t('project.topbar.errRate') }}:</span>
-                <span>{{ healthInfo.errorPercent.toFixed(2) }}%</span>
-              </p>
-              <p>
-                <span class="mr-2">{{ t('project.topbar.diskUsage') }}:</span>
-                <span>{{ healthInfo.diskUsage.toFixed(2) }}%</span>
-              </p>
-            </div>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip v-if="isUnhealthy">
+        <TooltipTrigger as-child>
+          <Button variant="ghost" size="icon">
+            <Frown class="h-5 w-5 text-destructive" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <div class="grid gap-2">
+            <p>
+              <span class="mr-2">{{ t('project.topbar.errRate') }}:</span>
+              <span>{{ healthInfo.errorPercent.toFixed(2) }}%</span>
+            </p>
+            <p>
+              <span class="mr-2">{{ t('project.topbar.diskUsage') }}:</span>
+              <span>{{ healthInfo.diskUsage.toFixed(2) }}%</span>
+            </p>
+          </div>
+        </TooltipContent>
+      </Tooltip>
       <Button @click="toggleFullscreen" variant="ghost" size="icon">
         <component :is="isFullscreen ? Minimize : Maximize" class="h-5 w-5" />
       </Button>
@@ -128,7 +126,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { UserInfo } from '@/types/user';
