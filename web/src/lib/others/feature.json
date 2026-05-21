@@ -1,26 +1,22 @@
 {
-  "version": "0.2.6",
-  "date": "2025-03-15",
+  "version": "0.2.7",
+  "date": "2025-05-21",
   "info": {
     "feature": {
       "name": "功能",
-      "items": [
-        {
-          "desc": "新增支持自定义 Webhook"
-        }
-      ]
+      "items": []
     },
     "enhance": {
       "name": "优化",
-      "items": [
-        {
-          "desc": "渠道类型选择显示"
-        }
-      ]
+      "items": []
     },
     "fix": {
       "name": "修复",
-      "items": []
+      "items": [
+        {
+          "desc": "抖音接口调整"
+        }
+      ]
     }
   }
 }

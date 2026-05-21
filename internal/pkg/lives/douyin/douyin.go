@@ -70,6 +70,12 @@ func (l *Douyin) GetInfo() (info *lives.LiveState, err error) {
 	streamIdPath := "state.streamStore.streamData.H264_streamData.common.stream"
 	streamId := json.Get(streamIdPath).String()
 	streamUrlInfos, _ := getStreamInfo(body, streamId)
+	if len(streamUrlInfos) > 0 {
+		info.StreamInfos = streamUrlInfos
+		return
+	}
+	mainCameraPath := "state.cameraStore.mainCameraInfo.h264Stream.flv_pull_url"
+	streamUrlInfos, _ = getCameraInfo(json, mainCameraPath)
 	info.StreamInfos = streamUrlInfos
 	return
 }
@@ -221,6 +227,38 @@ func getStreamInfo(body string, streamId string) (infos []*lives.StreamUrlInfo, 
 			}
 		})
 	}
+	infos = streamUrlInfos
+	return
+}
+
+func getCameraInfo(json *gjson.Result, cameraPath string) (infos []*lives.StreamUrlInfo, err error) {
+	streamUrlInfos := make([]*lives.StreamUrlInfo, 0, 10)
+	streamStr := json.Get(cameraPath).String()
+	mm := make(map[string]string)
+	gjson.Parse(streamStr).ForEach(func(key, value gjson.Result) bool {
+		mm[key.String()] = value.String()
+		return true
+	})
+	if len(mm) <= 0 {
+		return
+	}
+	for _, q := range cameraQualities {
+		raw, ok := mm[q.key]
+		if !ok {
+			continue
+		}
+
+		u, parseErr := url.Parse(raw)
+		if parseErr != nil {
+			continue
+		}
+
+		streamUrlInfos = append(streamUrlInfos, &lives.StreamUrlInfo{
+			Name: q.name,
+			Url:  u,
+		})
+	}
+
 	infos = streamUrlInfos
 	return
 }
