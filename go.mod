@@ -1,17 +1,17 @@
 module github.com/shichen437/gowlive
 
-go 1.24.0
+go 1.26.0
 
 require (
 	github.com/goflyfox/gtoken v1.5.11
-	github.com/gogf/gf/contrib/drivers/sqlite/v2 v2.9.5
-	github.com/gogf/gf/v2 v2.9.5
+	github.com/gogf/gf/contrib/drivers/sqlite/v2 v2.10.3
+	github.com/gogf/gf/v2 v2.10.3
 	github.com/golang-migrate/migrate/v4 v4.18.3
 	github.com/google/uuid v1.6.0
 	github.com/lthibault/jitterbug v2.0.0+incompatible
 	github.com/shirou/gopsutil/v3 v3.24.5
-	github.com/tidwall/gjson v1.18.0
-	github.com/xuri/excelize/v2 v2.10.0
+	github.com/tidwall/gjson v1.19.0
+	github.com/xuri/excelize/v2 v2.11.0
 	gopkg.in/mail.v2 v2.3.1
 )
 
@@ -19,7 +19,7 @@ require (
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
-	github.com/emirpasic/gods v1.18.1 // indirect
+	github.com/emirpasic/gods/v2 v2.0.0-alpha // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/glebarez/go-sqlite v1.21.2 // indirect
@@ -42,8 +42,8 @@ require (
 	github.com/olekukonko/tablewriter v1.1.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/richardlehane/mscfb v1.0.4 // indirect
-	github.com/richardlehane/msoleps v1.0.4 // indirect
+	github.com/richardlehane/mscfb v1.0.8 // indirect
+	github.com/richardlehane/msoleps v1.0.6 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
@@ -60,10 +60,10 @@ require (
 	go.opentelemetry.io/otel/sdk v1.38.0 // indirect
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
-	golang.org/x/crypto v0.45.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/crypto v0.57.0 // indirect
+	golang.org/x/net v0.59.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.22.5 // indirect
