@@ -159,7 +159,11 @@ func (r *SessionRegistry) IsRecording(sessionId int) bool {
 		return false
 	}
 
-	return session.RecorderManager.(recorders.Manager).HasRecorder(context.Background())
+	mgr, ok := session.RecorderManager.(recorders.Manager)
+	if !ok {
+		return false
+	}
+	return mgr.HasRecorder(context.Background())
 }
 
 func (r *SessionRegistry) IsLiving(sessionId int) bool {

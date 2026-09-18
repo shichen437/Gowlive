@@ -78,6 +78,11 @@ var (
 			initProxyRegistry(ctx)
 			initCookieRegistry(ctx)
 			g.Go(ctx, func(c context.Context) {
+				defer func() {
+					if rec := recover(); rec != nil {
+						g.Log().Errorf(c, "starter panic: %v", rec)
+					}
+				}()
 				time.Sleep(1500 * time.Millisecond)
 				CheckFile()
 				JobInit()

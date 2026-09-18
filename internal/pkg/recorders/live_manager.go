@@ -43,7 +43,11 @@ type Manager interface {
 
 func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 	ed.AddEventListener("LiveStart", events.NewEventListener(func(event *events.Event) {
-		session := event.Object.(*lives.LiveSession)
+		session, ok := event.Object.(*lives.LiveSession)
+		if !ok {
+			g.Log().Errorf(ctx, "LiveStart event: unexpected object type")
+			return
+		}
 		if session.Id != m.session.Id {
 			return
 		}
@@ -59,7 +63,11 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 	}))
 
 	ed.AddEventListener("NameChanged", events.NewEventListener(func(event *events.Event) {
-		session := event.Object.(*lives.LiveSession)
+		session, ok := event.Object.(*lives.LiveSession)
+		if !ok {
+			g.Log().Errorf(ctx, "NameChanged event: unexpected object type")
+			return
+		}
 		if session.Id != m.session.Id {
 			return
 		}
@@ -67,7 +75,11 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 	}))
 
 	removeEvtListener := events.NewEventListener(func(event *events.Event) {
-		session := event.Object.(*lives.LiveSession)
+		session, ok := event.Object.(*lives.LiveSession)
+		if !ok {
+			g.Log().Errorf(ctx, "LiveEnd/ListenStop event: unexpected object type")
+			return
+		}
 		if session.Id != m.session.Id {
 			return
 		}
@@ -83,7 +95,11 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 	ed.AddEventListener("ListenStop", removeEvtListener)
 
 	ed.AddEventListener("RecordingStoppedDueToDiskSpace", events.NewEventListener(func(event *events.Event) {
-		session := event.Object.(*lives.LiveSession)
+		session, ok := event.Object.(*lives.LiveSession)
+		if !ok {
+			g.Log().Errorf(ctx, "RecordingStoppedDueToDiskSpace event: unexpected object type")
+			return
+		}
 		if session.Id != m.session.Id || m.session.Config.MonitorOnly == 1 {
 			return
 		}
@@ -97,7 +113,11 @@ func (m *manager) registryListener(ctx context.Context, ed events.Dispatcher) {
 }
 
 func (m *manager) Start(ctx context.Context) error {
-	ed := m.session.EventDispatcher.(events.Dispatcher)
+	ed, ok := m.session.EventDispatcher.(events.Dispatcher)
+	if !ok {
+		g.Log().Errorf(ctx, "EventDispatcher type assertion failed for session %d", m.session.Id)
+		return nil
+	}
 	m.registryListener(ctx, ed)
 	go m.reconciliationLoop(ctx)
 	g.Log().Infof(ctx, "RecorderManager Started for session %d!", m.session.Id)

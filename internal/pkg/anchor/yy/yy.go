@@ -74,7 +74,7 @@ func (d *YY) getWebHomepageResp(ctx context.Context, hMap, cMap map[string]strin
 	c.SetHeaderMap(hMap)
 	c.SetCookieMap(cMap)
 	resp, err := c.Get(ctx, d.Url.String())
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil || utils.SafeStatusCode(resp) != http.StatusOK {
 		return "", gerror.New("获取YY用户主页失败")
 	}
 	body, err := utils.Text(resp.Response)
@@ -90,7 +90,7 @@ func getVideoCount(ctx context.Context, uid string, hMap, cMap map[string]string
 	c.SetHeaderMap(hMap)
 	c.SetCookieMap(cMap)
 	resp, err := c.Get(ctx, video_data_url+uid)
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil || utils.SafeStatusCode(resp) != http.StatusOK {
 		return 0
 	}
 	body, err := utils.Text(resp.Response)

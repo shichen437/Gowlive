@@ -35,7 +35,7 @@ func withRetry(f func(ctx context.Context) (*gclient.Response, error)) (*gclient
 		}
 
 		probeResp, probeErr := getClientWithToken().Get(ctx, utils.OPENLIST_DOMAIN+userInfoUrl)
-		if probeErr == nil && probeResp.StatusCode == http.StatusOK {
+		if probeErr == nil && utils.SafeStatusCode(probeResp) == http.StatusOK {
 			probeResp.Close()
 			g.Log().Info(ctx, "Token already refreshed, retrying original request.")
 			return f(ctx)
@@ -91,7 +91,7 @@ func checkResultUnauthorized(resp *gclient.Response) bool {
 	if resp == nil {
 		return false
 	}
-	if resp.StatusCode == http.StatusUnauthorized {
+	if utils.SafeStatusCode(resp) == http.StatusUnauthorized {
 		return true
 	}
 	if resp.Body == nil {

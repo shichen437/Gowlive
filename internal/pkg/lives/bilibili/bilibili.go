@@ -3,6 +3,7 @@ package bilibili
 import (
 	"fmt"
 	"maps"
+	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
@@ -76,8 +77,9 @@ func (l *Bilibili) requestStreamInfoApi() (infos []*lives.StreamUrlInfo, err err
 	c.SetCookieMap(l.assembleCookieMap())
 	payload := fmt.Sprintf(`?room_id=%s&protocol=0,1&format=0,1,2&codec=0,1&qn=10000&platform=web&ptype=8&dolby=5&panorama=1`, l.RoomID)
 	resp, err := c.Get(gctx.GetInitCtx(), liveApiUrlv2+payload)
-	if err != nil || resp.StatusCode != 200 {
-		g.Log().Error(gctx.GetInitCtx(), platform+" requestStreamInfoApi err info: ", err, "response code: ", resp.StatusCode)
+	if err != nil || resp == nil || utils.SafeStatusCode(resp) != http.StatusOK {
+		statusCode := utils.SafeStatusCode(resp)
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestStreamInfoApi err info: ", err, "response code: ", statusCode)
 		return nil, gerror.New(l.Platform + "获取直播信息失败")
 	}
 	defer resp.Close()
@@ -108,8 +110,9 @@ func (l *Bilibili) getUserInfo(info *lives.LiveState) error {
 	resp, err := c.Get(gctx.GetInitCtx(), userApiUrl, g.Map{
 		"roomid": l.RoomID,
 	})
-	if err != nil || resp.StatusCode != 200 {
-		g.Log().Error(gctx.GetInitCtx(), platform+" getUserInfo err info: ", err, "response code: ", resp.StatusCode)
+	if err != nil || resp == nil || utils.SafeStatusCode(resp) != http.StatusOK {
+		statusCode := utils.SafeStatusCode(resp)
+		g.Log().Error(gctx.GetInitCtx(), platform+" getUserInfo err info: ", err, "response code: ", statusCode)
 		return gerror.New(l.Platform + "获取房间信息失败")
 	}
 	defer resp.Close()
@@ -130,7 +133,7 @@ func (l *Bilibili) requestWebApi() (*lives.LiveState, error) {
 		"room_id": l.RoomID,
 		"from":    "room",
 	})
-	if err != nil || resp == nil || resp.StatusCode != 200 {
+	if err != nil || resp == nil || utils.SafeStatusCode(resp) != http.StatusOK {
 		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi err info: ", err, "response: ", resp)
 		return nil, gerror.New(l.Platform + "获取房间信息失败")
 	}
@@ -159,8 +162,9 @@ func (l *Bilibili) parseRoomID() error {
 	resp, err := c.Get(gctx.GetInitCtx(), roomInitUrl, g.Map{
 		"id": paths[1],
 	})
-	if err != nil || resp.StatusCode != 200 {
-		g.Log().Error(gctx.GetInitCtx(), platform+" parseRoomIDerr info: ", err, "response code: ", resp.StatusCode)
+	if err != nil || resp == nil || utils.SafeStatusCode(resp) != http.StatusOK {
+		statusCode := utils.SafeStatusCode(resp)
+		g.Log().Error(gctx.GetInitCtx(), platform+" parseRoomIDerr info: ", err, "response code: ", statusCode)
 		return gerror.New(l.Platform + "获取房间信息失败")
 	}
 	body, err := utils.Text(resp.Response)

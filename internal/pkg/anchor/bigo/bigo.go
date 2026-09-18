@@ -82,7 +82,7 @@ func (d *Bigo) getWebRequestResp(ctx context.Context, uid string) (string, error
 		"lang":   "tw",
 	}
 	resp, err := c.Post(ctx, anchorApi, params)
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil || utils.SafeStatusCode(resp) != http.StatusOK {
 		return "", gerror.New("Bigo anchor api request failed")
 	}
 	body, err := utils.Text(resp.Response)

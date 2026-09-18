@@ -31,8 +31,10 @@ func Login() error {
 		"otp_code": utils.OPENLIST_CODE,
 	})
 	_status = 400
-	if err != nil || resp.StatusCode != http.StatusOK {
-		err = gerror.Newf("failed to login, err : %v, code: %d", err, resp.StatusCode)
+	if err != nil || resp == nil || utils.SafeStatusCode(resp) != http.StatusOK {
+		statusCode := utils.SafeStatusCode(resp)
+		err = gerror.Newf("failed to login, err : %v, code: %d", err, statusCode)
+		g.Log().Error(ctx, err)
 		return err
 	}
 	body, err := utils.Text(resp.Response)
@@ -67,11 +69,13 @@ func Username() (string, error) {
 	}
 	defer resp.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return "", gerror.Newf("failed to get username, code: %d", resp.StatusCode)
+	usernameCode := utils.SafeStatusCode(resp)
+	usernameBody, _ := utils.SafeResponseBody(resp)
+	if usernameCode != http.StatusOK {
+		return "", gerror.Newf("failed to get username, code: %d, body: %s", usernameCode, usernameBody)
 	}
 
-	body, err := utils.Text(resp.Response)
+	body, err := utils.SafeResponseBody(resp)
 	if err != nil {
 		return "", err
 	}
@@ -97,11 +101,13 @@ func DirInfo(path string) (*DirContentModel, error) {
 	}
 	defer resp.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, gerror.Newf("failed to list dir, code: %d", resp.StatusCode)
+	dirCode := utils.SafeStatusCode(resp)
+	dirBody, _ := utils.SafeResponseBody(resp)
+	if dirCode != http.StatusOK {
+		return nil, gerror.Newf("failed to list dir, code: %d, body: %s", dirCode, dirBody)
 	}
 
-	body, err := utils.Text(resp.Response)
+	body, err := utils.SafeResponseBody(resp)
 	if err != nil {
 		return nil, err
 	}
@@ -188,11 +194,13 @@ func mkdir(path string) error {
 		return err
 	}
 	defer resp.Close()
-	if resp.StatusCode != http.StatusOK {
-		return gerror.Newf("failed to create dir, code: %d", resp.StatusCode)
+	mkdirCode := utils.SafeStatusCode(resp)
+	mkdirBody, _ := utils.SafeResponseBody(resp)
+	if mkdirCode != http.StatusOK {
+		return gerror.Newf("failed to create dir, code: %d, body: %s", mkdirCode, mkdirBody)
 	}
 
-	body, err := utils.Text(resp.Response)
+	body, err := utils.SafeResponseBody(resp)
 	if err != nil {
 		return err
 	}

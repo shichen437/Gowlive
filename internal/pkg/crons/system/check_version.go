@@ -7,6 +7,8 @@ import (
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcache"
+
+	"github.com/shichen437/gowlive/internal/pkg/utils"
 )
 
 var (
@@ -65,7 +67,7 @@ func fetchGithubVersion(ctx context.Context, ch chan<- string) {
 	client.SetTimeout(4 * time.Second)
 	client.SetHeader("User-Agent", UserAgentValue)
 	resp, err := client.Get(ctx, GithubUrl)
-	if err != nil || resp.StatusCode != 200 {
+	if err != nil || utils.SafeStatusCode(resp) != 200 {
 		ch <- ""
 		return
 	}
@@ -80,7 +82,7 @@ func fetchGiteeVersion(ctx context.Context, ch chan<- string) {
 	client.SetTimeout(4 * time.Second)
 	client.SetHeader("User-Agent", UserAgentValue)
 	resp, err := client.Get(ctx, GiteeUrl)
-	if err != nil || resp.StatusCode != 200 {
+	if err != nil || utils.SafeStatusCode(resp) != 200 {
 		ch <- ""
 		return
 	}

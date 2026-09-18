@@ -49,9 +49,15 @@ type recorder struct {
 
 func NewRecorder(session *lives.LiveSession) (Recorder, error) {
 	return &recorder{
-		session:    session,
-		startTime:  time.Now(),
-		ed:         session.EventDispatcher.(events.Dispatcher),
+		session:   session,
+		startTime: time.Now(),
+		ed: func() events.Dispatcher {
+			if d, ok := session.EventDispatcher.(events.Dispatcher); ok {
+				return d
+			}
+			panic("EventDispatcher type assertion failed: expected events.Dispatcher")
+			return nil
+		}(),
 		state:      begin,
 		stop:       make(chan struct{}),
 		parserLock: new(sync.RWMutex),
@@ -146,6 +152,10 @@ func (r *recorder) tryRecord(ctx context.Context) error {
 }
 
 func (r *recorder) getQuality(streamInfos []*lives.StreamUrlInfo) *lives.StreamUrlInfo {
+	if len(streamInfos) == 0 {
+		g.Log().Warningf(gctx.GetInitCtx(), "getQuality called with empty streamInfos for session %d", r.session.Id)
+		return nil
+	}
 	streamInfo := streamInfos[0]
 	if r.session.Config.Quality == 0 {
 		return streamInfo

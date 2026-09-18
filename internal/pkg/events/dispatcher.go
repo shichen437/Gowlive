@@ -39,7 +39,11 @@ func (e *dispatcher) DispatchEvent(event *Event) {
 	}
 	hs := make([]*EventListener, 0)
 	for e := listeners.Front(); e != nil; e = e.Next() {
-		hs = append(hs, e.Value.(*EventListener))
+		el, ok := e.Value.(*EventListener)
+		if !ok {
+			continue
+		}
+		hs = append(hs, el)
 	}
 	e.RUnlock()
 	go func() {

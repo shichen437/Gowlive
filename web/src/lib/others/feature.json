@@ -1,6 +1,6 @@
 {
-  "version": "0.2.7",
-  "date": "2025-05-21",
+  "version": "0.2.8",
+  "date": "2026-09-19",
   "info": {
     "feature": {
       "name": "功能",
@@ -14,7 +14,7 @@
       "name": "修复",
       "items": [
         {
-          "desc": "抖音接口调整"
+          "desc": "gClient响应状态码读取导致 panic"
         }
       ]
     }

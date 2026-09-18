@@ -1,7 +1,7 @@
 ###############################################################################
 #                                goframe-build
 ###############################################################################
-FROM --platform=linux/amd64 golang:1.24-alpine AS builder
+FROM --platform=linux/amd64 golang:1.26-alpine AS builder
 ENV WORKDIR=/gowlive
 WORKDIR $WORKDIR
 
@@ -21,7 +21,7 @@ RUN go mod tidy && \
 ###############################################################################
 #                                vue-build
 ###############################################################################
-FROM node:20-alpine AS vue-builder
+FROM node:24-alpine AS vue-builder
 WORKDIR /app
 COPY web .
 RUN rm -rf node_modules dist && \
@@ -34,7 +34,7 @@ RUN rm -rf node_modules dist && \
 FROM --platform=linux/amd64 alpine:3.19
 
 LABEL maintainer="shichen437 <shichen437@126.com>"
-LABEL version="0.2.7"
+LABEL version="0.2.8"
 LABEL description="Gowlive"
 LABEL license="Mit"
 LABEL source="https://github.com/shichen437/Gowlive"

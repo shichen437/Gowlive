@@ -99,8 +99,8 @@ func (l *Bigo) requestWebApi(ctx context.Context, uid string) (string, error) {
 		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi err info: ", err)
 		return "", err
 	}
-	if resp.StatusCode != http.StatusOK {
-		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi response code: ", resp.StatusCode)
+	if utils.SafeStatusCode(resp) != http.StatusOK {
+		g.Log().Error(gctx.GetInitCtx(), platform+" requestWebApi response code: ", utils.SafeStatusCode(resp))
 		return "", gerror.New("Bigo platform request failed")
 	}
 	body, err := utils.Text(resp.Response)

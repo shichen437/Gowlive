@@ -34,9 +34,13 @@ type listener struct {
 }
 
 func NewListener(session *lives.LiveSession) Listener {
+	ed, ok := session.EventDispatcher.(events.Dispatcher)
+	if !ok {
+		panic("EventDispatcher type assertion failed: expected events.Dispatcher")
+	}
 	return &listener{
 		session: session,
-		ed:      session.EventDispatcher.(events.Dispatcher),
+		ed:      ed,
 		state:   begin,
 		stop:    make(chan struct{}),
 	}
