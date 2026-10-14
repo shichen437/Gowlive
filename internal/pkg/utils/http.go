@@ -1,11 +1,14 @@
 package utils
 
 import (
+	"context"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
@@ -34,7 +37,7 @@ func GetCookieList(cookie string) []*http.Cookie {
 	if cookie == "" {
 		return cookiesList
 	}
-	for _, cStr := range strings.Split(cookie, ";") {
+	for cStr := range strings.SplitSeq(cookie, ";") {
 		cArr := strings.SplitN(cStr, "=", 2)
 		if len(cArr) != 2 {
 			continue
@@ -65,4 +68,51 @@ func UrlRemoveParams(raw string) string {
 		return head
 	}
 	return raw
+}
+
+func GetRedirectURL(ctx context.Context, shortURL string) (string, error) {
+	if shortURL == "" {
+		return "", errors.New("empty url")
+	}
+
+	const maxRedirects = 5
+
+	client := &http.Client{
+		Timeout: 15 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	currentURL := shortURL
+	for range maxRedirects {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, currentURL, nil)
+		if err != nil {
+			return "", err
+		}
+
+		resp, err := client.Do(req)
+		if err != nil {
+			return "", err
+		}
+
+		if resp.StatusCode >= 300 && resp.StatusCode < 400 {
+			loc := resp.Header.Get("Location")
+			if cerr := resp.Body.Close(); cerr != nil {
+				g.Log().Warning(gctx.GetInitCtx(), "failed to close response body:", cerr)
+			}
+			if loc == "" {
+				return "", errors.New("redirect response missing Location header")
+			}
+			currentURL = loc
+			continue
+		}
+
+		if cerr := resp.Body.Close(); cerr != nil {
+			g.Log().Warning(gctx.GetInitCtx(), "failed to close response body:", cerr)
+		}
+		return currentURL, nil
+	}
+
+	return "", errors.New("too many redirects")
 }

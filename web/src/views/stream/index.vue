@@ -10,6 +10,10 @@
           <CopyPlus class="w-4 h-4 mr-2" />
           {{ t('stream.rooms.batch.button') }}
         </Button>
+        <Button @click="openLinkExtractModal" variant="secondary">
+          <Link class="w-4 h-4 mr-2" />
+          {{ t('stream.rooms.linkExtract.title') }}
+        </Button>
       </div>
       <div class="flex items-center space-x-2">
         <div class="flex items-center">
@@ -256,6 +260,7 @@
   </div>
   <RoomModal ref="roomModal" @refresh="getRooms" />
   <BatchAddRoomModal ref="batchAddRoomModal" @refresh="getRooms" />
+  <LinkExtractModal ref="linkExtractModal" />
   <ConfirmModal
     :open="showConfirmModal"
     :onOpenChange="(open: any) => (showConfirmModal = open)"
@@ -298,6 +303,7 @@ import type { RoomInfo } from '@/types/stream';
 import RoomModal from '@/components/modal/stream/RoomModal.vue';
 import ConfirmModal from '@/components/modal/ConfirmModal.vue';
 import BatchAddRoomModal from '@/components/modal/stream/BatchAddRoomModal.vue';
+import LinkExtractModal from '@/components/modal/stream/LinkExtractModal.vue';
 import SortRoomDropDownMenu from '@/components/dropdownmenu/stream/SortRoomDropDownMenu.vue';
 import FilterRoomDropDownMenu from '@/components/dropdownmenu/stream/FilterRoomDropDownMenu.vue';
 import ExportRoomDropDownMenu from '@/components/dropdownmenu/stream/ExportRoomDropDownMenu.vue';
@@ -319,12 +325,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -333,20 +333,15 @@ import {
   PaginationItem,
 } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import {
   Plus,
   Pencil,
-  Trash2,
   Play,
   Square,
   CopyPlus,
-  Folder,
-  Pin,
-  PinOff,
-  MoreHorizontal,
   List,
   LayoutGrid,
+  Link,
 } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 import { Badge } from '@/components/ui/badge';
@@ -362,6 +357,9 @@ const pageSize = ref(12);
 const total = ref(0);
 const roomModal = ref<InstanceType<typeof RoomModal> | null>(null);
 const batchAddRoomModal = ref<InstanceType<typeof BatchAddRoomModal> | null>(
+  null,
+);
+const linkExtractModal = ref<InstanceType<typeof LinkExtractModal> | null>(
   null,
 );
 const roomToDelete = ref<number | null>(null);
@@ -472,6 +470,10 @@ const openAddRoomModal = () => {
 
 const openBatchAddRoomModal = () => {
   batchAddRoomModal.value?.openModal();
+};
+
+const openLinkExtractModal = () => {
+  linkExtractModal.value?.openModal();
 };
 
 const openEditRoomModal = (id: number) => {

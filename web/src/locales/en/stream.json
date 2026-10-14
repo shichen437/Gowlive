@@ -122,6 +122,17 @@
       "button": "Batch Add",
       "title": "Batch Add Rooms"
     },
+    "linkExtract": {
+      "title": "Link Extract",
+      "rawContent": "Raw Content",
+      "result": "Extracted Links",
+      "placeholder": "Paste raw content containing links here...",
+      "paste": "Paste from Clipboard",
+      "copy": "Copy Result",
+      "pasteFailed": "Failed to read clipboard",
+      "copySuccess": "Copied to clipboard",
+      "copyFailed": "Failed to copy to clipboard"
+    },
     "buttons": {
       "openFolder": "Open Folder",
       "top": "Pin to Top",

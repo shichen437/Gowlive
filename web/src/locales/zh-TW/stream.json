@@ -122,6 +122,17 @@
       "button": "批量新增",
       "title": "批量新增房間"
     },
+    "linkExtract": {
+      "title": "連結提取",
+      "rawContent": "原始內容",
+      "result": "提取結果",
+      "placeholder": "在此貼上包含連結的原始內容...",
+      "paste": "從剪貼簿貼上",
+      "copy": "複製結果",
+      "pasteFailed": "讀取剪貼簿失敗",
+      "copySuccess": "已複製到剪貼簿",
+      "copyFailed": "複製到剪貼簿失敗"
+    },
     "buttons": {
       "openFolder": "打開資料夾",
       "top": "置頂",

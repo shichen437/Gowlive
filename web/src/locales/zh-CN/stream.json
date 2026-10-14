@@ -122,6 +122,17 @@
       "button": "批量添加",
       "title": "批量添加房间"
     },
+    "linkExtract": {
+      "title": "链接提取",
+      "rawContent": "原始内容",
+      "result": "提取结果",
+      "placeholder": "在此粘贴包含链接的原始内容...",
+      "paste": "从剪贴板粘贴",
+      "copy": "复制结果",
+      "pasteFailed": "读取剪贴板失败",
+      "copySuccess": "已复制到剪贴板",
+      "copyFailed": "复制到剪贴板失败"
+    },
     "buttons": {
       "openFolder": "打开文件夹",
       "top": "置顶",

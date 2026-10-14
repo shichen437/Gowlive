@@ -22,6 +22,7 @@ import (
 	"github.com/shichen437/gowlive/internal/app/stream/service"
 	"github.com/shichen437/gowlive/internal/pkg/consts"
 	"github.com/shichen437/gowlive/internal/pkg/crons"
+	"github.com/shichen437/gowlive/internal/pkg/handlers"
 	"github.com/shichen437/gowlive/internal/pkg/lives"
 	"github.com/shichen437/gowlive/internal/pkg/manager"
 	"github.com/shichen437/gowlive/internal/pkg/registry"
@@ -90,6 +91,7 @@ func (s *sLiveManage) Get(ctx context.Context, req *v1.GetLiveManageReq) (res *v
 func (s *sLiveManage) Add(ctx context.Context, req *v1.PostLiveManageReq) (res *v1.PostLiveManageRes, err error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
+	req.RoomUrl = handlers.HandleRedirectUrl(ctx, req.RoomUrl)
 	if checkExistsRoomUrl(ctx, req.RoomUrl) {
 		err = utils.TError(ctx, "stream.anchor.error.Repeated")
 		return
@@ -126,12 +128,13 @@ func (s *sLiveManage) BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchR
 		newCtx := gctx.GetInitCtx()
 		errUrls := make([]string, 0)
 		for _, roomUrl := range req.RoomUrls {
-			if checkExistsRoomUrl(ctx, roomUrl) {
+			realUrl := handlers.HandleRedirectUrl(ctx, roomUrl)
+			if checkExistsRoomUrl(ctx, realUrl) {
 				g.Log().Errorf(newCtx, "链接 %s 重复添加", roomUrl)
 				errUrls = append(errUrls, roomUrl)
 				continue
 			}
-			liveApi, err := lives.New(roomUrl)
+			liveApi, err := lives.New(realUrl)
 			if err != nil {
 				g.Log().Errorf(newCtx, "链接 %s 获取解析 API 失败，错误信息：%v", roomUrl, err)
 				errUrls = append(errUrls, roomUrl)
@@ -145,7 +148,7 @@ func (s *sLiveManage) BatchAdd(ctx context.Context, req *v1.PostLiveManageBatchR
 			}
 			var liveId int64
 			buildReq := &v1.PostLiveManageReq{
-				RoomUrl:     roomUrl,
+				RoomUrl:     realUrl,
 				MonitorType: consts.MonitorTypeStop,
 				Interval:    req.Interval,
 				Format:      req.Format,
